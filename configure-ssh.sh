@@ -52,8 +52,8 @@ then
     ssh ${i} 'chown lresende:lresende /home/lresende/.ssh/config'
     ssh ${i} 'chmod 600 /home/lresende/.ssh/config'
 
-    #echo "##### User customizations " | ssh ${i} "cat >> /home/lresende/.bash_profile"
-    #echo "alias cd..='cd ..'" | ssh ${i} "cat >> /home/lresende/.bash_profile"
-    #echo "alias ls='ls -la'" | ssh ${i} "cat >> /home/lresende/.bash_profile"
+    echo "##### User customizations " | ssh ${i} "cat >> /home/lresende/.bash_profile"
+    echo "alias cd..='cd ..'" | ssh ${i} "cat >> /home/lresende/.bash_profile"
+    echo "alias ls='ls -la'" | ssh ${i} "cat >> /home/lresende/.bash_profile"
   done
 fi
