@@ -95,5 +95,7 @@ then
     ssh ${i} "sed -i.bak \"s@localhost:8030@$CLUSTER_MASTER:8030@g\" $HADOOP_HOME/etc/hadoop/yarn-site.xml"
     ssh ${i} "sed -i.bak \"s@localhost:8031@$CLUSTER_MASTER:8031@g\" $HADOOP_HOME/etc/hadoop/yarn-site.xml"
     ssh ${i} "sed -i.bak \"s@localhost:8032@$CLUSTER_MASTER:8032@g\" $HADOOP_HOME/etc/hadoop/yarn-site.xml"
+
+    ssh ${i} "cmod +x $HADOOP_HOME/etc/hadoop/*-env.sh"
   done  
 fi
