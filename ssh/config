@@ -1,0 +1,15 @@
+Host *
+    IdentitiesOnly yes
+    IdentityFile ~/.ssh/ibm_rsa
+    
+Host 169.45.103.134 169.45.103.144 169.45.103.145 169.45.103.130 169.45.101.87
+    Hostname 169.45.103.134
+    StrictHostKeyChecking no
+    Hostname 169.45.103.144
+    StrictHostKeyChecking no    
+    Hostname 169.45.103.145
+    StrictHostKeyChecking no
+    Hostname 169.45.103.130
+    StrictHostKeyChecking no
+    Hostname 169.45.101.87
+    StrictHostKeyChecking no                    
