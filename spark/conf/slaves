@@ -1,0 +1,5 @@
+# A Spark Worker will be started on each of the machines listed below.
+#172.16.159.54
+#172.16.159.55
+#172.16.159.90
+#172.16.159.111
