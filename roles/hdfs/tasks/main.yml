@@ -1,0 +1,107 @@
+- name: Create service account for HDFS
+  user: name={{ hadoop.user }}
+        system=yes
+        shell={{ hadoop.user_shell }}
+        state=present
+        groups="{{ hadoop.user_groups | join(',') }}"
+
+- name: set hadoop distribution fact
+  set_fact: hadoop_path=hadoop-{{ hadoop.version }}
+
+- name: define number of nodes
+  set_fact: number_of_nodes="{{ groups['nodes'] | length }}"
+
+- debug:
+     msg: "{{ number_of_nodes }}"
+
+- name: disable hdfs replication in single node
+  set_fact: hdfs_replication_factor=1
+  when: number_of_nodes < 3
+
+- name: enable hdfs replication when cluster has more then three nodes
+  set_fact: hdfs_replication_factor=3
+  when: number_of_nodes >= 3
+
+- name: create hadoop data directory
+  file:
+    path: "{{ hadoop.data_dir }}"
+    state: directory
+    owner: "{{ hadoop.user }}"
+    group: "{{ hadoop.user }}"
+  become: true
+
+- name: create hadoop name directory
+  file:
+    path: "{{ hadoop.name_dir }}"
+    state: directory
+    owner: "{{ hadoop.user }}"
+    group: "{{ hadoop.user }}"
+  become: true
+
+- name: create hadoop temp directory
+  file:
+    path: "{{ hadoop.temp_dir }}"
+    state: directory
+    owner: "{{ hadoop.user }}"
+    group: "{{ hadoop.user }}"
+  become: true
+
+- name: create install directory
+  file:
+    path: "{{ hadoop.install_dir }}"
+    state: directory
+    owner: "{{ hadoop.user }}"
+    group: "{{ hadoop.user }}"
+  become: true
+
+- name: check hadoop downloaded
+  local_action: >
+    command test -f {{ hadoop.install_temp_dir }}/{{ hadoop_path }}.tar.gz
+  register: hadoop_downloaded
+  failed_when: hadoop_downloaded.rc not in [0, 1]
+  changed_when: False
+  run_once: true
+
+- name: download hadoop
+  local_action: get_url url="{{ hadoop.mirror }}/repos/dist/release/hadoop/common/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz" dest="{{ hadoop.install_temp_dir }}"
+  when: hadoop_downloaded.rc == 1
+  run_once: true
+
+- name: unarchive to the install directory
+  unarchive:
+    src: "{{ hadoop.install_temp_dir }}/{{ hadoop_path }}.tar.gz"
+    dest: "{{ hadoop.install_dir }}"
+    owner: "{{ hadoop.user }}"
+    group: "{{ hadoop.user }}"
+    creates: "{{ hadoop.install_dir }}/{{ hadoop_path }}/RELEASE"
+  become: true
+
+- name: set core-site.xml
+  template: src="core-site.xml.j2" dest="{{ hadoop.install_dir }}/{{ hadoop_path }}/etc/hadoop/core-site.xml"
+  become: true
+
+- name: set hadoop-env.sh
+  template: src="hadoop-env.sh.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hadoop-env.sh"
+  become: true
+
+- name: set hdfs-site.xml
+  template: src="hdfs-site.xml.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hdfs-site.xml"
+  become: true
+
+# Environment setup.
+- name: add hadoop profile to startup
+  template:
+    src: hadoop-profile.sh.j2
+    dest: /etc/profile.d/hadoop-profile.sh
+    mode: 0644
+
+#- name: format hdfs
+#  shell: "bin/hdfs namenode -format"
+#  args:
+#      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
+#  when: (inventory_hostname in groups['master'])
+
+#- name: start hdfs
+#  shell: "sbin/start-dfs.sh"
+#  args:
+#      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"

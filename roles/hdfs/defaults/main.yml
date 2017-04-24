@@ -1,0 +1,11 @@
+hadoop:
+  version: 2.7.3
+  install_temp_dir: /tmp
+  install_dir: /opt
+  data_dir: /opt/data/data
+  name_dir: /opt/data/name
+  temp_dir: /tmp/hadoop/hdfs/tmp
+  mirror: https://dist.apache.org
+  user: "hdfs"               # the name of the (OS)user created for spark
+  user_groups: []             # Optional list of (OS)groups the new spark user should belong to
+  user_shell: "/bin/false"    # the spark user's default shell
