@@ -1,0 +1,3 @@
+{% for key, value in spark.defaults_extras.items() | sort %}
+{{ key }} {{ value }}
+{% endfor %}

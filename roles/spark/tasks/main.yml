@@ -1,0 +1,67 @@
+- name: Create service account for Spark
+  user: name={{ spark.user }}
+        system=yes
+        shell={{ spark.user_shell }}
+        state=present
+        groups="{{ spark.user_groups | join(',') }}"
+
+- name: set spark distribution fact
+  set_fact: spark_path=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}
+
+- name: check spark downloaded
+  local_action: >
+    command test -f {{ spark.temp_dir }}/{{ spark_path }}.tgz
+  register: spark_downloaded
+  failed_when: spark_downloaded.rc not in [0, 1]
+  changed_when: False
+  run_once: true
+
+- name: download spark
+  local_action: get_url url="{{ spark.mirror }}/repos/dist/release/spark/spark-{{ spark.version }}/{{ spark_path }}.tgz" dest="{{ spark.temp_dir }}"
+  when: spark_downloaded.rc == 1
+  run_once: true
+
+- name: create spark working directory
+  file:
+    path: "{{ spark.working_dir }}"
+    state: directory
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+  become: true
+
+- name: create install directory
+  file:
+    path: "{{ spark.install_dir }}"
+    state: directory
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+  become: true
+
+- name: download and unarchive to the install directory
+  unarchive:
+    src: "{{ spark.temp_dir }}/{{ spark_path }}.tgz"
+    dest: "{{ spark.install_dir }}"
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+    creates: "{{ spark.install_dir }}/{{ spark_path }}/RELEASE"
+  become: true
+
+- name: set spark-env.sh
+  template: src="spark-env-sh.j2" dest="{{ spark.install_dir }}/{{ spark_path }}/conf/spark-env.sh"
+  become: true
+
+- name: set spark-defaults.conf
+  template: src="spark-defaults-conf.j2" dest="{{ spark.install_dir}}/{{ spark_path }}/conf/spark-defaults.conf"
+  become: true
+
+# Environment setup.
+- name: add spark profile to startup
+  template:
+    src: spark-profile.sh.j2
+    dest: /etc/profile.d/spark-profile.sh
+    mode: 0644
+
+#- name: start spark
+#  shell: "sbin/start-all.sh"
+#  args:
+#      chdir: "{{ spark.install_dir}}/{{ spark_path }}"
