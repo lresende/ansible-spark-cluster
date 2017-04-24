@@ -1,0 +1,16 @@
+[all:vars]
+ansible_connection=ssh
+#ansible_user=root
+#ansible_ssh_private_key_file=~/.ssh/ibm_rsa
+gather_facts=True
+gathering=smart
+host_key_checking=False
+
+[master]
+172.16.192.163
+
+[nodes]
+172.16.192.163
+172.16.192.191
+172.16.192.197
+172.16.194.200
