@@ -1,0 +1,18 @@
+# Mac
+.DS_Store
+
+# Eclipse
+.classpath
+.project
+.settings/
+.externalToolBuilders/
+maven-eclipse.xml
+
+# Intellij
+.idea/
+.idea_modules/
+*.iml
+*.iws
+
+# Ansible temp files
+*.retry
