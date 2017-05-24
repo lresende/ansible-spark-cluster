@@ -19,11 +19,11 @@
   get_url:
      url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
      dest: "{{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}"
-  with_first_found:
-    - files:
-         - "{{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}"
-      skip: true
-  when: (inventory_hostname in groups['master'])
+#  with_first_found:
+#    - files:
+#         - "{{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}"
+#      skip: true
+#  when: (inventory_hostname in groups['master'])
 
 - name: clean anaconda install directory
   file:
