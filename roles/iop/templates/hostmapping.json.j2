@@ -1,0 +1,25 @@
+{
+    "blueprint": "iop",
+    "default_password": "passw0rd",
+    "host_groups": [
+        {
+            "name": "master",
+            "hosts": [
+                {
+                    "fqdn": "{{ groups['master'][0] }}.{{ ansible_domain }}"
+                }
+            ]
+        },
+        {
+            "name": "slaves",
+            "hosts": [
+
+                {% for host in groups['nodes'] %}
+                  {% if 'master' not in hostvars[host]['group_names'] %}
+                    {"fqdn": "{{ hostvars[host]['ansible_hostname'] }}.{{ ansible_domain }}" } {% if not loop.last %}, {%endif%}
+                  {% endif %}
+                {% endfor %}
+            ]
+        }
+    ]
+}

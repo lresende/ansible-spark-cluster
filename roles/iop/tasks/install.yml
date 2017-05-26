@@ -1,0 +1,50 @@
+##########################################
+## Install ambari server on all nodes
+##########################################
+
+- debug: msg="groups={{groups}}"
+  run_once: true
+
+- name: add new ambari repository to all nodes
+  template:
+    src: ambari.repo.j2
+    dest: /etc/yum.repos.d/ambari.repo
+    mode: 0644
+
+- name: install ambari-server on master node
+  yum:
+    name: ambari-server
+    state: installed
+  when: inventory_hostname in groups['master']
+
+- name: setup ambari server on master node
+  shell:
+    ambari-server setup --silent
+  when: inventory_hostname in groups['master']
+
+- name: change default ambari-server port
+  lineinfile:
+    dest: /etc/ambari-server/conf/ambari.properties
+    regexp: '^client.api.port'
+    line: 'client.api.port=8081'
+  when: inventory_hostname in groups['master']
+
+- name: start ambari server on master node
+  shell:
+    /usr/sbin/ambari-server start
+  when: inventory_hostname in groups['master']
+
+- name: install ambari-agent on all nodes
+  yum:
+    name: ambari-agent
+    state: installed
+
+- name: change master hostname in ambari agent configuration in all nodes
+  lineinfile:
+    dest: /etc/ambari-agent/conf/ambari-agent.ini
+    regexp: '^hostname=localhost'
+    line: "hostname={{ groups['master'][0] }}"
+
+- name: start ambari agent on all nodes
+  shell:
+    /usr/sbin/ambari-agent start

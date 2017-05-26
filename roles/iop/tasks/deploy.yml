@@ -1,0 +1,111 @@
+
+- name: retrieve hosts for ambari server deployment
+  shell: >
+    curl -H "X-Requested-By: ambari" -X GET -u admin:admin http://{{groups['master'][0]}}:8081/api/v1/hosts
+  when: (inventory_hostname in groups['master'])
+
+- name: retrieve blueprints for ambari server deployment
+  shell: >
+    curl -H "X-Requested-By: ambari" -X GET -u admin:admin http://{{groups['master'][0]}}:8081/api/v1/hosts
+  when: (inventory_hostname in groups['master'])
+
+- name: generate blueprints for ambari server deployment
+  template: src="blueprint_multi_node_spark.json.j2" dest="/tmp/blueprint_multi_node_spark.json" mode=0644
+  when: (inventory_hostname in groups['master'])
+
+- name: upload blueprint for ambari server deployment
+  shell: >
+    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/blueprint_multi_node_spark.json http://{{groups['master'][0]}}:8081/api/v1/blueprints/iop?validate_topology=false
+  when: (inventory_hostname in groups['master'])
+
+#- name: retrieve registered ambari server blueprints after registering iop one
+#  shell: curl -H "X-Requested-By: ambari" -X GET -u admin:admin http://{{groups['master'][0]}}:8081/api/v1/hosts
+#  when: (inventory_hostname in groups['master'])
+
+- name: generate host mapping for ambari server deployment
+  template: src="hostmapping.json.j2" dest="/tmp/hostmapping.json" mode=0644
+  when: (inventory_hostname in groups['master'])
+
+- name: deploy ambari server cluster
+  shell: >
+    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/hostmapping.json http://{{groups['master'][0]}}:8081/api/v1/clusters/iop
+  when: (inventory_hostname in groups['master'])
+
+
+
+#- name: create ambari cluster
+#  uri:
+#    url: http://{{groups['master'][0]}}:8081/api/v1/blueprints/iop?validate_topology=false
+#    method: POST
+#    body: "{{ lookup('file','blueprints/blueprint_multi_node_spark.json') }}"
+#    #user: admin
+#    #password: admin
+#    headers:
+#      Content-Type: "application/json"
+#      Authorization: Basic YWRtaW46YWRtaW4=
+#      X-Requested-By: "ambari"
+#    #force_basic_auth: yes
+#    status_code: 200,201,202
+#    body_format: json
+#  when: (inventory_hostname in groups['master'])
+
+#- name: generate hostmapping for ambari server deployment
+#  template:
+#    src: hostmapping.json.j2
+#    dest: /tmp/hostmapping.json
+#    mode: 0644
+#  when: (inventory_hostname in groups['master'])
+
+#- name: capture hostmapping contents
+#  shell: cat /tmp/hostmapping.json
+#  register: hostmapping_contents
+#  when: (inventory_hostname in groups['master'])
+
+#- name: deploy ambari cluster
+#  uri:
+#    url: http://{{groups['master'][0]}}:8081/api/v1/clusters/iop
+#    method: POST
+#    user: admin
+#    password: admin
+#    headers:
+#      X-Requested-By: "ambari"
+#    body: "{{ lookup('file','/tmp/hostmapping.json') }}"
+#    force_basic_auth: yes
+#    status_code: 200,201,202
+#    body_format: json
+#  when: (inventory_hostname in groups['master'])
+
+#- name: Checking ambari request ID and wait for services to be installed. This may take 3-6 minutes
+#  uri:
+#    url: http://{{groups['master'][0]}}:8081/api/v1/clusters/iop/requests/1
+#    method: GET
+#    user: admin
+#    password: admin
+#    headers:
+#       Content-Type: "application/json"
+#       X-Requested-By: "ambari"
+#    force_basic_auth: yes
+#    status_code: 200,201,202
+#    return_content: yes
+#  register: cluster_create_task
+#  no_log: True
+#  until: ((cluster_create_task.content|from_json).Requests.request_status == 'COMPLETED' or
+#         (cluster_create_task.content|from_json).Requests.request_status == 'FAILED' or
+#         (cluster_create_task.content|from_json).Requests.request_status == 'TIMEDOUT' or
+#         (cluster_create_task.content|from_json).Requests.request_status == 'ABORTED')
+#  retries: "{{ wait_timeout // 10 }}"
+#  delay: 10
+#  when: wait
+#     and
+#    inventory_hostname in groups['master']
+
+#- name: Fail if the cluster create task is in an error state
+#  fail:
+#    msg: "Cluster deploy failed. Status is {{ (cluster_create_task.content|from_json).Requests.request_status }}"
+#  when: wait and inventory_hostname in groups['master'] and
+#         ((cluster_create_task.content|from_json).Requests.request_status == 'FAILED' or
+#         (cluster_create_task.content|from_json).Requests.request_status == 'TIMEDOUT' or
+#         (cluster_create_task.content|from_json).Requests.request_status == 'ABORTED')
+
+#- debug:
+#    msg: "Ambari server has finished deploying IOP. Access via  http://{{groups['master'][0]}}.{{ ansible_domain }}:8081"

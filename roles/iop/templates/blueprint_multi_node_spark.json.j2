@@ -1,0 +1,72 @@
+{
+    "host_groups": [
+        {
+            "name": "master",
+            "components": [
+              { "name" : "AMBARI_SERVER" },
+              { "name" : "ZOOKEEPER_SERVER" },
+              { "name" : "NAMENODE" },
+              { "name" : "SECONDARY_NAMENODE" },
+              { "name" : "RESOURCEMANAGER" },
+              { "name" : "APP_TIMELINE_SERVER" },
+              { "name" : "HISTORYSERVER" },
+              { "name" : "WEBHCAT_SERVER" },
+              { "name" : "HIVE_SERVER" },
+              { "name" : "HIVE_METASTORE" },
+              { "name" : "SPARK2_JOBHISTORYSERVER" },
+              { "name" : "SPARK2_THRIFTSERVER" },
+              { "name" : "MYSQL_SERVER" },
+              { "name" : "KNOX_GATEWAY" },
+              { "name" : "KERNEL_GATEWAY" },
+
+              { "name" : "DATANODE"},
+              { "name" : "NODEMANAGER"},
+
+              { "name": "PIG"},
+              { "name": "HCAT"},
+              { "name": "HDFS_CLIENT"},
+              { "name": "YARN_CLIENT"},
+              { "name": "HIVE_CLIENT"},
+              { "name": "SPARK2_CLIENT"},
+              { "name": "MAPREDUCE2_CLIENT"},
+              { "name": "ZOOKEEPER_CLIENT"}
+            ],
+            "cardinality": "1"
+        },
+        {
+            "name": "slaves",
+            "components": [
+              { "name" : "DATANODE"},
+              { "name" : "NODEMANAGER"},
+              { "name" : "ZOOKEEPER_SERVER" },
+
+              { "name": "PIG"},
+              { "name": "HCAT"},
+              { "name": "HDFS_CLIENT"},
+              { "name": "YARN_CLIENT"},
+              { "name": "HIVE_CLIENT"},
+              { "name": "SPARK2_CLIENT"},
+              { "name": "ZOOKEEPER_CLIENT"}
+            ]
+        }
+    ],
+    "configurations": [
+        {
+            "cluster-env": {
+                "properties_attributes": {},
+                "security_enabled": "false",
+                "smokeuser": "ambari-qa",
+                "user_group": "hadoop",
+                "properties": {
+                  "ignore_groupsusers_create": "false",
+                  "override_uid": "true"
+                }
+            }
+        }
+    ],
+    "Blueprints": {
+        "blueprint_name": "iop",
+        "stack_name": "BigInsights",
+        "stack_version": "4.2.5"
+    }
+}

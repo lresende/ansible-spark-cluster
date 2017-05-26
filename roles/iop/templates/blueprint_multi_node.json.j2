@@ -1,0 +1,103 @@
+{
+    "host_groups": [
+        {
+            "name": "master",
+            "components": [
+              { "name" : "AMBARI_SERVER" },
+              { "name" : "ZOOKEEPER_SERVER" },
+              { "name" : "OOZIE_SERVER" },
+              { "name" : "HBASE_MASTER" },
+              { "name" : "NAMENODE" },
+              { "name" : "SECONDARY_NAMENODE" },
+              { "name" : "RESOURCEMANAGER" },
+              { "name" : "APP_TIMELINE_SERVER" },
+              { "name" : "HISTORYSERVER" },
+              { "name" : "WEBHCAT_SERVER" },
+              { "name" : "HIVE_SERVER" },
+              { "name" : "HIVE_METASTORE" },
+              { "name" : "SPARK2_JOBHISTORYSERVER" },
+              { "name" : "SPARK2_THRIFTSERVER" },
+              { "name" : "MYSQL_SERVER" },
+              { "name" : "METRICS_MONITOR" },
+              { "name" : "KNOX_GATEWAY" },
+              { "name" : "KERNEL_GATEWAY" },
+              { "name" : "KAFKA_BROKER" },
+
+              { "name": "PIG"},
+              { "name": "HCAT"},
+              { "name": "SQOOP"},
+              { "name": "SLIDER"},
+              { "name": "HDFS_CLIENT"},
+              { "name": "YARN_CLIENT"},
+              { "name": "HIVE_CLIENT"},
+              { "name": "HBASE_CLIENT"},
+              { "name": "HBASE_REST_SERVER"},
+              { "name": "OOZIE_CLIENT"},
+              { "name": "SPARK2_CLIENT"},
+              { "name": "MAPREDUCE2_CLIENT"},
+              { "name": "ZOOKEEPER_CLIENT"},
+
+              { "name": "METRICS_COLLECTOR"}
+            ],
+            "cardinality": "1"
+        },
+        {
+            "name": "slaves",
+            "components": [
+              { "name" : "DATANODE"},
+              { "name" : "NODEMANAGER"},
+              { "name" : "HBASE_REST_SERVER" },
+              { "name" : "HBASE_REGIONSERVER"},
+              { "name" : "ZOOKEEPER_SERVER" },
+
+              { "name": "PIG"},
+              { "name": "HCAT"},
+              { "name": "SQOOP"},
+              { "name": "SLIDER"},
+              { "name": "HDFS_CLIENT"},
+              { "name": "YARN_CLIENT"},
+              { "name": "HIVE_CLIENT"},
+              { "name": "HBASE_CLIENT"},
+              { "name": "HBASE_REST_SERVER"},
+              { "name": "OOZIE_CLIENT"},
+              { "name": "SPARK2_CLIENT"},
+              { "name": "MAPREDUCE2_CLIENT"},
+              { "name": "ZOOKEEPER_CLIENT"},
+
+              { "name": "METRICS_COLLECTOR"}
+            ]
+        }
+    ],
+    "configurations": [
+        {
+            "cluster-env": {
+                "properties_attributes": {},
+                "security_enabled": "false",
+                "smokeuser": "ambari-qa",
+                "user_group": "hadoop",
+                "properties": {
+                  "ignore_groupsusers_create": "false",
+                  "override_uid": "true"
+                }
+            }
+        },
+        {
+          "jnbg-env": {
+            "properties_attributes": {},
+            "properties": {
+              "jkg.log_dir": "/var/log/jnbg",
+              "jkg.loglevel": "INFO",
+              "jkg.pid_file": "/var/run/jnbg/server.pid",
+              "jkg.port": "8888",
+              "toree.interpreters": "Scala",
+              "toree.spark_home": "/usr/iop/current/spark2-client"
+            }
+          }
+        }
+    ],
+    "Blueprints": {
+        "blueprint_name": "iop",
+        "stack_name": "BigInsights",
+        "stack_version": "4.2.5"
+    }
+}
