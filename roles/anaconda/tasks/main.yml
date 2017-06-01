@@ -1,7 +1,11 @@
 
+- name: install bzip2
+  package:
+    name: bzip2
+    state: latest
+
 - name: set anaconda distribution fact
   set_fact: anaconda_install_file=Anaconda{{ anaconda.python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
-
 
 #- name: check anaconda downloaded
 #  local_action: >
@@ -11,6 +15,16 @@
 #  changed_when: False
 #  run_once: true
 #  tags: data-nodes
+
+- name: clean previous anaconda deployments (python 2)
+  file:
+    state: absent
+    path: "{{ anaconda.install_dir }}/anaconda2/"
+
+- name: clean previous anaconda deployments (python 3)
+  file:
+    state: absent
+    path: "{{ anaconda.install_dir }}/anaconda3/"
 
 - debug:
      msg: "Downloading https://repo.continuum.io/archive/{{ anaconda_install_file }}"
@@ -29,11 +43,6 @@
   file:
     path: "{{ anaconda.install_dir }}/anaconda{{ anaconda.python_version}}"
     state: absent
-
-- name: install bzip2
-  package:
-    name: bzip2
-    state: latest
 
 - name: install anaconda package
   shell: "bash {{ anaconda.install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ anaconda.install_dir }}/anaconda{{ anaconda.python_version}}"
