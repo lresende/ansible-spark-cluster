@@ -12,14 +12,61 @@ You will need a driver machine with ansible installed and a clone of the current
 # Available Components
 
 * **Common**  Deploys Java
-* **HDFS**
+* **HDFS** Deploys HDFS filesystem
+* **Spark** Deploys Spark in Standalone mode
+* **Anaconda** Deploys Anaconda Python distribution
+* **IOP** Deploys IBM Open Platform (IOP) 4.2.5
+* **Notebook** Deploys Notebook Platform
 
-* **Spark**
+# Deploying Components
 
-* **Anaconda**
+### Create host inventory file
 
-* **IOP 4.25 (IBM Open Platform)**
+```
+[all:vars]
+ansible_connection=ssh
+#ansible_user=root
+#ansible_ssh_private_key_file=~/.ssh/ibm_rsa
+gather_facts=True
+gathering=smart
+host_key_checking=False
 
-* **Elyra**
+    
+[master]
+FQDN   ansible_host=IP
+    
+[nodes]
+FQDN   ansible_host=IP
+FQDN   ansible_host=IP
+FQDN   ansible_host=IP
+FQDN   ansible_host=IP
+
+```
+
+### Create your playbook
+
+```
+- name: Deploy and configure IOP
+  hosts: all
+  remote_user: root
+  roles:
+    - role: common
+    - role: iop
+    
+- name: Deploy and configure Anaconda
+  hosts: all
+  remote_user: root
+  roles:
+    - role: anaconda
+    
+- name: Deploy and configure Notebook Platform
+  hosts: master
+  remote_user: root
+  roles:
+    - role: notebook
+
+```
+
+### Deploy
 
 ansible-playbook setup-elyra-cluster.yml -i hosts-elyra-cluster
