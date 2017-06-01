@@ -1,0 +1,15 @@
+notebook:
+  useLocalArchives: yes
+  download_location: http://9.30.252.137/dist
+
+  yarn_client_archive_location: yarn-api-client
+  yarn_client_archive: yarn_api_client-0.2.4-py3-none-any.whl
+
+  elyra_archive_location: elyra
+  elyra_archive: jupyter_kernel_gateway-2.0.0.dev0-py2.py3-none-any.whl
+
+  toree_archive_location: toree
+  toree_archive: toree-0.2.0.dev1-incubating-binary-release.tar.gz
+
+  install_temp_dir: /tmp
+  install_dir: /opt

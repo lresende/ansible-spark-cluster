@@ -1,0 +1,56 @@
+
+# update python packages
+- name: pip install paramiko
+  shell: "pip install paramiko"
+
+# copy and install yarn-client-api
+- debug:
+     msg: "Downloading Yarn Client API: {{ notebook.download_location }}/{{ notebook.yarn_client_archive_location }}/{{ notebook.yarn_client_archive }}"
+
+- name: download and install yarn-client-api
+  get_url:
+    url: "{{ notebook.download_location }}/{{ notebook.yarn_client_archive_location }}/{{ notebook.yarn_client_archive }}"
+    dest: "{{ notebook.install_temp_dir }}/{{ notebook.yarn_client_archive }}"
+
+- name: pip install yarn-client-api
+  shell: "cd {{ notebook.install_temp_dir }}; pip install -I {{ notebook.yarn_client_archive }}"
+
+# install elyra dependencies
+#yum install gcc openssl-devel libffi-devel python-devel
+- name: install elyra dependencies
+  yum:
+    name: gcc,openssl-devel,libffi-devel,python-devel
+    state: installed
+
+# copy and install elyra
+- debug:
+     msg: "Downloading Elyra: {{ notebook.download_location }}/{{ notebook.elyra_archive_location }}/{{ notebook.elyra_archive }}"
+
+- name: download and install elyra
+  get_url:
+     url: "{{ notebook.download_location }}/{{ notebook.elyra_archive_location }}/{{ notebook.elyra_archive }}"
+     dest: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_archive }}"
+
+- name: pip install elyra
+  shell: "cd {{ notebook.install_temp_dir }}; pip install -I {{ notebook.elyra_archive }}"
+
+# copy and install toree
+- debug:
+     msg: "Downloading Toree:  {{ notebook.download_location }}/{{ notebook.toree_archive_location }}/{{ notebook.toree_archive }}"
+
+- name: download toree binary distro
+  get_url:
+     url: "{{ notebook.download_location }}/{{ notebook.toree_archive_location }}/{{ notebook.toree_archive }}"
+     dest: "{{ notebook.install_temp_dir }}/{{ notebook.toree_archive }}"
+
+
+- name: create toree install directory
+  file:
+    path: "{{ notebook.install_dir }}/toree"
+    state: directory
+  become: true
+
+- unarchive:
+    src: "{{ notebook.install_temp_dir }}/{{ notebook.toree_archive }}"
+    dest: "{{ notebook.install_dir }}/toree"
+    remote_src: True
