@@ -69,4 +69,4 @@ FQDN   ansible_host=IP
 
 ### Deploy
 
-ansible-playbook setup-elyra-cluster.yml -i hosts-elyra-cluster
+ansible-playbook spark-cluster.yml -i hosts-multi-node
