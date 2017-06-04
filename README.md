@@ -31,10 +31,10 @@ gather_facts=True
 gathering=smart
 host_key_checking=False
 
-    
+
 [master]
 FQDN   ansible_host=IP
-    
+
 [nodes]
 FQDN   ansible_host=IP
 FQDN   ansible_host=IP
@@ -52,13 +52,13 @@ FQDN   ansible_host=IP
   roles:
     - role: common
     - role: iop
-    
+
 - name: Deploy and configure Anaconda
   hosts: all
   remote_user: root
   roles:
     - role: anaconda
-    
+
 - name: Deploy and configure Notebook Platform
   hosts: master
   remote_user: root
@@ -69,4 +69,12 @@ FQDN   ansible_host=IP
 
 ### Deploy
 
-ansible-playbook setup-elyra-cluster.yml -i hosts-elyra-cluster
+```
+ansible-playbook <deployment playbook.yml> -i <hosts inventory>
+```
+
+Example:
+
+```
+ansible-playbook spark-cluster.yml -i hosts-multi-node
+```
