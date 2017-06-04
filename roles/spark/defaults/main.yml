@@ -1,6 +1,6 @@
 spark:
   temp_dir: /tmp
-  version: 2.1.0
+  version: 2.1.1
   hadoop_version: 2.7
   working_dir: /tmp/spark/data
   install_dir: /opt
