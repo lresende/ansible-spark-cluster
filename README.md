@@ -22,6 +22,10 @@ sudo yum install -y  ansible
 * Install Annaconda
 * Use pip install ansible
 
+### Supported/Tested Platform
+
+* RHEL 7.x
+
 # Available Components
 
 * **Common**  Deploys Java
