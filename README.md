@@ -8,6 +8,19 @@ You will need a driver machine with ansible installed and a clone of the current
 * if you are running on private cloud (public network access to all nodes)
   * Install ansible on your laptop and drive the deployment from it
 
+## Installing Ansible on RHEL
+
+```
+curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo rpm -i epel-release-latest-7.noarch.rpm
+sudo yum update -y
+sudo yum install -y  ansible
+```
+
+### Installing Ansible on Mac
+
+* Install Annaconda
+* Use pip install ansible
 
 # Available Components
 
