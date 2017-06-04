@@ -1,0 +1,18 @@
+
+
+#- debug:
+#     msg: "{{ hostvars['lresende-elyra-node-1'] }}"
+#  when: inventory_hostname in groups['master']
+
+- name: create bin directory for utility scripts
+  file:
+    path: "{{ common.install_dir }}/bin"
+    state: directory
+  when: inventory_hostname in groups['master']
+
+- name: create do.sh utility.
+  template:
+    src: do.sh.j2
+    dest: "{{ common.install_dir }}/bin/do.sh"
+    mode: 0744
+  when: inventory_hostname in groups['master']
