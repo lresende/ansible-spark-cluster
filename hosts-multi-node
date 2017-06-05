@@ -7,10 +7,10 @@ gathering=smart
 host_key_checking=False
 
 [master]
-172.16.192.163
+lresende-elyra-node-1   ansible_host=9.30.51.102
 
 [nodes]
-172.16.192.163
-172.16.192.191
-172.16.192.197
-172.16.194.200
+lresende-elyra-node-2   ansible_host=9.30.193.205
+lresende-elyra-node-3   ansible_host=9.30.56.28
+lresende-elyra-node-4   ansible_host=9.30.56.133
+lresende-elyra-node-5   ansible_host=9.30.57.69
