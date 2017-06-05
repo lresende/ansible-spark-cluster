@@ -5,22 +5,22 @@
 #        state=present
 #        groups="{{ hadoop.user_groups | join(',') }}"
 
-- name: set hadoop distribution fact
-  set_fact: hadoop_path=hadoop-{{ hadoop.version }}
-
 - name: define number of nodes
-  set_fact: number_of_nodes="{{ groups['nodes'] | length }}"
+  set_fact: number_of_nodes="{{ groups['nodes'] | length | int }}"
 
 - debug:
      msg: "{{ number_of_nodes }}"
 
 - name: disable hdfs replication in single node
   set_fact: hdfs_replication_factor=1
-  when: number_of_nodes < 3
+  when: number_of_nodes | int < 3
 
 - name: enable hdfs replication when cluster has more then three nodes
   set_fact: hdfs_replication_factor=3
-  when: number_of_nodes >= 3
+  when: number_of_nodes | int >= 3
+
+- debug:
+     msg: "{{ hdfs_replication_factor }}"
 
 - name: remove pre-existent hadoop data directory
   file:
@@ -48,6 +48,7 @@
 #    group: "{{ hadoop.user }}"
 #  become: true
 
+
 - name: remove pre-existent hadoop temp directory
   file:
     path: "{{ hadoop.temp_dir }}/"
@@ -71,40 +72,41 @@
 
 - name: check hadoop downloaded
   local_action: >
-    command test -f {{ hadoop.install_temp_dir }}/{{ hadoop_path }}.tar.gz
+    command test -f {{ hadoop.install_temp_dir }}/{{ hadoop.hadoop_archive }}
   register: hadoop_downloaded
   failed_when: hadoop_downloaded.rc not in [0, 1]
   changed_when: False
   run_once: true
 
 - debug:
-     msg: "Downloading Hadoop from: {{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz"
+     msg: "Downloading Hadoop from: {{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop.hadoop_archive }}"
+
 
 - name: download hadoop
-  local_action: get_url url="{{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz" dest="{{ hadoop.install_temp_dir }}"
+  local_action: get_url url="{{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop.hadoop_archive }}" dest="{{ hadoop.install_temp_dir }}/"
   when: hadoop_downloaded.rc == 1
   run_once: true
 
 - name: unarchive to the install directory
   unarchive:
-    src: "{{ hadoop.install_temp_dir }}/{{ hadoop_path }}.tar.gz"
+    src: "{{ hadoop.install_temp_dir }}/{{ hadoop.hadoop_archive }}"
     dest: "{{ hadoop.install_dir }}"
 #    owner: "{{ hadoop.user }}"
 #    group: "{{ hadoop.user }}"
-    creates: "{{ hadoop.install_dir }}/{{ hadoop_path }}/RELEASE"
-#  become: true
+    creates: "{{ hadoop.install_dir }}/{{ hadoop.hadoop_install_dir }}"
 
 - name: set core-site.xml
-  template: src="core-site.xml.j2" dest="{{ hadoop.install_dir }}/{{ hadoop_path }}/etc/hadoop/core-site.xml"
+  template: src="core-site.xml.j2" dest="{{ hadoop.install_dir }}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/core-site.xml"
 
 - name: set hadoop-env.sh
-  template: src="hadoop-env.sh.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hadoop-env.sh"
+  template: src="hadoop-env.sh.j2" dest="{{ hadoop.install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/hadoop-env.sh"
 
 - name: set hdfs-site.xml
-  template: src="hdfs-site.xml.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hdfs-site.xml"
+  template: src="hdfs-site.xml.j2" dest="{{ hadoop.install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/hdfs-site.xml"
 
 - name: set slaves
-  template: src="slaves.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/slaves"
+  template: src="slaves.j2" dest="{{ hadoop.install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/slaves"
+  become: true
 
 # Environment setup.
 - name: add hadoop profile to startup
@@ -116,10 +118,11 @@
 - name: format hdfs
   shell: "bin/hdfs namenode -format"
   args:
-      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
+      chdir: "{{ hadoop.install_dir}}/{{ hadoop.hadoop_install_dir }}"
   when: (inventory_hostname in groups['master'])
 
 - name: start hdfs
   shell: "sbin/start-dfs.sh"
   args:
-      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
+      chdir: "{{ hadoop.install_dir}}/{{ hadoop.hadoop_install_dir }}"
+  when: (inventory_hostname in groups['master'])
