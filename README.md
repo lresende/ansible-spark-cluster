@@ -8,7 +8,7 @@ You will need a driver machine with ansible installed and a clone of the current
 * if you are running on private cloud (public network access to all nodes)
   * Install ansible on your laptop and drive the deployment from it
 
-## Installing Ansible on RHEL
+### Installing Ansible on RHEL
 
 ```
 curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -25,6 +25,8 @@ sudo yum install -y  ansible
 ### Supported/Tested Platform
 
 * RHEL 7.x
+* Ansible 2.3.1.0
+  * Ansible 2.3.0.0 seems to have a bug with conditional when which is used in some roles
 
 # Available Components
 
