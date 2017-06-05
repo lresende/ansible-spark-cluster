@@ -1,9 +1,9 @@
-- name: Create service account for HDFS
-  user: name={{ hadoop.user }}
-        system=yes
-        shell={{ hadoop.user_shell }}
-        state=present
-        groups="{{ hadoop.user_groups | join(',') }}"
+#- name: Create service account for HDFS
+#  user: name={{ hadoop.user }}
+#        system=yes
+#        shell={{ hadoop.user_shell }}
+#        state=present
+#        groups="{{ hadoop.user_groups | join(',') }}"
 
 - name: set hadoop distribution fact
   set_fact: hadoop_path=hadoop-{{ hadoop.version }}
@@ -26,33 +26,33 @@
   file:
     path: "{{ hadoop.data_dir }}"
     state: directory
-    owner: "{{ hadoop.user }}"
-    group: "{{ hadoop.user }}"
-  become: true
+#    owner: "{{ hadoop.user }}"
+#    group: "{{ hadoop.user }}"
+#  become: true
 
 - name: create hadoop name directory
   file:
     path: "{{ hadoop.name_dir }}"
     state: directory
-    owner: "{{ hadoop.user }}"
-    group: "{{ hadoop.user }}"
-  become: true
+#    owner: "{{ hadoop.user }}"
+#    group: "{{ hadoop.user }}"
+#  become: true
 
 - name: create hadoop temp directory
   file:
     path: "{{ hadoop.temp_dir }}"
     state: directory
-    owner: "{{ hadoop.user }}"
-    group: "{{ hadoop.user }}"
-  become: true
+#    owner: "{{ hadoop.user }}"
+#    group: "{{ hadoop.user }}"
+#  become: true
 
 - name: create install directory
   file:
     path: "{{ hadoop.install_dir }}"
     state: directory
-    owner: "{{ hadoop.user }}"
-    group: "{{ hadoop.user }}"
-  become: true
+#    owner: "{{ hadoop.user }}"
+#    group: "{{ hadoop.user }}"
+#  become: true
 
 - name: check hadoop downloaded
   local_action: >
@@ -74,26 +74,22 @@
   unarchive:
     src: "{{ hadoop.install_temp_dir }}/{{ hadoop_path }}.tar.gz"
     dest: "{{ hadoop.install_dir }}"
-    owner: "{{ hadoop.user }}"
-    group: "{{ hadoop.user }}"
+#    owner: "{{ hadoop.user }}"
+#    group: "{{ hadoop.user }}"
     creates: "{{ hadoop.install_dir }}/{{ hadoop_path }}/RELEASE"
-  become: true
+#  become: true
 
 - name: set core-site.xml
   template: src="core-site.xml.j2" dest="{{ hadoop.install_dir }}/{{ hadoop_path }}/etc/hadoop/core-site.xml"
-  become: true
 
 - name: set hadoop-env.sh
   template: src="hadoop-env.sh.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hadoop-env.sh"
-  become: true
 
 - name: set hdfs-site.xml
   template: src="hdfs-site.xml.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hdfs-site.xml"
-  become: true
 
 - name: set slaves
   template: src="slaves.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/slaves"
-  become: true
 
 # Environment setup.
 - name: add hadoop profile to startup

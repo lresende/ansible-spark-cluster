@@ -1,9 +1,9 @@
-- name: Create service account for Spark
-  user: name={{ spark.user }}
-        system=yes
-        shell={{ spark.user_shell }}
-        state=present
-        groups="{{ spark.user_groups | join(',') }}"
+#- name: Create service account for Spark
+#  user: name={{ spark.user }}
+#        system=yes
+#        shell={{ spark.user_shell }}
+#        state=present
+#        groups="{{ spark.user_groups | join(',') }}"
 
 - name: set spark distribution fact
   set_fact: spark_path=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}
@@ -28,38 +28,35 @@
   file:
     path: "{{ spark.working_dir }}"
     state: directory
-    owner: "{{ spark.user }}"
-    group: "{{ spark.user }}"
-  become: true
+#    owner: "{{ spark.user }}"
+#    group: "{{ spark.user }}"
+#  become: true
 
 - name: create install directory
   file:
     path: "{{ spark.install_dir }}"
     state: directory
-    owner: "{{ spark.user }}"
-    group: "{{ spark.user }}"
-  become: true
+#    owner: "{{ spark.user }}"
+#    group: "{{ spark.user }}"
+#  become: true
 
 - name: download and unarchive to the install directory
   unarchive:
     src: "{{ spark.temp_dir }}/{{ spark_path }}.tgz"
     dest: "{{ spark.install_dir }}"
-    owner: "{{ spark.user }}"
-    group: "{{ spark.user }}"
+#    owner: "{{ spark.user }}"
+#    group: "{{ spark.user }}"
     creates: "{{ spark.install_dir }}/{{ spark_path }}/RELEASE"
-  become: true
+#  become: true
 
 - name: set spark-env.sh
   template: src="spark-env-sh.j2" dest="{{ spark.install_dir }}/{{ spark_path }}/conf/spark-env.sh"
-  become: true
 
 - name: set spark-defaults.conf
   template: src="spark-defaults-conf.j2" dest="{{ spark.install_dir}}/{{ spark_path }}/conf/spark-defaults.conf"
-  become: true
 
 - name: set slaves
   template: src="slaves.j2" dest="{{ spark.install_dir}}/{{ spark_path }}/conf/slaves"
-  become: true
 
 # Environment setup.
 - name: add spark profile to startup
