@@ -95,5 +95,5 @@ ansible-playbook <deployment playbook.yml> -i <hosts inventory>
 Example:
 
 ```
-ansible-playbook spark-cluster.yml -i hosts-multi-node
+ansible-playbook setup-spark-cluster.yml -i hosts-fyre
 ```

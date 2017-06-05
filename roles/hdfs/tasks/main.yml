@@ -81,7 +81,6 @@
 - debug:
      msg: "Downloading Hadoop from: {{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop.hadoop_archive }}"
 
-
 - name: download hadoop
   local_action: get_url url="{{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop.hadoop_archive }}" dest="{{ hadoop.install_temp_dir }}/"
   when: hadoop_downloaded.rc == 1
