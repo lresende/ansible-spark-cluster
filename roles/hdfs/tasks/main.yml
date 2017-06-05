@@ -22,6 +22,11 @@
   set_fact: hdfs_replication_factor=3
   when: number_of_nodes >= 3
 
+- name: remove pre-existent hadoop data directory
+  file:
+    path: "{{ hadoop.data_dir }}/"
+    state: absent
+
 - name: create hadoop data directory
   file:
     path: "{{ hadoop.data_dir }}"
@@ -30,6 +35,11 @@
 #    group: "{{ hadoop.user }}"
 #  become: true
 
+- name: remove pre-existent hadoop name directory
+  file:
+    path: "{{ hadoop.name_dir }}/"
+    state: absent
+
 - name: create hadoop name directory
   file:
     path: "{{ hadoop.name_dir }}"
@@ -37,6 +47,11 @@
 #    owner: "{{ hadoop.user }}"
 #    group: "{{ hadoop.user }}"
 #  become: true
+
+- name: remove pre-existent hadoop temp directory
+  file:
+    path: "{{ hadoop.temp_dir }}/"
+    state: absent
 
 - name: create hadoop temp directory
   file:
