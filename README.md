@@ -31,9 +31,10 @@ sudo yum install -y  ansible
 # Available Components
 
 * **Common**  Deploys Java
-* **HDFS** Deploys HDFS filesystem
-* **Spark** Deploys Spark in Standalone mode
-* **Anaconda** Deploys Anaconda Python distribution
+* **HDFS** Deploys HDFS filesystem using slave nodes as data nodes
+* **Spark** Deploys Spark in Standalone mode using slave nodes for workers
+* **ElasticSearch** Deploy ElasticSearch nodes on all slave nodes
+* **Anaconda** Deploys Anaconda Python distribution on all nodes
 * **IOP** Deploys IBM Open Platform (IOP) 4.2.5
 * **Notebook** Deploys Notebook Platform
 
