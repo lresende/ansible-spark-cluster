@@ -8,8 +8,12 @@
 - name: set spark installation path fact
   set_fact: spark_installation_dir=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}
 
-- name: set spark installation path fact
+- name: set spark archive fact
   set_fact: spark_archive=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}.tgz
+
+- name: set spark download location fact
+  set_fact: spark_download={{ spark.download_location }}/spark-{{ spark.version }}/{{ spark_archive }}
+
 
 - name: check spark downloaded
   local_action: >
@@ -20,31 +24,12 @@
   run_once: true
 
 - debug:
-     msg: "Downloading Spark from: {{ spark.download_location }}/spark-{{ spark.version }}/{{ spark_archive }}"
+     msg: "Downloading Spark from: {{ spark_download }}"
 
 - name: download spark
-  local_action: get_url url="{{ spark.download_location }}/spark-{{ spark.version }}/{{ spark_archive }}" dest="{{ spark.temp_dir }}"
+  get_url: url="{{ spark_download }}" dest="{{ spark.temp_dir }}/{{ spark_archive }}"
   when: spark_downloaded.rc == 1
   run_once: true
-
-- name: create spark working directory
-  file:
-    path: "{{ spark.working_dir }}"
-    state: directory
-#    owner: "{{ spark.user }}"
-#    group: "{{ spark.user }}"
-#  become: true
-
-- name: create install directory
-  file:
-    path: "{{ spark.install_dir }}"
-    state: directory
-#    owner: "{{ spark.user }}"
-#    group: "{{ spark.user }}"
-#  become: true
-
-- debug:
-     msg: "Downloading Spark from: {{ spark.temp_dir }}/{{ spark_archive }}"
 
 - name: download and unarchive to the install directory
   unarchive:
@@ -53,6 +38,14 @@
 #    owner: "{{ spark.user }}"
 #    group: "{{ spark.user }}"
     creates: "{{ spark.install_dir }}/{{ spark_installation_dir }}"
+#  become: true
+
+- name: create spark working directory
+  file:
+    path: "{{ spark.working_dir }}"
+    state: directory
+#    owner: "{{ spark.user }}"
+#    group: "{{ spark.user }}"
 #  become: true
 
 - name: set spark-env.sh
