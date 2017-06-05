@@ -65,7 +65,7 @@
     dest: /etc/profile.d/spark-profile.sh
     mode: 0644
 
-#- name: start spark
-#  shell: "sbin/start-all.sh"
-#  args:
-#      chdir: "{{ spark.install_dir}}/{{ spark_path }}"
+- name: start spark
+  shell: "sbin/start-all.sh"
+  args:
+      chdir: "{{ spark.install_dir}}/{{ spark_path }}"

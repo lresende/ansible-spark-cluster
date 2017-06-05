@@ -98,13 +98,13 @@
     dest: /etc/profile.d/hadoop-profile.sh
     mode: 0644
 
-#- name: format hdfs
-#  shell: "bin/hdfs namenode -format"
-#  args:
-#      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
-#  when: (inventory_hostname in groups['master'])
+- name: format hdfs
+  shell: "bin/hdfs namenode -format"
+  args:
+      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
+  when: (inventory_hostname in groups['master'])
 
-#- name: start hdfs
-#  shell: "sbin/start-dfs.sh"
-#  args:
-#      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
+- name: start hdfs
+  shell: "sbin/start-dfs.sh"
+  args:
+      chdir: "{{ hadoop.install_dir}}/{{ hadoop_path }}"
