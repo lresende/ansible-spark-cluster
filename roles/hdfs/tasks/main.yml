@@ -91,6 +91,10 @@
   template: src="hdfs-site.xml.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/hdfs-site.xml"
   become: true
 
+- name: set slaves
+  template: src="slaves.j2" dest="{{ hadoop.install_dir}}/{{ hadoop_path }}/etc/hadoop/slaves"
+  become: true
+
 # Environment setup.
 - name: add hadoop profile to startup
   template:

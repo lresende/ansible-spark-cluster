@@ -57,6 +57,10 @@
   template: src="spark-defaults-conf.j2" dest="{{ spark.install_dir}}/{{ spark_path }}/conf/spark-defaults.conf"
   become: true
 
+- name: set slaves
+  template: src="slaves.j2" dest="{{ spark.install_dir}}/{{ spark_path }}/conf/slaves"
+  become: true
+
 # Environment setup.
 - name: add spark profile to startup
   template:
