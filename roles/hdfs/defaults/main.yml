@@ -1,5 +1,7 @@
 hadoop:
   version: 2.7.3
+  hadoop_archive: hadoop-2.7.3.tar.gz
+  hadoop_install_dir: hadoop-2.7.3
   install_temp_dir: /tmp
   install_dir: /opt
   data_dir: /opt/data/data
