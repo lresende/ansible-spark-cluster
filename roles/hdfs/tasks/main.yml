@@ -62,8 +62,11 @@
   changed_when: False
   run_once: true
 
+- debug:
+     msg: "Downloading Hadoop from: {{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz"
+
 - name: download hadoop
-  local_action: get_url url="{{ hadoop.mirror }}/repos/dist/release/hadoop/common/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz" dest="{{ hadoop.install_temp_dir }}"
+  local_action: get_url url="{{ hadoop.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop_path }}.tar.gz" dest="{{ hadoop.install_temp_dir }}"
   when: hadoop_downloaded.rc == 1
   run_once: true
 

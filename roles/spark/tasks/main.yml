@@ -16,8 +16,11 @@
   changed_when: False
   run_once: true
 
+- debug:
+     msg: "Downloading Spark from: {{ spark.mirror }}/spark-{{ spark.version }}/{{ spark_path }}.tgz"
+
 - name: download spark
-  local_action: get_url url="{{ spark.mirror }}/repos/dist/release/spark/spark-{{ spark.version }}/{{ spark_path }}.tgz" dest="{{ spark.temp_dir }}"
+  local_action: get_url url="{{ spark.mirror }}/spark-{{ spark.version }}/{{ spark_path }}.tgz" dest="{{ spark.temp_dir }}"
   when: spark_downloaded.rc == 1
   run_once: true
 
