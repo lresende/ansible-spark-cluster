@@ -1,0 +1,9 @@
+elasticsearch:
+  version: 5.4.1
+  # https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.1.tar.gz
+  download_location: https://artifacts.elastic.co/downloads/elasticsearch
+  install_temp_dir: /tmp
+  install_dir: /opt
+  user: "elasticsearch"       # the name of the (OS)user created for spark
+  user_groups: []             # Optional list of (OS)groups the new spark user should belong to
+  user_shell: "/bin/false"    # the elasticsearch user's default shell

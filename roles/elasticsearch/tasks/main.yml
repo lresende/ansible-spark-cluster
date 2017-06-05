@@ -1,0 +1,51 @@
+- name: Create service account for Elasticsearch
+  user: name={{ elasticsearch.user }}
+        system=yes
+        shell={{ elasticsearch.user_shell }}
+        state=present
+        groups="{{ elasticsearch.user_groups | join(',') }}"
+
+- name: set elasticsearch installation directory fact
+  set_fact: elasticsearch_installation_dir=elasticsearch-{{ elasticsearch.version }}
+
+- name: set elasticsearch archive fact
+  set_fact: elasticsearch_archive=elasticsearch-{{ elasticsearch.version }}.tar.gz
+
+- name: set elasticsearch download location fact
+  set_fact: elasticsearch_download={{ elasticsearch.download_location }}/{{ elasticsearch_archive }}
+
+- debug:
+     msg: "Downloading ElasticSearch {{ elasticsearch_download }}"
+
+- name: check elasticsearch downloaded
+  local_action: >
+    command test -f {{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}
+  register: elasticsearch_downloaded
+  failed_when: elasticsearch_downloaded.rc not in [0, 1]
+  changed_when: False
+  run_once: true
+
+- name: download elasticsearch
+  get_url: url="{{ elasticsearch_download }}" dest="{{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}"
+  when: elasticsearch_downloaded.rc == 1
+  run_once: true
+
+- name: unarchive to the install directory
+  unarchive:
+    src: "{{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}"
+    dest: "{{ elasticsearch.install_dir }}"
+    creates: "{{ elasticsearch.install_dir }}/{{ elasticsearch_installation_dir }}"
+
+- name: set elasticsearch.yml
+  template: src="elasticsearch.yml.j2" dest="{{ elasticsearch.install_dir }}/{{ elasticsearch_installation_dir }}/config/elasticsearch.yml"
+
+# Environment setup.
+- name: add elasticsearch profile to startup
+  template:
+    src: elasticsearch-profile.sh.j2
+    dest: /etc/profile.d/elasticsearch-profile.sh
+    mode: 0644
+
+#- name: make elasticsearch a service
+#  shell: >
+#    chkconfig --add elasticsearch

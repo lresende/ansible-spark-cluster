@@ -10,4 +10,4 @@ hadoop:
   download_location: https://archive.apache.org/dist/hadoop/common/
   user: "hdfs"               # the name of the (OS)user created for spark
   user_groups: []             # Optional list of (OS)groups the new spark user should belong to
-  user_shell: "/bin/false"    # the spark user's default shell
+  user_shell: "/bin/false"    # the hdfs user's default shell
