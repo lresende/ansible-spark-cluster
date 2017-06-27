@@ -1,0 +1,12 @@
+- name: ambari setup
+  hosts: all
+  remote_user: root
+  roles:
+    - role: iop
+
+- name: 3rd party tools setup
+  hosts: all
+  remote_user: root
+  roles:
+    - role: common
+    - role: anaconda
