@@ -1,2 +1,3 @@
+- include: os-packages.yml
 - include: java.yml
 - include: utilities.yml
