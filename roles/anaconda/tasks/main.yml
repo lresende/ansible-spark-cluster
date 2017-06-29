@@ -46,7 +46,6 @@
 
 - name: install anaconda package
   shell: "bash {{ anaconda.install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ anaconda.install_dir }}/anaconda{{ anaconda.python_version}}"
-  when: (inventory_hostname in groups['master'])
 
 # Environment setup.
 - name: Add anaconda_env to startup
@@ -54,4 +53,3 @@
     src: anaconda-profile.sh.j2
     dest: /etc/profile.d/anaconda-profile.sh
     mode: 0644
-  when: inventory_hostname in groups['master']
