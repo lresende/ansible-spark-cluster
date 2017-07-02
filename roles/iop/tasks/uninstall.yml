@@ -50,3 +50,15 @@
     name: postgresql
     state: removed
   when: (inventory_hostname in groups['master'])
+
+- user: name="ambari-qa" state="absent" remove="yes"
+- user: name="yarn" state="absent" remove="yes"
+- user: name="hdfs" state="absent" remove="yes"
+- user: name="users" state="absent" remove="yes"
+- user: name="hcat" state="absent" remove="yes"
+- user: name="hive" state="absent" remove="yes"
+- user: name="mapred" state="absent" remove="yes"
+- user: name="hadoop" state="absent" remove="yes"
+- user: name="spark" state="absent" remove="yes"
+- user: name="knox" state="absent" remove="yes"
+- user: name="zookeeper" state="absent" remove="yes"
