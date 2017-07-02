@@ -20,11 +20,6 @@
     name: ambari-agent
     state: removed
 
-#- name: purge ambari agent rpm on all nodes
-#  apt_rpm:
-#    name: ambari-agent
-#    state: absent
-
 - name: remove remaining config files on all nodes
   shell:
      rm -rf /etc/yum.repos.d/IOP.repo
@@ -40,12 +35,6 @@
     name: ambari-server
     state: removed
   when: (inventory_hostname in groups['master'])
-
-#- name: purge ambari server rpm on master node
-#  apt_rpm:
-#    name: ambari-server
-#    state: absent
-#  when: (inventory_hostname in groups['master'])
 
 - name: remove remaining ambari server on master node
   shell:

@@ -18,10 +18,6 @@
     curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/blueprint_multi_node_spark.json http://{{groups['master'][0]}}:8081/api/v1/blueprints/iop?validate_topology=false
   when: (inventory_hostname in groups['master'])
 
-#- name: retrieve registered ambari server blueprints after registering iop one
-#  shell: curl -H "X-Requested-By: ambari" -X GET -u admin:admin http://{{groups['master'][0]}}:8081/api/v1/hosts
-#  when: (inventory_hostname in groups['master'])
-
 - name: generate host mapping for ambari server deployment
   template: src="hostmapping.json.j2" dest="/tmp/hostmapping.json" mode=0644
   when: (inventory_hostname in groups['master'])
