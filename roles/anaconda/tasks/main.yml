@@ -53,3 +53,4 @@
     src: anaconda-profile.sh.j2
     dest: /etc/profile.d/anaconda-profile.sh
     mode: 0644
+  when: anaconda.update_path

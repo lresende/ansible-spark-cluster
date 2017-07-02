@@ -1,5 +1,6 @@
 anaconda:
   version: 4.4.0
   python_version: 3
+  update_path: true
   install_temp_dir: /tmp
   install_dir: /opt
