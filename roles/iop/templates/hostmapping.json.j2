@@ -6,7 +6,9 @@
             "name": "master",
             "hosts": [
                 {
-                    "fqdn": "{{ groups['master'][0] }}.{{ ansible_domain }}"
+                {% for host in groups['master'] %}
+                    "fqdn": "{{ hostvars[host]['ansible_hostname'] }}.{{ ansible_domain }}"
+                {% endfor %}
                 }
             ]
         },
