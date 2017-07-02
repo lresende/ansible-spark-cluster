@@ -22,6 +22,17 @@ sudo yum install -y  ansible
 * Install Annaconda
 * Use pip install ansible
 
+### Updating Ansible configuration
+
+In order to have variable overriding from host inventory, please add the following configuration into your ~/ansible.csg file
+
+```
+[defaults]
+host_key_checking = False
+hash_behaviour = merge
+```
+
+
 ### Supported/Tested Platform
 
 * RHEL 7.x
