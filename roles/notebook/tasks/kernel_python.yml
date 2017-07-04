@@ -1,0 +1,20 @@
+
+ - name: remove old yarn kernel launcher
+   shell: "rm -rf {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: create placeholder for yarn kernel launcher
+   shell: "mkdir -p {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: update kernel launcher
+   shell: "tar -zxvf {{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster spark_2.1_python_yarn_cluster"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: disable impersonation based on configuration
+   shell: " sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster/kernel.json"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master']) and (notebook.enable_impersonation == false)
