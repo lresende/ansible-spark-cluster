@@ -1,7 +1,8 @@
 
-# install elyra dependencies
-#yum install gcc openssl-devel libffi-devel python-devel
 - name: install commonly used os dependencies
   yum:
     name: gcc,openssl-devel,libffi-devel,python-devel
     state: installed
+
+- name: upgrade all packages
+  yum: name=* state=latest
