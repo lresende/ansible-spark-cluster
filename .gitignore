@@ -16,3 +16,8 @@ maven-eclipse.xml
 
 # Ansible temp files
 *.retry
+
+# Test roles and playbooks
+roles/test/**
+test.yml
+
