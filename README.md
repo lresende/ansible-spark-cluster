@@ -101,11 +101,11 @@ FQDN   ansible_host=IP
 ### Deploy
 
 ```
-ansible-playbook <deployment playbook.yml> -i <hosts inventory>
+ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
 ```
 
 Example:
 
 ```
-ansible-playbook setup-spark-cluster.yml -i hosts-fyre
+ansible-playbook --verbose setup-spark-cluster.yml -i hosts-fyre
 ```
