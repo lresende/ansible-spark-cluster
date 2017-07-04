@@ -1,12 +1,25 @@
-- name: ambari setup
-  hosts: all
-  remote_user: root
-  roles:
-    - role: iop
+#- name: ambari setup
+#  hosts: all
+#  remote_user: root
+#  roles:
+#    - role: common
+#    - role: iop
 
-- name: 3rd party tools setup
+#- name: anaconda
+#  hosts: master
+#  vars:
+#    anaconda:
+#      python_version: 2
+#      update_path: false
+#  remote_user: root
+#  roles:
+#   - role: anaconda
+
+
+- name: notebook platform dependencies
   hosts: all
   remote_user: root
   roles:
-    - role: common
-    - role: anaconda
+    - role: notebook
+
+

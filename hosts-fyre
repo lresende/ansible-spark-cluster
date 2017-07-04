@@ -5,12 +5,14 @@ ansible_connection=ssh
 gather_facts=True
 gathering=smart
 host_key_checking=False
+install_temp_dir=/tmp/ansible-install
+install_dir=/opt
 
 [master]
-lresende-elyra-node-1   ansible_host=9.30.51.102
+lresende-elyra-node-1   ansible_host=9.30.147.7
 
 [nodes]
-lresende-elyra-node-2   ansible_host=9.30.193.205
-lresende-elyra-node-3   ansible_host=9.30.56.28
-lresende-elyra-node-4   ansible_host=9.30.56.133
-lresende-elyra-node-5   ansible_host=9.30.57.69
+lresende-elyra-node-2   ansible_host=9.30.251.94
+lresende-elyra-node-3   ansible_host=9.30.251.96
+lresende-elyra-node-4   ansible_host=9.30.251.111
+lresende-elyra-node-5   ansible_host=9.30.251.169
