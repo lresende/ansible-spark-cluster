@@ -1,0 +1,21 @@
+
+ - name: enable EPEL repository
+   yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: installed
+
+ - name: install os dependencies
+   yum:
+    name: gcc,openssl-devel,libffi-devel,python-devel
+    state: installed
+
+ - name: install python dependencies
+   yum:
+    name: python-pip, python-wheel
+    state: installed
+
+ - name: install python packages
+   shell: |
+    pip install --upgrade pip
+    pip install --upgrade ipykernel
+    pip install --upgrade paramiko

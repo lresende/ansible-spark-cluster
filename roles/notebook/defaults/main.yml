@@ -1,15 +1,23 @@
 notebook:
-  useLocalArchives: yes
-  download_location: http://9.30.252.137/dist
+  yarn_client_package_name: yarn_api_client-0.2.4-py2.py3-none-any.whl
+  yarn_client_pip_download_location: http://9.30.252.137/dist/yarn-api-client/yarn_api_client-0.2.4-py2.py3-none-any.whl
 
-  yarn_client_archive_location: yarn-api-client
-  yarn_client_archive: yarn_api_client-0.2.4-py3-none-any.whl
+  elyra_archive_package_name: jupyter_kernel_gateway-2.0.0.dev-py2.py3-none-any.whl
+  elyra_archive_pip_download_location: http://9.30.252.137/dist/elyra/jupyter_kernel_gateway-2.0.0.dev-py2.py3-none-any.whl
 
-  elyra_archive_location: elyra
-  elyra_archive: jupyter_kernel_gateway-2.0.0.dev0-py2.py3-none-any.whl
+  elyra_kernelspec_package_name: elyra-kernel-specs.tar.gz
+  elyra_kernelspec_download_location: http://9.30.252.137/dist/elyra-kernel-specs/elyra-kernel-specs.tar.gz
+  elyra_log_directory: /var/log/elyra
+  elyra_tmp_directory: /tmp/elyra
 
-  toree_archive_location: toree
-  toree_archive: toree-0.2.0.dev1-incubating-binary-release.tar.gz
+  toree_archive_package_name: toree-0.2.0.dev1.tar.gz
+  toree_pip_download_location: http://9.30.252.137/dist/toree/toree-0.2.0.dev1.tar.gz
 
   install_temp_dir: /tmp
   install_dir: /opt
+
+  pip: /opt/anaconda2/bin/pip
+  jupyter: /opt/anaconda2/bin/jupyter
+  spark_home: /usr/iop/current/spark2-client
+
+  enable_impersonation: false

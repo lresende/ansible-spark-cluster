@@ -1,0 +1,73 @@
+
+ # copy and install yarn-client-api
+ - debug:
+    msg: "Downloading Yarn Client API: {{ notebook.yarn_client_pip_download_location }}"
+
+ - name: download yarn-client-api
+   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}" dest="{{ notebook.install_temp_dir }}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: copy yarn-client-api to node
+   copy:
+     src: "{{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
+     dest: "{{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: pip uninstall yarn-client-api
+   shell: "{{ notebook.pip }} uninstall -y {{ notebook.yarn_client_package_name }}"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: pip install yarn-client-api
+   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{notebook.yarn_client_package_name}}"
+   when: (inventory_hostname in groups['master'])
+
+ # copy and install elyra
+ - debug:
+    msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}"
+
+ - name: download and install elyra
+   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}" dest="{{ notebook.install_temp_dir }}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: copy elyra to node
+   copy:
+     src: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
+     dest: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: pip uninstall elyra
+   shell: "{{ notebook.pip }} uninstall -y {{ notebook.elyra_archive_package_name }}"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: pip install elyra
+   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{notebook.elyra_archive_package_name}}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: create temp directory for elyra
+   file: path="{{ notebook.elyra_tmp_directory }}" state="directory" mode="0777"
+   ignore_errors: yes
+
+ - name: create log directory for elyra
+   file: path="{{ notebook.elyra_log_directory }}" state="directory" mode="0755"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: generate elyra startup script
+   template:
+    src: start-elyra.sh.j2
+    dest: "{{ notebook.install_dir }}/bin/start-elyra.sh"
+    mode: 0744
+   when: (inventory_hostname in groups['master'])
+
+ # copy elyra kernel specs
+
+ - name: download elyra kernel specs
+   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}" dest="{{ notebook.install_temp_dir }}"
+
+ - name: copy toree to remote node
+   copy:
+     src: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
+     dest: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
+   when: (inventory_hostname in groups['master'])
