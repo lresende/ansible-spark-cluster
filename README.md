@@ -24,7 +24,7 @@ sudo yum install -y  ansible
 
 ### Updating Ansible configuration
 
-In order to have variable overriding from host inventory, please add the following configuration into your ~/ansible.csg file
+In order to have variable overriding from host inventory, please add the following configuration into your ~/.ansible.cfg file
 
 ```
 [defaults]
