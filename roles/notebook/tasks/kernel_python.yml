@@ -18,3 +18,8 @@
    shell: " sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster/kernel.json"
    ignore_errors: yes
    when: (inventory_hostname in groups['master']) and (notebook.enable_impersonation == false)
+
+ - name: update spark home to hdp location
+   shell: " sed -i 's/iop/hdp/g' {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster/kernel.json"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master']) and (notebook.enable_impersonation == false)

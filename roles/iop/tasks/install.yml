@@ -7,7 +7,7 @@
 
 - name: add new ambari repository to all nodes
   template:
-    src: ambari.repo.j2
+    src: ambari-hdp.repo.j2
     dest: /etc/yum.repos.d/ambari.repo
     mode: 0644
 

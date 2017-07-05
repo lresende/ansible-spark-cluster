@@ -1,34 +1,25 @@
 ##########################################
 ## Uninstall ambari server on all nodes
 ##########################################
-
-- name: stop ambari-server service
-  shell: "bash ambari-server stop"
+- name: stop all ambari services
+  shell: >
+        curl -H "X-Requested-By: ambari" -X PUT -u admin:admin -d '{"RequestInfo":{"context":"_PARSE_.STOP.ALL_SERVICES","operation_level":{"level":"CLUSTER","cluster_name":"Sandbox"}},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}' http://{{groups['master'][0]}}:8081/api/v1/clusters/hdp/services
   ignore_errors: yes
   when: (inventory_hostname in groups['master'])
 
-- name: stop ambari-agent service
-  shell: "bash ambari-agent stop"
-  ignore_errors: yes
+- name: wait for all ambari services to stop
+  pause:
+   seconds: 90
 
-- name: run uninstall script on all nodes
-  shell: python /usr/lib/python2.6/site-packages/ambari_commons/host_uninstall.py
+- name: stop ambari-server service
+  shell: "ambari-server stop"
   ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
 
-- name: remove ambari agent on all nodes
-  yum:
-    name: ambari-agent
-    state: removed
-
-- name: remove remaining config files on all nodes
-  shell:
-     rm -rf /etc/yum.repos.d/IOP.repo
-     rm -rf /etc/yum.repos.d/IOP-UTILS.repo
-     rm -rf /etc/yum.repos.d/ambari.repo
-     rm -rf /var/log/ambari-agent
-     rm -rf /var/log/knox
-     rm -rf /etc/ambari-agent
+- name: reset ambari-server data
+  shell: "ambari-server reset --silent"
   ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
 
 - name: remove ambari server on master node
   yum:
@@ -38,10 +29,17 @@
 
 - name: remove remaining ambari server on master node
   shell:
+    rm -rf /var/lib/ambari-server
+    rm -rf /var/run/ambari-server
+    rm -rf /usr/lib/ambari-server
     rm -rf /etc/ambari-server
     rm -rf /var/log/ambari-server/
+  ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
+
+- name: remove postgres ambari server databases
+  shell: >
     su - postgres -c "dropdb ambari"
-    su - postgres -c "dropdb ambarirca"
   ignore_errors: yes
   when: (inventory_hostname in groups['master'])
 
@@ -51,12 +49,54 @@
     state: removed
   when: (inventory_hostname in groups['master'])
 
+- name: stop ambari-agent service
+  shell: "ambari-agent stop"
+  ignore_errors: yes
+
+#- name: run uninstall script on all nodes
+#  shell: python /usr/lib/python2.6/site-packages/ambari_commons/host_uninstall.py
+#  ignore_errors: yes
+
+- name: remove ambari agent on all nodes
+  yum:
+    name: ambari-agent
+    state: removed
+
+- name: remove remaining config files on all nodes
+  shell: >
+     rm -rf /var/lib/ambari-agent
+     rm -rf /var/run/ambari-agent
+     rm -rf /usr/lib/amrbari-agent
+     rm -rf /etc/ambari-agent
+     rm -rf /var/log/ambari-agent
+     rm -rf /usr/lib/python2.6/site-packages/ambari*
+     rm -rf /etc/yum.repos.d/IOP.repo
+     rm -rf /etc/yum.repos.d/IOP-UTILS.repo
+     rm -rf /etc/yum.repos.d/ambari.repo
+     rm -rf /var/log/ambari-agent
+     rm -rf /var/log/hadoop
+     rm -rf /var/log/hadoop-hdfs
+     rm -rf /var/log/hadoop-mapreduce
+     rm -rf /var/log/hadoop-yarn
+     rm -rf /var/log/hive
+     rm -rf /var/log/hive2
+     rm -rf /var/log/hive-hcatalog
+     rm -rf /var/log/knox
+     rm -rf /var/log/spark
+     rm -rf /var/log/spark2
+     rm -rf /var/log/webcat
+     rm -rf /var/log/webhcat
+     rm -rf /var/log/zookeeper
+  ignore_errors: yes
+
+
 - user: name="ambari-qa" state="absent" remove="yes"
 - user: name="yarn" state="absent" remove="yes"
 - user: name="hdfs" state="absent" remove="yes"
 - user: name="users" state="absent" remove="yes"
 - user: name="hcat" state="absent" remove="yes"
 - user: name="hive" state="absent" remove="yes"
+- user: name="livy" state="absent" remove="yes"
 - user: name="mapred" state="absent" remove="yes"
 - user: name="hadoop" state="absent" remove="yes"
 - user: name="spark" state="absent" remove="yes"

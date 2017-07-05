@@ -18,6 +18,6 @@ notebook:
 
   pip: /opt/anaconda2/bin/pip
   jupyter: /opt/anaconda2/bin/jupyter
-  spark_home: /usr/iop/current/spark2-client
+  spark_home: /usr/hdp/current/spark2-client
 
   enable_impersonation: false

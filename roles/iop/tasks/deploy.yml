@@ -15,7 +15,7 @@
 
 - name: upload blueprint for ambari server deployment
   shell: >
-    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/blueprint_multi_node_spark.json http://{{groups['master'][0]}}:8081/api/v1/blueprints/iop?validate_topology=false
+    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/blueprint_multi_node_spark.json http://{{groups['master'][0]}}:8081/api/v1/blueprints/hdp?validate_topology=false
   when: (inventory_hostname in groups['master'])
 
 - name: generate host mapping for ambari server deployment
@@ -24,7 +24,7 @@
 
 - name: deploy ambari server cluster
   shell: >
-    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/hostmapping.json http://{{groups['master'][0]}}:8081/api/v1/clusters/iop
+    curl -H "X-Requested-By: ambari" -X POST -u admin:admin -d @/tmp/hostmapping.json http://{{groups['master'][0]}}:8081/api/v1/clusters/hdp
   when: (inventory_hostname in groups['master'])
 
 
