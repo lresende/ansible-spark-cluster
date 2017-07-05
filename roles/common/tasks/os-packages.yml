@@ -6,3 +6,6 @@
 
 - name: upgrade all packages
   yum: name=* state=latest
+
+- name: clean yum repository
+  shell: "yum clean all"

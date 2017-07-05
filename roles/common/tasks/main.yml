@@ -1,3 +1,6 @@
 - include: os-packages.yml
+
 - include: java.yml
+  when: "install_java == True"
+
 - include: utilities.yml

@@ -2,16 +2,6 @@
 - name: set java distribution fact
   set_fact: java_install_file=jdk-{{ common.java_version }}-linux-x64.rpm
 
-
-#- name: check java downloaded
-#  local_action: >
-#    command test -f {{ common.install_temp_dir }}/{{ java_install_file }}
-#  register: java_downloaded
-#  failed_when: java_downloaded.rc not in [0, 1]
-#  changed_when: False
-#  run_once: true
-#  tags: data-nodes
-
 - debug:
      msg: "Downloading http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/{{ java_install_file }}"
 
@@ -20,15 +10,10 @@
      headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
      url: "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/{{ java_install_file }}"
      dest: "{{ common.install_temp_dir }}/{{ java_install_file }}"
-#  with_first_found:
-#    - files:
-#         - "{{ common.install_temp_dir }}/{{ java_install_file }}"
-#      skip: true
 
 - name: install java sdk rpm
-  yum:
-    name: "{{ common.install_temp_dir }}/{{ java_install_file }}"
-    state: present
+  shell: "yum install -y {{ common.install_temp_dir }}/{{ java_install_file }}"
+  ignore_errors: yes
 
 # Environment setup.
 - name: Set JAVA_HOME if configured.
