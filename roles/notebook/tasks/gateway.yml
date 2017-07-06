@@ -1,8 +1,11 @@
  # configure hadoop
  - name: configure hadoop home folder
-   shell: >
-     sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -mkdir /user/root
-     sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -chown root /user/root
+   shell: "sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -mkdir /user/root"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: configure hadoop home folder
+   shell: "sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -chown root /user/root"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
