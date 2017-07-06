@@ -2,13 +2,15 @@
   hosts: all
   remote_user: root
   roles:
-#    - role: common
-#    - role: hdfs
-#    - role: spark
-    - role: elasticsearch
+    - role: common
+    - role: hdfs
+    - role: spark
+#    - role: elasticsearch
 
-#- name: notebook setup
-#  hosts: master
-#  remote_user: root
-#  roles:
-#    - role: anaconda
+- name: notebook platform
+  hosts: all
+  remote_user: root
+  roles:
+   - role: anaconda
+   - role: notebook
+

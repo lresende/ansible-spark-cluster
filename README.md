@@ -61,7 +61,7 @@ ansible_connection=ssh
 gather_facts=True
 gathering=smart
 host_key_checking=False
-
+install_java=False
 
 [master]
 FQDN   ansible_host=IP
@@ -77,21 +77,25 @@ FQDN   ansible_host=IP
 ### Create your playbook
 
 ```
-- name: Deploy and configure IOP
+- name: ambari setup
   hosts: all
   remote_user: root
   roles:
     - role: common
     - role: iop
 
-- name: Deploy and configure Anaconda
-  hosts: all
+- name: anaconda
+  hosts: master
+  vars:
+    anaconda:
+      python_version: 2
+      update_path: false
   remote_user: root
   roles:
-    - role: anaconda
+   - role: anaconda
 
-- name: Deploy and configure Notebook Platform
-  hosts: master
+- name: notebook platform dependencies
+  hosts: all
   remote_user: root
   roles:
     - role: notebook
