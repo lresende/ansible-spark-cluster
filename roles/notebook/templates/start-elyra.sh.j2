@@ -1,28 +1,28 @@
 #!/bin/bash
 
 timestamp() {
-  date +"%Y-%m-%d_%H-%M-%S"
+  date +"%Y-%m-%d"
 }
 
 export ELYRA_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
-export ELYRA_REMOTE_USER=root
+export ELYRA_REMOTE_USER={{ notebook.user }}
 # provide password if passwordless ssh is not configured
 #export ELYRA_REMOTE_PWD=
 
-export ELYRA_YARN_ENDPOINT=http://{{groups['master'][0]}}:8088/ws/v1/cluster
+export ELYRA_YARN_ENDPOINT=http://{{ notebook.elyra_yarn_endpoint_host }}:8088/ws/v1/cluster
 
 export ELYRA_PROXY_LAUNCH_LOG={{ notebook.elyra_log_directory }}/proxy_launch_$(timestamp).log
 
 export ELYRA_KERNEL_LAUNCH_TIMEOUT=90
 #export ELYRA_CONNECTION_FILE_MODE=socket
 
-export JUPYTER_DATA_DIR={{ notebook.elyra_tmp_directory }} #/var/lib/elyra
-export JUPYTER_RUNTIME_DIR={{ notebook.elyra_tmp_directory }} #/var/run/elyra/runtime
+export JUPYTER_DATA_DIR={{ notebook.elyra_data_directory }}
+export JUPYTER_RUNTIME_DIR={{ notebook.elyra_runtime_directory }}
 
-START_CMD="{{ notebook.jupyter }} kernelgateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=300 --MappingKernelManager.cull_interval=30 --JupyterWebsocketPersonality.list_kernels=True"
+START_CMD="{{ notebook.jupyter }} kernelgateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --JupyterWebsocketPersonality.list_kernels=True"
 
 LOG={{ notebook.elyra_log_directory }}/elyra_$(timestamp).log
-PIDFILE={{ notebook.elyra_log_directory }}/elyra.pid
+PIDFILE={{ notebook.elyra_run_directory }}/elyra.pid
 
 eval "$START_CMD > $LOG 2>&1 &"
 if [ "$?" -eq 0 ]; then

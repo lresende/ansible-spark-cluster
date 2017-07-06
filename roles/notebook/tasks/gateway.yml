@@ -11,10 +11,10 @@
 
  # copy and install yarn-client-api
  - debug:
-    msg: "Downloading Yarn Client API: {{ notebook.yarn_client_pip_download_location }}"
+    msg: "Downloading Yarn Client API: {{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}"
 
  - name: download yarn-client-api
-   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}" dest="{{ notebook.install_temp_dir }}"
    when: (inventory_hostname in groups['master'])
 
  - name: copy yarn-client-api to node
@@ -29,15 +29,15 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip install yarn-client-api
-   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{notebook.yarn_client_package_name}}"
+   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  # copy and install elyra
  - debug:
-    msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}"
+    msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
 
  - name: download and install elyra
-   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="{{ notebook.install_temp_dir }}"
    when: (inventory_hostname in groups['master'])
 
  - name: copy elyra to node
@@ -52,15 +52,127 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip install elyra
-   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{notebook.elyra_archive_package_name}}"
+   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
- - name: create temp directory for elyra
-   file: path="{{ notebook.elyra_tmp_directory }}" state="directory" mode="0777"
-   ignore_errors: yes
+ - name: remove elyra data directory
+   file:
+     path: "{{ notebook.elyra_data_directory }}"
+     state: absent
+   when: (inventory_hostname in groups['master'])
+
+ - name: remove elyra run directory
+   file:
+    path: "{{ notebook.elyra_run_directory }}"
+    state: absent
+
+ - name: remove elyra user
+   user:
+      name: "{{ notebook.user }}"
+      state: absent
+      remove: yes
+
+ - name: remove elyra group
+   group:
+     name: "{{ notebook.user }}"
+     state: absent
+
+ - name: create elyra user
+   user:
+     name: "{{ notebook.user }}"
+     groups: "{{ notebook.groups }}"
+     append: yes
+
+ - name: create elyra user ssh folder
+   file:
+    path: "/home/{{ notebook.user }}/.ssh"
+    state: directory
+    owner: "{{ notebook.user }}"
+    group: "{{ notebook.user }}"
+    mode: 0700
+
+ - name: remove old SSH keys for elyra user
+   local_action: shell rm -rf /tmp/elyra_id_rsa*
+   run_once: true
+
+ - name: generate SSH keys for elyra user
+   local_action: shell ssh-keygen -t rsa -b 4096 -f /tmp/elyra_id_rsa -q -N ""
+   run_once: true
+
+ - name: copy private ssh key to node
+   copy:
+     src: "/tmp/elyra_id_rsa"
+     dest: "/home/{{ notebook.user }}/.ssh/id_rsa"
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0600
+
+ - name: copy public ssh key to node
+   copy:
+     src: "/tmp/elyra_id_rsa.pub"
+     dest: "/home/{{ notebook.user }}/.ssh/id_rsa.pub"
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0644
+
+ - name: add SSH key to authorized users
+   authorized_key:
+     user: "{{ notebook.user }}"
+     state: present
+     key: "{{ lookup('file', '/tmp/elyra_id_rsa.pub') }}"
+
+ - name: remove local SSH keys for elyra user
+   local_action: shell rm -rf /tmp/elyra_id_rsa*
+   run_once: true
 
  - name: create log directory for elyra
-   file: path="{{ notebook.elyra_log_directory }}" state="directory" mode="0755"
+   file:
+     path: "{{ notebook.elyra_log_directory }}"
+     state: directory
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0755
+   become_user: "{{ notebook.user }}"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: create bin directory for elyra startup
+   file:
+     path: "{{ notebook.install_dir }}/bin"
+     state: directory
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0755
+   become_user: "{{ notebook.user }}"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: create elyra run directory
+   file:
+     path: "{{ notebook.elyra_run_directory }}"
+     state: directory
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0755
+   become_user: "{{ notebook.user }}"
+
+ - name: create elyra runtime directory
+   file:
+    path: "{{ notebook.elyra_runtime_directory }}"
+    state: directory
+    owner: "{{ notebook.user }}"
+    group: "{{ notebook.user }}"
+    mode: 0777
+   become_user: "{{ notebook.user }}"
+
+ - name: create data directory for elyra startup
+   file:
+     path: "{{ notebook.elyra_data_directory }}"
+     state: directory
+     owner: "{{ notebook.user }}"
+     group: "{{ notebook.user }}"
+     mode: 0755
+   become_user: "{{ notebook.user }}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
@@ -69,12 +181,14 @@
     src: start-elyra.sh.j2
     dest: "{{ notebook.install_dir }}/bin/start-elyra.sh"
     mode: 0744
+    owner: "{{ notebook.user }}"
+    group: "{{ notebook.user }}"
    when: (inventory_hostname in groups['master'])
 
  # copy elyra kernel specs
 
  - name: download elyra kernel specs
-   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="{{ notebook.install_temp_dir }}"
 
  - name: copy toree to remote node
    copy:
