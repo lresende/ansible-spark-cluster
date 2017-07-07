@@ -1,10 +1,10 @@
-export HADOOP_PREFIX={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
-export HADOOP_COMMON_HOME={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
-export HADOOP_HDFS_HOME={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
-export HADOOP_MAPRED_HOME={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
-#export HADOOP_YARN_HOME={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
-export HADOOP_CONF_DIR={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}/etc/hadoop
-#export YARN_CONF_DIR={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}/etc/hadoop
+export HADOOP_PREFIX={{ install_dir }}/hadoop-{{ hadoop.version }}
+export HADOOP_COMMON_HOME={{ install_dir }}/hadoop-{{ hadoop.version }}
+export HADOOP_HDFS_HOME={{ install_dir }}/hadoop-{{ hadoop.version }}
+export HADOOP_MAPRED_HOME={{ install_dir }}/hadoop-{{ hadoop.version }}
+#export HADOOP_YARN_HOME={{ install_dir }}/hadoop-{{ hadoop.version }}
+export HADOOP_CONF_DIR={{ install_dir }}/hadoop-{{ hadoop.version }}/etc/hadoop
+#export YARN_CONF_DIR={{ install_dir }}/hadoop-{{ hadoop.version }}/etc/hadoop
 
-export HADOOP_HOME={{ hadoop.install_dir }}/hadoop-{{ hadoop.version }}
+export HADOOP_HOME={{ install_dir }}/hadoop-{{ hadoop.version }}
 export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH

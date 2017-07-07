@@ -19,25 +19,25 @@
 
 - name: check elasticsearch downloaded
   local_action: >
-    command test -f {{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}
+    command test -f {{ install_temp_dir }}/{{ elasticsearch_archive }}
   register: elasticsearch_downloaded
   failed_when: elasticsearch_downloaded.rc not in [0, 1]
   changed_when: False
   run_once: true
 
 - name: download elasticsearch
-  get_url: url="{{ elasticsearch_download }}" dest="{{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}"
+  get_url: url="{{ elasticsearch_download }}" dest="{{ install_temp_dir }}/{{ elasticsearch_archive }}"
   when: elasticsearch_downloaded.rc == 1
   run_once: true
 
 - name: unarchive to the install directory
   unarchive:
-    src: "{{ elasticsearch.install_temp_dir }}/{{ elasticsearch_archive }}"
-    dest: "{{ elasticsearch.install_dir }}"
-    creates: "{{ elasticsearch.install_dir }}/{{ elasticsearch_installation_dir }}"
+    src: "{{ install_temp_dir }}/{{ elasticsearch_archive }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ install_dir }}/{{ elasticsearch_installation_dir }}"
 
 - name: set elasticsearch.yml
-  template: src="elasticsearch.yml.j2" dest="{{ elasticsearch.install_dir }}/{{ elasticsearch_installation_dir }}/config/elasticsearch.yml"
+  template: src="elasticsearch.yml.j2" dest="{{ install_dir }}/{{ elasticsearch_installation_dir }}/config/elasticsearch.yml"
 
 # Environment setup.
 - name: add elasticsearch profile to startup

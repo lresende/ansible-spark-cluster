@@ -10,7 +10,7 @@
    when: (inventory_hostname in groups['master'])
 
  - name: update kernel launcher
-   shell: "tar -zxvf {{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster spark_2.1_python_yarn_cluster"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster spark_2.1_python_yarn_cluster"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 

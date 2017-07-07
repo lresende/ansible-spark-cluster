@@ -1,5 +1,3 @@
 common:
   java_version: 8u131
   java_home: "/usr/java/jdk1.8.0_131"
-  install_temp_dir: /tmp
-  install_dir: /opt

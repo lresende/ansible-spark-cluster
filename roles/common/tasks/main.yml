@@ -1,3 +1,13 @@
+- name: create install dir
+  file:
+    path: "{{ install_dir }}"
+    state: directory
+
+- name: create temporary install dir
+  file:
+    path: "{{ install_temp_dir }}"
+    state: directory
+
 - include: os-packages.yml
 
 - include: java.yml

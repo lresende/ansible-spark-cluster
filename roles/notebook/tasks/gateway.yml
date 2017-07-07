@@ -14,13 +14,13 @@
     msg: "Downloading Yarn Client API: {{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}"
 
  - name: download yarn-client-api
-   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}" dest="/tmp/"
    when: (inventory_hostname in groups['master'])
 
  - name: copy yarn-client-api to node
    copy:
-     src: "{{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
-     dest: "{{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
+     src: "/tmp/{{ notebook.yarn_client_package_name }}"
+     dest: "{{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  - name: pip uninstall yarn-client-api
@@ -29,7 +29,7 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip install yarn-client-api
-   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
+   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  # copy and install elyra
@@ -37,13 +37,13 @@
     msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
 
  - name: download and install elyra
-   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="/tmp"
    when: (inventory_hostname in groups['master'])
 
  - name: copy elyra to node
    copy:
-     src: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
-     dest: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
+     src: "/tmp/{{ notebook.elyra_archive_package_name }}"
+     dest: "{{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  - name: pip uninstall elyra
@@ -52,7 +52,7 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip install elyra
-   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
+   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  # copy and install notebook - this must follow the elyra (JKG) install until it pulls Notebook 5.1.0
@@ -61,13 +61,13 @@
     msg: "Downloading Notebook: {{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}"
 
  - name: download and install notebook
-   local_action: get_url url="{{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}" dest="/tmp/"
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  - name: copy notebook to node
    copy:
-     src: "{{ notebook.install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
-     dest: "{{ notebook.install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
+     src: "/tmp/{{ notebook.notebook_archive_package_name }}"
+     dest: "{{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  - name: pip uninstall notebook
@@ -76,7 +76,7 @@
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  - name: pip install notebook
-   shell: "{{ notebook.pip }} install {{ notebook.install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
+   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  # Create Elyra user
@@ -164,7 +164,7 @@
 
  - name: create bin directory for elyra startup
    file:
-     path: "{{ notebook.install_dir }}/bin"
+     path: "{{ install_dir }}/bin"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -205,7 +205,7 @@
  - name: generate elyra startup script
    template:
     src: start-elyra.sh.j2
-    dest: "{{ notebook.install_dir }}/bin/start-elyra.sh"
+    dest: "{{ install_dir }}/bin/start-elyra.sh"
     mode: 0744
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
@@ -214,10 +214,10 @@
  # copy elyra kernel specs
 
  - name: download elyra kernel specs
-   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
 
  - name: copy toree to remote node
    copy:
-     src: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
-     dest: "{{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
+     src: "/tmp/{{ notebook.elyra_kernelspec_package_name }}"
+     dest: "{{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
    when: (inventory_hostname in groups['master'])

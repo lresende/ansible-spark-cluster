@@ -20,9 +20,6 @@ notebook:
   toree_archive_package_name: toree-0.2.0.dev1.tar.gz
   toree_pip_download_location: http://{{ internal.elyra_download_server }}/dist/toree/
 
-  install_temp_dir: /tmp
-  install_dir: /opt/elyra
-
   elyra_yarn_endpoint_host: "{{ groups['nodes'][0] }}"
 
   elyra_log_directory: /var/log/elyra

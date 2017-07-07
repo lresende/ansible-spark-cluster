@@ -3,12 +3,12 @@
     msg: "Downloading Toree:  {{ notebook.toree_pip_download_location }}{{ notebook.toree_archive_package_name }}"
 
  - name: download toree
-   local_action: get_url url="{{ notebook.toree_pip_download_location }}{{ notebook.toree_archive_package_name }}" dest="{{ notebook.install_temp_dir }}"
+   local_action: get_url url="{{ notebook.toree_pip_download_location }}{{ notebook.toree_archive_package_name }}" dest="/tmp"
 
  - name: copy toree to remote node
    copy:
-     src: "{{ notebook.install_temp_dir }}/{{ notebook.toree_archive_package_name }}"
-     dest: "{{ notebook.install_temp_dir }}/{{ notebook.toree_archive_package_name }}"
+     src: "/tmp/{{ notebook.toree_archive_package_name }}"
+     dest: "{{ install_temp_dir }}/{{ notebook.toree_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  - name: pip uninstall toree
@@ -27,7 +27,7 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip install toree
-   shell: "{{ notebook.pip }} install --upgrade {{ notebook.install_temp_dir }}/{{notebook.toree_archive_package_name}}"
+   shell: "{{ notebook.pip }} install --upgrade {{ install_temp_dir }}/{{notebook.toree_archive_package_name}}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
@@ -66,7 +66,7 @@
    when: (inventory_hostname in groups['master'])
 
  - name: update kernel launcher
-   shell: "tar -zxvf {{ notebook.install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster/ spark_2.1_scala_yarn_cluster/"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster/ spark_2.1_scala_yarn_cluster/"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 

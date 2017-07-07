@@ -9,7 +9,7 @@
 
 #- name: check anaconda downloaded
 #  local_action: >
-#    command test -f {{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}
+#    command test -f {{ install_temp_dir }}/{{ anaconda_install_file }}
 #  register: anaconda_downloaded
 #  failed_when: anaconda_downloaded.rc not in [0, 1]
 #  changed_when: False
@@ -19,12 +19,12 @@
 - name: clean previous anaconda deployments (python 2)
   file:
     state: absent
-    path: "{{ anaconda.install_dir }}/anaconda2/"
+    path: "{{ install_dir }}/anaconda2/"
 
 - name: clean previous anaconda deployments (python 3)
   file:
     state: absent
-    path: "{{ anaconda.install_dir }}/anaconda3/"
+    path: "{{ install_dir }}/anaconda3/"
 
 - debug:
      msg: "Downloading https://repo.continuum.io/archive/{{ anaconda_install_file }}"
@@ -32,20 +32,20 @@
 - name: download anaconda package
   get_url:
      url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
-     dest: "{{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}"
+     dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 #  with_first_found:
 #    - files:
-#         - "{{ anaconda.install_temp_dir }}/{{ anaconda_install_file }}"
+#         - "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 #      skip: true
 #  when: (inventory_hostname in groups['master'])
 
 - name: clean anaconda install directory
   file:
-    path: "{{ anaconda.install_dir }}/anaconda{{ anaconda.python_version}}"
+    path: "{{ install_dir }}/anaconda{{ anaconda.python_version}}"
     state: absent
 
 - name: install anaconda package
-  shell: "bash {{ anaconda.install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ anaconda.install_dir }}/anaconda{{ anaconda.python_version}}"
+  shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ anaconda.python_version}}"
 
 # Environment setup.
 - name: Add anaconda_env to startup
