@@ -17,23 +17,8 @@
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
- - name: pip uninstall jupyter client
-   shell: "{{ notebook.pip }} uninstall -y jupyter_client"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
- - name: pip uninstall toree
-   shell: "{{ notebook.pip }} uninstall -y {{notebook.toree_archive_package_name}}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
  - name: pip install toree
    shell: "{{ notebook.pip }} install --upgrade {{ install_temp_dir }}/{{notebook.toree_archive_package_name}}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
- - name: pip upgrade jupyter client
-   shell: "{{ notebook.pip }} install --upgrade jupyter_client"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
