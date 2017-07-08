@@ -16,6 +16,7 @@
  - name: download yarn-client-api
    local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}" dest="/tmp/"
    when: (inventory_hostname in groups['master'])
+   run_once: true
 
  - name: copy yarn-client-api to node
    copy:
@@ -39,6 +40,7 @@
  - name: download and install elyra
    local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="/tmp"
    when: (inventory_hostname in groups['master'])
+   run_once: true
 
  - name: copy elyra to node
    copy:
@@ -63,6 +65,7 @@
  - name: download and install notebook
    local_action: get_url url="{{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}" dest="/tmp/"
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
+   run_once: true
 
  - name: copy notebook to node
    copy:
@@ -215,6 +218,7 @@
 
  - name: download elyra kernel specs
    local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
+   run_once: true
 
  - name: copy toree to remote node
    copy:

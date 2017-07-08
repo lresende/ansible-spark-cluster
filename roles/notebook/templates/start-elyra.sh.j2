@@ -13,7 +13,7 @@ export ELYRA_YARN_ENDPOINT=http://{{ notebook.elyra_yarn_endpoint_host }}:8088/w
 
 export ELYRA_PROXY_LAUNCH_LOG={{ notebook.elyra_log_directory }}/proxy_launch_$(timestamp).log
 
-export ELYRA_KERNEL_LAUNCH_TIMEOUT=90
+export ELYRA_KERNEL_LAUNCH_TIMEOUT=120
 #export ELYRA_CONNECTION_FILE_MODE=socket
 
 export JUPYTER_DATA_DIR={{ notebook.elyra_data_directory }}

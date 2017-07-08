@@ -4,6 +4,7 @@
 
  - name: download toree
    local_action: get_url url="{{ notebook.toree_pip_download_location }}{{ notebook.toree_archive_package_name }}" dest="/tmp"
+   run_once: true
 
  - name: copy toree to remote node
    copy:
