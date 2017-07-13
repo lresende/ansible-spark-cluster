@@ -1,0 +1,43 @@
+ - name: adding a few R packages
+   command: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('{{item}}' %in% installed.packages()[,'Package'])) install.packages(pkgs='{{item}}', repos=c('http://cran.cnr.berkeley.edu/'))"
+   with_items:
+   - RCurl
+   - devtools
+   - uuid
+   - argparser
+
+ - name: install IRkernel
+   command: /usr/bin/Rscript --slave --no-save --no-restore-history -e "library(devtools)" -e "install_github('IRkernel/repr')" -e "install_github('IRkernel/IRdisplay')" -e "install_github('IRkernel/IRkernel')" -e "IRkernel::installspec(user=FALSE)"
+
+ - name: retrieve kernelspec location
+   shell: "{{ notebook.jupyter }} kernelspec list | grep -i ir | awk '{print $2}' | xargs -i dirname {}"
+   register: result
+   when: (inventory_hostname in groups['master'])
+
+ - name: store kernelspec location
+   set_fact: jupyter_kernelspec_location="{{ result.stdout }}"
+   with_items: "{{ result.stdout }}"
+   when: (inventory_hostname in groups['master'])
+
+ - name: remove old kernelspecs for yarn
+   shell: "rm -rf {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: move kernelspec location
+   shell: "mv {{ jupyter_kernelspec_location }}/ir {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: update kernel launcher
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster/ spark_2.1_R_yarn_cluster/"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master'])
+
+ - name: disable impersonation based on configuration
+   shell: " sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster/kernel.json"
+   ignore_errors: yes
+   when: (inventory_hostname in groups['master']) and (notebook.enable_impersonation == false)
+
+
+
