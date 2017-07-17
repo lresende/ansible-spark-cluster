@@ -13,8 +13,7 @@ export ELYRA_YARN_ENDPOINT=http://{{ notebook.elyra_yarn_endpoint_host }}:8088/w
 
 export ELYRA_PROXY_LAUNCH_LOG={{ notebook.elyra_log_directory }}/proxy_launch_$(timestamp).log
 
-export ELYRA_KERNEL_LAUNCH_TIMEOUT=120
-#export ELYRA_CONNECTION_FILE_MODE=socket
+export ELYRA_KERNEL_LAUNCH_TIMEOUT=40
 
 export JUPYTER_DATA_DIR={{ notebook.elyra_data_directory }}
 export JUPYTER_RUNTIME_DIR={{ notebook.elyra_runtime_directory }}
@@ -22,7 +21,7 @@ export JUPYTER_RUNTIME_DIR={{ notebook.elyra_runtime_directory }}
 START_CMD="{{ notebook.jupyter }} kernelgateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
 
 LOG={{ notebook.elyra_log_directory }}/elyra_$(timestamp).log
-PIDFILE={{ notebook.elyra_run_directory }}/elyra.pid
+PIDFILE={{ notebook.elyra_runtime_directory }}/elyra.pid
 
 eval "$START_CMD > $LOG 2>&1 &"
 if [ "$?" -eq 0 ]; then

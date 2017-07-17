@@ -90,9 +90,9 @@
      state: absent
    when: (inventory_hostname in groups['master'])
 
- - name: remove elyra run directory
+ - name: remove elyra runtime directory
    file:
-    path: "{{ notebook.elyra_run_directory }}"
+    path: "{{ notebook.elyra_runtime_directory }}"
     state: absent
 
  - name: remove elyra user
@@ -163,11 +163,10 @@
      mode: 0755
    become_user: "{{ notebook.user }}"
    ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
 
  - name: create bin directory for elyra startup
    file:
-     path: "{{ install_dir }}/bin"
+     path: "{{ notebook.elyra_install_directory }}/bin"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -175,15 +174,6 @@
    become_user: "{{ notebook.user }}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
-
- - name: create elyra run directory
-   file:
-     path: "{{ notebook.elyra_run_directory }}"
-     state: directory
-     owner: "{{ notebook.user }}"
-     group: "{{ notebook.user }}"
-     mode: 0755
-   become_user: "{{ notebook.user }}"
 
  - name: create elyra runtime directory
    file:
@@ -208,7 +198,7 @@
  - name: generate elyra startup script
    template:
     src: start-elyra.sh.j2
-    dest: "{{ install_dir }}/bin/start-elyra.sh"
+    dest: "{{ notebook.elyra_install_directory }}/bin/start-elyra.sh"
     mode: 0744
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
