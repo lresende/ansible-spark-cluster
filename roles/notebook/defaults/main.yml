@@ -1,6 +1,7 @@
 internal:
 
   elyra_download_server: 9.30.252.137
+  elyra_install_dir: "{{ install_dir }}/elyra"
 
 
 notebook:
@@ -22,11 +23,10 @@ notebook:
 
   elyra_yarn_endpoint_host: "{{ groups['master'][0] }}"
 
-  elyra_log_directory: /var/log/elyra
-  elyra_tmp_directory: /tmp/elyra
-  elyra_run_directory: /var/run/elyra
-  elyra_runtime_directory: /var/run/elyra/runtime
-  elyra_data_directory: /var/lib/elyra
+  elyra_install_directory: "{{ internal.elyra_install_dir }}"
+  elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
+  elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
+  elyra_data_directory: "{{ internal.elyra_install_dir }}/data"
 
   pip: /opt/anaconda2/bin/pip
   jupyter: /opt/anaconda2/bin/jupyter
