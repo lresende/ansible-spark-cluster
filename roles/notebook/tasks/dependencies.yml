@@ -19,3 +19,8 @@
     pip install --upgrade pip
     pip install --upgrade ipykernel
     pip install --upgrade paramiko
+
+ - name: install R packages
+   yum:
+    name: R, openssl-devel.x86_64, libcurl-devel.x86_64
+    state: installed

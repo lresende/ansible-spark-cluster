@@ -2,3 +2,4 @@
 - include: gateway.yml
 - include: kernel_scala.yml
 - include: kernel_python.yml
+- include: kernel_R.yml
