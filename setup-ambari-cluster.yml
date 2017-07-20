@@ -1,8 +1,15 @@
+- name: install common dependencies
+  hosts: all
+  vars:
+     install_java: false
+  remote_user: root
+  roles:
+    - role: common
+
 - name: ambari setup
   hosts: all
   remote_user: root
   roles:
-    - role: common
     - role: iop
 
 - name: anaconda
