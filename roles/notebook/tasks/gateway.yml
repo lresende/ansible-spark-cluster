@@ -1,12 +1,14 @@
  # configure hadoop
- - name: configure hadoop home folder
-   shell: "sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -mkdir /user/root"
+ - name: create hadoop home folder
+   shell: "sudo -u hdfs hadoop fs -mkdir /user/root"
    ignore_errors: yes
+   become_user: hdfs
    when: (inventory_hostname in groups['master'])
 
  - name: configure hadoop home folder
-   shell: "sudo -u hdfs /usr/hdp/current/hadoop-client/bin/hadoop fs -chown root /user/root"
+   shell: "sudo -u hdfs hadoop fs -chown root /user/root"
    ignore_errors: yes
+   become_user: hdfs
    when: (inventory_hostname in groups['master'])
 
  # copy and install yarn-client-api
@@ -121,7 +123,9 @@
     mode: 0700
 
  - name: remove old SSH keys for elyra user
-   local_action: shell rm -rf /tmp/elyra_id_rsa*
+   local_action: file path="{{item}}" state=absent 
+   with_fileglob:
+     - /tmp/elyra_id_rsa*
    run_once: true
 
  - name: generate SSH keys for elyra user
@@ -151,7 +155,9 @@
      key: "{{ lookup('file', '/tmp/elyra_id_rsa.pub') }}"
 
  - name: remove local SSH keys for elyra user
-   local_action: shell rm -rf /tmp/elyra_id_rsa*
+   local_action: file path="{{item}}" state=absent 
+   with_fileglob:
+     - /tmp/elyra_id_rsa*
    run_once: true
 
  - name: create log directory for elyra
@@ -210,8 +216,12 @@
    local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
    run_once: true
 
- - name: copy toree to remote node
+ - name: create temporary installation directory
+   file:
+     path: "{{ install_temp_dir }}"
+     state: directory
+
+ - name: copy kernelspec package to remote node
    copy:
      src: "/tmp/{{ notebook.elyra_kernelspec_package_name }}"
      dest: "{{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
-   when: (inventory_hostname in groups['master'])
