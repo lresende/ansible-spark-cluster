@@ -1,25 +1,26 @@
 internal:
 
   elyra_download_server: 9.30.252.137
+  elyra_download_root: dist
   elyra_install_dir: "{{ install_dir }}/elyra"
 
 
 notebook:
 
   yarn_client_package_name: yarn_api_client-0.2.4-py2.py3-none-any.whl
-  yarn_client_pip_download_location: http://{{ internal.elyra_download_server }}/dist/yarn-api-client/
+  yarn_client_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/yarn-api-client/
 
   elyra_archive_package_name: jupyter_kernel_gateway-2.0.0.dev-py2.py3-none-any.whl
-  elyra_archive_pip_download_location: http://{{ internal.elyra_download_server }}/dist/elyra/
+  elyra_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra/
 
   elyra_kernelspec_package_name: elyra-kernel-specs.tar.gz
-  elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/dist/elyra-kernel-specs/
+  elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra-kernel-specs/
 
   notebook_archive_package_name: notebook-5.1.0.dev0-py2.py3-none-any.whl
-  notebook_archive_pip_download_location: http://{{ internal.elyra_download_server }}/dist/notebook/
+  notebook_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/notebook/
 
   toree_archive_package_name: toree-0.2.0.dev1.tar.gz
-  toree_pip_download_location: http://{{ internal.elyra_download_server }}/dist/toree/
+  toree_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/toree/
 
   elyra_yarn_endpoint_host: "{{ groups['master'][0] }}"
 
