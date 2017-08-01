@@ -11,30 +11,6 @@
    become_user: hdfs
    when: (inventory_hostname in groups['master'])
 
- # copy and install yarn-client-api
- - debug:
-    msg: "Downloading Yarn Client API: {{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}"
-
- - name: download yarn-client-api
-   local_action: get_url url="{{ notebook.yarn_client_pip_download_location }}{{ notebook.yarn_client_package_name }}" dest="/tmp/"
-   when: (inventory_hostname in groups['master'])
-   run_once: true
-
- - name: copy yarn-client-api to node
-   copy:
-     src: "/tmp/{{ notebook.yarn_client_package_name }}"
-     dest: "{{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
-   when: (inventory_hostname in groups['master'])
-
- - name: pip uninstall yarn-client-api
-   shell: "{{ pip }} uninstall -y {{ notebook.yarn_client_package_name }}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
- - name: pip install yarn-client-api
-   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
-   when: (inventory_hostname in groups['master'])
-
  # copy and install elyra
  - debug:
     msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
