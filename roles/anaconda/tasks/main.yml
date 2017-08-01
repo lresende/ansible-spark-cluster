@@ -7,15 +7,6 @@
 - name: set anaconda distribution fact
   set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
 
-#- name: check anaconda downloaded
-#  local_action: >
-#    command test -f {{ install_temp_dir }}/{{ anaconda_install_file }}
-#  register: anaconda_downloaded
-#  failed_when: anaconda_downloaded.rc not in [0, 1]
-#  changed_when: False
-#  run_once: true
-#  tags: data-nodes
-
 - name: clean previous anaconda deployments (python 2)
   file:
     state: absent
@@ -33,11 +24,6 @@
   get_url:
      url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
      dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
-#  with_first_found:
-#    - files:
-#         - "{{ install_temp_dir }}/{{ anaconda_install_file }}"
-#      skip: true
-#  when: (inventory_hostname in groups['master'])
 
 - name: clean anaconda install directory
   file:
