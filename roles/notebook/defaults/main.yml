@@ -13,6 +13,11 @@ notebook:
   elyra_archive_package_name: jupyter_kernel_gateway-2.0.0.dev-py2.py3-none-any.whl
   elyra_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra/
 
+  elyra_install_directory: "{{ internal.elyra_install_dir }}"
+  elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
+  elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
+  elyra_data_directory: "{{ internal.elyra_install_dir }}/data"
+
   elyra_kernelspec_package_name: elyra-kernel-specs.tar.gz
   elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra-kernel-specs/
 
@@ -22,15 +27,9 @@ notebook:
   toree_archive_package_name: toree-0.2.0.dev1.tar.gz
   toree_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/toree/
 
-  elyra_yarn_endpoint_host: "{{ groups['master'][0] }}"
+  yarn_endpoint_host: "{{ groups['master'][0] }}"
 
-  elyra_install_directory: "{{ internal.elyra_install_dir }}"
-  elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
-  elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
-  elyra_data_directory: "{{ internal.elyra_install_dir }}/data"
-
-  pip: /opt/anaconda2/bin/pip
-  jupyter: /opt/anaconda2/bin/jupyter
+  #"lookup('env', 'SPARK_HOME') | default('/usr/hdp/current/spark2-client', true)"
   spark_home: /usr/hdp/current/spark2-client
 
   user: elyra

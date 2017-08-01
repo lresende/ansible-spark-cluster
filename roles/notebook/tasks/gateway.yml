@@ -27,12 +27,12 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip uninstall yarn-client-api
-   shell: "{{ notebook.pip }} uninstall -y {{ notebook.yarn_client_package_name }}"
+   shell: "{{ pip }} uninstall -y {{ notebook.yarn_client_package_name }}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
  - name: pip install yarn-client-api
-   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
+   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.yarn_client_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  # copy and install elyra
@@ -51,12 +51,12 @@
    when: (inventory_hostname in groups['master'])
 
  - name: pip uninstall elyra
-   shell: "{{ notebook.pip }} uninstall -y {{ notebook.elyra_archive_package_name }}"
+   shell: "{{ pip }} uninstall -y {{ notebook.elyra_archive_package_name }}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
  - name: pip install elyra
-   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
+   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
  # copy and install notebook - this must follow the elyra (JKG) install until it pulls Notebook 5.1.0
@@ -76,12 +76,12 @@
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  - name: pip uninstall notebook
-   shell: "{{ notebook.pip }} uninstall -y {{ notebook.notebook_archive_package_name }}"
+   shell: "{{ pip }} uninstall -y {{ notebook.notebook_archive_package_name }}"
    ignore_errors: yes
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  - name: pip install notebook
-   shell: "{{ notebook.pip }} install {{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
+   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
    when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
 
  # Create Elyra user
@@ -160,6 +160,11 @@
      - /tmp/elyra_id_rsa*
    run_once: true
 
+ - name: Remove elyra root installation folder
+   file:
+     path: "{{ notebook.elyra_log_directory }}"
+     state: absent
+
  - name: create log directory for elyra
    file:
      path: "{{ notebook.elyra_log_directory }}"
@@ -170,7 +175,7 @@
    become_user: "{{ notebook.user }}"
    ignore_errors: yes
 
- - name: create bin directory for elyra startup
+ - name: create bin directory for elyra
    file:
      path: "{{ notebook.elyra_install_directory }}/bin"
      state: directory
@@ -181,7 +186,7 @@
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
- - name: create elyra runtime directory
+ - name: create runtime directory for elyra
    file:
     path: "{{ notebook.elyra_runtime_directory }}"
     state: directory
@@ -190,7 +195,7 @@
     mode: 0777
    become_user: "{{ notebook.user }}"
 
- - name: create data directory for elyra startup
+ - name: create data directory for elyra
    file:
      path: "{{ notebook.elyra_data_directory }}"
      state: directory
@@ -215,6 +220,11 @@
  - name: download elyra kernel specs
    local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
    run_once: true
+
+ - name: create temporary installation directory
+   file:
+     path: "{{ install_temp_dir }}"
+     state: absent
 
  - name: create temporary installation directory
    file:

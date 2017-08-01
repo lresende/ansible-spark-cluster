@@ -12,19 +12,19 @@
      dest: "{{ install_temp_dir }}/{{ notebook.toree_archive_package_name }}"
 
  - name: pip uninstall toree
-   shell: "{{ notebook.pip }} uninstall -y {{ notebook.toree_archive_package_name }}"
+   shell: "{{ pip }} uninstall -y {{ notebook.toree_archive_package_name }}"
    ignore_errors: yes
 
  - name: pip install toree
-   shell: "{{ notebook.pip }} install --upgrade {{ install_temp_dir }}/{{notebook.toree_archive_package_name}}"
+   shell: "{{ pip }} install --upgrade {{ install_temp_dir }}/{{notebook.toree_archive_package_name}}"
    ignore_errors: yes
 
  - debug:
-    msg: "{{ notebook.jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name=\"Spark 2.1\" --interpreters=Scala"
+    msg: "{{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name=\"Spark 2.1\" --interpreters=Scala"
 
  - name: install toree kernel
    shell: >
-    {{ notebook.jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name="Spark 2.1" --interpreters=Scala
+    {{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name="Spark 2.1" --interpreters=Scala
    ignore_errors: yes
 
  - name: retrieve kernelspec location

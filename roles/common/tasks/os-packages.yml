@@ -1,4 +1,3 @@
-
 - name: install commonly used os dependencies
   yum:
     name: bzip2,gcc,openssl-devel,libffi-devel,python-devel,openssl-devel,libcurl,libcurl-devel

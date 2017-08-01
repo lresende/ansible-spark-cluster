@@ -1,33 +1,33 @@
 
- - name: remove old yarn cluster kernel launcher
+ - name: remove old python yarn cluster kernel launcher
    file:
      path: "{{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster"
      state: absent
 
- - name: remove old yarn client kernel launcher
+ - name: remove old python yarn client kernel launcher
    file:
      path: "{{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_client"
      state: absent
 
- - name: create placeholder for yarn cluster kernel launcher
+ - name: create placeholder for python yarn cluster kernel launcher
    file:
     path: "{{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster"
     state: directory
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
 
- - name: create placeholder for yarn client kernel launcher
+ - name: create placeholder for python yarn client kernel launcher
    file:
     path: "{{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_client"
     state: directory
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
 
- - name: update kernel cluster launcher
+ - name: update python kernel cluster launcher
    shell: "tar -zxvf {{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_cluster spark_2.1_python_yarn_cluster"
    ignore_errors: yes
 
- - name: update kernel client launcher
+ - name: update python kernel client launcher
    shell: "tar -zxvf {{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_python_yarn_client spark_2.1_python_yarn_client"
    ignore_errors: yes
 

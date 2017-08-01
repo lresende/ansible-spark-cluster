@@ -1,3 +1,27 @@
+- name: set pip location
+  set_fact: pip={{ install_dir }}/anaconda{{ python_version }}/bin/pip
+  when: notebook.use_anaconda
+
+- name: set pip location
+  set_fact: pip=pip
+  when: not notebook.use_anaconda
+
+- name: set jupyter location
+  set_fact: jupyter={{ install_dir }}/anaconda{{ python_version }}/bin/jupyter
+  when: notebook.use_anaconda
+
+- name: set jupyter location
+  set_fact: jupyter=jupyter
+  when: not notebook.use_anaconda
+
+- name: set RScript location
+  set_fact: rscript={{ install_dir }}/anaconda{{ python_version }}/bin/RScript
+  when: notebook.use_anaconda
+
+- name: set RScript location
+  set_fact: rscript=Rscript
+  when: not notebook.use_anaconda
+
 - include: dependencies.yml
 - include: gateway.yml
 - include: kernel_scala.yml
