@@ -1,7 +1,7 @@
 
 - name: install commonly used os dependencies
   yum:
-    name: gcc,openssl-devel,libffi-devel,python-devel
+    name: bzip2,gcc,openssl-devel,libffi-devel,python-devel,openssl-devel,libcurl,libcurl-devel
     state: installed
 
 - name: upgrade all packages
