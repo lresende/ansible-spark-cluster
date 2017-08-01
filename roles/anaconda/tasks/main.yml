@@ -5,7 +5,7 @@
     state: latest
 
 - name: set anaconda distribution fact
-  set_fact: anaconda_install_file=Anaconda{{ anaconda.python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
+  set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
 
 #- name: check anaconda downloaded
 #  local_action: >
@@ -41,11 +41,11 @@
 
 - name: clean anaconda install directory
   file:
-    path: "{{ install_dir }}/anaconda{{ anaconda.python_version}}"
+    path: "{{ install_dir }}/anaconda{{ python_version }}"
     state: absent
 
 - name: install anaconda package
-  shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ anaconda.python_version}}"
+  shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ python_version }}"
 
 # Environment setup.
 - name: Add anaconda_env to startup

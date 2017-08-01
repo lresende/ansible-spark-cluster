@@ -62,6 +62,9 @@ gather_facts=True
 gathering=smart
 host_key_checking=False
 install_java=False
+install_temp_dir=/tmp/ansible-install
+install_dir=/opt
+python_version=2
 
 [master]
 FQDN   ansible_host=IP
@@ -85,10 +88,9 @@ FQDN   ansible_host=IP
     - role: iop
 
 - name: anaconda
-  hosts: master
+  hosts: all
   vars:
     anaconda:
-      python_version: 2
       update_path: false
   remote_user: root
   roles:
