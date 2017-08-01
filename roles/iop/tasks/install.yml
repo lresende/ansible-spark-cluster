@@ -48,3 +48,10 @@
 - name: start ambari agent on all nodes
   shell:
     /usr/sbin/ambari-agent start
+
+# Environment setup.
+- name: Add ambari related env to startup
+  template:
+    src: ambari-profile.sh.j2
+    dest: /etc/profile.d/ambari-profile.sh
+    mode: 0644
