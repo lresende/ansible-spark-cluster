@@ -20,10 +20,15 @@ export JUPYTER_RUNTIME_DIR={{ notebook.elyra_runtime_directory }}
 
 START_CMD="{{ jupyter }} kernelgateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
 
+LOG_FORMAT=--KernelGatewayApp.log_format='%(asctime)s,%(msecs)03d %(levelname)s %(name)s: %(message)s'
+
+# Enable white list of kernels...
+#WHITE_LIST=--KernelSpecManager.whitelist="['spark_2.1_python_yarn_cluster','spark_2.1_r_yarn_cluster','spark_2.1_scala_yarn_cluster','spark_2.1_python_yarn_client','spark_2.1_r_yarn_client','spark_2.1_scala_yarn_client']"
+
 LOG={{ notebook.elyra_log_directory }}/elyra_$(timestamp).log
 PIDFILE={{ notebook.elyra_runtime_directory }}/elyra.pid
 
-eval "$START_CMD > $LOG 2>&1 &"
+$START_CMD "$LOG_FORMAT" $WHITE_LIST > $LOG 2>&1 &
 if [ "$?" -eq 0 ]; then
   echo $! > $PIDFILE
   exit 0
