@@ -23,7 +23,13 @@
   when: not notebook.use_anaconda
 
 - include: dependencies.yml
+
 - include: gateway.yml
+
 - include: kernel_scala.yml
+  when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
+
 - include: kernel_python.yml
+  when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
+
 - include: kernel_R.yml
