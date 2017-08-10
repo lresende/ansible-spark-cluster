@@ -16,7 +16,6 @@ notebook:
   elyra_install_directory: "{{ internal.elyra_install_dir }}"
   elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
   elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
-  elyra_data_directory: "{{ internal.elyra_install_dir }}/data"
 
   elyra_kernelspec_package_name: elyra-kernel-specs.tar.gz
   elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra-kernel-specs/
@@ -38,3 +37,4 @@ notebook:
 
   enable_impersonation: false
   enable_notebook_5_1: true
+  deploy_kernelspecs_to_workers: false
