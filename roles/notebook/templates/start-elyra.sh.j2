@@ -11,11 +11,11 @@ export ELYRA_REMOTE_USER={{ notebook.user }}
 
 export ELYRA_YARN_ENDPOINT=http://{{ notebook.yarn_endpoint_host }}:8088/ws/v1/cluster
 
-export ELYRA_PROXY_LAUNCH_LOG=/var/log/elyra_proxy_launch_$(timestamp).log
+export ELYRA_PROXY_LAUNCH_LOG=/tmp/elyra_proxy_launch_$(timestamp).log
 
 export ELYRA_KERNEL_LAUNCH_TIMEOUT=40
 
-START_CMD="{{ jupyter }} kernelgateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
+START_CMD="{{ jupyter }} elyra --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
 
 LOG_FORMAT=--KernelGatewayApp.log_format='%(asctime)s,%(msecs)03d %(levelname)s %(name)s: %(message)s'
 

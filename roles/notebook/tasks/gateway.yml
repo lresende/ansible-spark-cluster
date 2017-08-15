@@ -163,17 +163,6 @@
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
- - name: create data directory for elyra
-   file:
-     path: "{{ notebook.elyra_data_directory }}"
-     state: directory
-     owner: "{{ notebook.user }}"
-     group: "{{ notebook.user }}"
-     mode: 0755
-   become_user: "{{ notebook.user }}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
  - name: generate elyra startup script
    template:
     src: start-elyra.sh.j2
