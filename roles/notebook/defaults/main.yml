@@ -7,10 +7,7 @@ internal:
 
 notebook:
 
-  yarn_client_package_name: yarn_api_client-0.2.4-py2.py3-none-any.whl
-  yarn_client_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/yarn-api-client/
-
-  elyra_archive_package_name: jupyter_kernel_gateway-2.0.0.dev-py2.py3-none-any.whl
+  elyra_archive_package_name: elyra-0.0.2.dev-py2.py3-none-any.whl
   elyra_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra/
 
   elyra_install_directory: "{{ internal.elyra_install_dir }}"

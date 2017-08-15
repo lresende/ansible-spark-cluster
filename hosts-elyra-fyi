@@ -1,0 +1,19 @@
+[all:vars]
+ansible_connection=ssh
+#ansible_user=root
+#ansible_ssh_private_key_file=~/.ssh/ibm_rsa
+gather_facts=True
+gathering=smart
+host_key_checking=False
+install_temp_dir=/tmp/ansible-install
+install_dir=/opt
+python_version=2
+
+[master]
+elyra-fyi-node-1   ansible_host=9.30.250.232
+
+[nodes]
+elyra-fyi-node-2   ansible_host=9.30.252.8
+elyra-fyi-node-3   ansible_host=9.30.254.115
+elyra-fyi-node-4   ansible_host=9.30.255.217
+elyra-fyi-node-5   ansible_host=9.30.255.220
