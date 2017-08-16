@@ -30,6 +30,10 @@
    shell: "{{ install_dir }}/anaconda{{ python_version }}/bin/conda install --yes --quiet -c r r-essentials r-irkernel"
    when: notebook.use_anaconda
 
+ - name: install argparser R package
+   shell: >
+     {{ install_dir }}/anaconda{{ python_version }}/bin/Rscript -e 'install.packages("argparser", repos="https://cran.rstudio.com")' 
+
 # - name: retrieve kernelspec location
 #   shell: "{{ jupyter }} kernelspec list | grep -i ir | awk '{print $2}' | xargs -i dirname {}"
 #   register: result
