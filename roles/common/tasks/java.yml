@@ -3,12 +3,12 @@
   set_fact: java_install_file=jdk-{{ common.java_version }}-linux-x64.rpm
 
 - debug:
-     msg: "Downloading http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/{{ java_install_file }}"
+     msg: "Downloading {{ common.java_download }}"
 
 - name: download java sdk rpm
   get_url:
      headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
-     url: "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/{{ java_install_file }}"
+     url: "{{ common.java_download }}"
      dest: "{{ install_temp_dir }}/{{ java_install_file }}"
 
 - name: install java sdk rpm

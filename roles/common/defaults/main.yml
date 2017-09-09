@@ -1,3 +1,4 @@
 common:
-  java_version: 8u131
-  java_home: "/usr/java/jdk1.8.0_131"
+  java_version: 8u144
+  java_home: "/usr/java/jdk1.8.0_144"
+  java_download: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm"
