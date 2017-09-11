@@ -73,11 +73,19 @@
      name: "{{ notebook.user }}"
      state: absent
 
- - name: create elyra user
+ - name: create elyra user in master node
    user:
      name: "{{ notebook.user }}"
      groups: "{{ notebook.groups }}"
      append: yes
+   when: inventory_hostname in groups['master']
+
+ - name: create elyra user in data nodes
+   user:
+     name: "{{ notebook.user }}"
+     append: yes
+   when: inventory_hostname in groups['nodes']
+
 
  - name: create elyra user ssh folder
    file:
