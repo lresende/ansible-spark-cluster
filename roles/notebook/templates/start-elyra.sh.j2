@@ -4,6 +4,7 @@ timestamp() {
   date +"%Y-%m-%d"
 }
 
+unset XDG_RUNTIME_DIR
 export ELYRA_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
 export ELYRA_REMOTE_USER={{ notebook.user }}
 # provide password if passwordless ssh is not configured
