@@ -89,7 +89,6 @@
      rm -rf /var/log/zookeeper
   ignore_errors: yes
 
-
 - user: name="ambari-qa" state="absent" remove="yes"
 - user: name="yarn" state="absent" remove="yes"
 - user: name="hdfs" state="absent" remove="yes"
@@ -102,3 +101,16 @@
 - user: name="spark" state="absent" remove="yes"
 - user: name="knox" state="absent" remove="yes"
 - user: name="zookeeper" state="absent" remove="yes"
+
+- name: remove old ambari repo definition
+  file: path="/etc/yum.repos.d/ambari.repo.j2" state=absent
+
+- name: remove old HDP repo definition
+  file: path="/etc/yum.repos.d/HDP.repo" state=absent
+
+- name: remove old HDP-UTILS repo definition
+  file: path="/etc/yum.repos.d/HDP-UTILS.repo" state=absent
+
+- name: remove HDP specific java installation
+  file: path="/usr/jdk64" state=absent
+
