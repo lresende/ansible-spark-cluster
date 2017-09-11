@@ -2,6 +2,9 @@
 - name: set java distribution fact
   set_fact: java_install_file=jdk-{{ common.java_version }}-linux-x64.rpm
 
+- name: remove old java packages
+  file: path="{{ install_temp_dir }}/{{ java_install_file }}" state=absent
+
 - debug:
      msg: "Downloading {{ common.java_download }}"
 
@@ -11,9 +14,17 @@
      url: "{{ common.java_download }}"
      dest: "{{ install_temp_dir }}/{{ java_install_file }}"
 
+#- name: download java sdk rpm
+#  shell: "cd {{ install_temp_dir }} && curl -LO {{ common.java_download }} -H 'Cookie: oraclelicense=accept-securebackup-cookie'"
+
 - name: install java sdk rpm
-  shell: "yum install -y {{ install_temp_dir }}/{{ java_install_file }}"
-  ignore_errors: yes
+  shell: "rpm -Uvh --replacepkgs {{ install_temp_dir }}/{{ java_install_file }}"
+
+- name: configure default java
+  shell: "alternatives --install /usr/bin/java java {{ common.java_home }}/bin/java 1"
+
+- name: configure default java
+  shell: "alternatives --set java {{ common.java_home }}/bin/java"
 
 # Environment setup.
 - name: Set JAVA_HOME if configured.
@@ -22,3 +33,7 @@
     dest: /etc/profile.d/java_home.sh
     mode: 0644
   when: java_home is not defined and java_home == ''
+
+# Set java_home fact to be used for other roles
+- name: set java home fact
+  set_fact: java_home={{ common.java_home }}
