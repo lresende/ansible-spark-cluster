@@ -1,20 +1,15 @@
-- name: install common dependencies
-  hosts: all
-  remote_user: root
-  roles:
-    - role: common
-
 - name: ambari setup
   hosts: all
   remote_user: root
   roles:
-    - role: iop
+    - role: common
+    - role: ambari
 
 - name: anaconda
   hosts: all
   vars:
     anaconda:
-      update_path: false
+      update_path: true
   remote_user: root
   roles:
    - role: anaconda

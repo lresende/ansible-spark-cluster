@@ -5,15 +5,15 @@ ansible_connection=ssh
 gather_facts=True
 gathering=smart
 host_key_checking=False
-install_java=False
+install_java=True
 install_temp_dir=/tmp/ansible-install
 install_dir=/opt
 python_version=2
 
 [master]
-spark-02.softlayer.com   ansible_host=169.45.103.134
+spark-03.softlayer.com   ansible_host=169.45.103.144
 
 [nodes]
-spark-03.softlayer.com   ansible_host=169.45.103.144
 spark-04.softlayer.com   ansible_host=169.45.103.145
 spark-05.softlayer.com   ansible_host=169.45.103.130
+spark-06.softlayer.com   ansible_host=169.45.103.131

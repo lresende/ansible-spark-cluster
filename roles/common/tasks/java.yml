@@ -19,6 +19,8 @@
 
 - name: install java sdk rpm
   shell: "rpm -Uvh --replacepkgs {{ install_temp_dir }}/{{ java_install_file }}"
+  register: shell_result
+  failed_when: "'error' in shell_result.stderr"
 
 - name: configure default java
   shell: "alternatives --install /usr/bin/java java {{ common.java_home }}/bin/java 1"

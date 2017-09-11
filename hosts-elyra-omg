@@ -5,8 +5,10 @@ ansible_connection=ssh
 gather_facts=True
 gathering=smart
 host_key_checking=False
+install_java=True
 install_temp_dir=/tmp/ansible-install
 install_dir=/opt
+python_version=2
 
 [master]
 elyra-omg-node-1   ansible_host=9.30.245.178

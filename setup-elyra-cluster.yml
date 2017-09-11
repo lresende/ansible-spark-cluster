@@ -4,7 +4,7 @@
 #  vars:
 #    anaconda:
 #      python_version: 2
-#      update_path: false
+#      update_path: true
 #  remote_user: root
 #  roles:
 #   - role: anaconda
