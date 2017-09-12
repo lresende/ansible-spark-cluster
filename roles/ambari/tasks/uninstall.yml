@@ -1,15 +1,24 @@
 ##########################################
 ## Uninstall ambari server on all nodes
 ##########################################
-- name: stop all ambari services
-  shell: >
-        curl -H "X-Requested-By: ambari" -X PUT -u admin:admin -d '{"RequestInfo":{"context":"_PARSE_.STOP.ALL_SERVICES","operation_level":{"level":"CLUSTER","cluster_name":"Sandbox"}},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}' http://{{groups['master'][0]}}:8081/api/v1/clusters/hdp/services
-  ignore_errors: yes
-  when: (inventory_hostname in groups['master'])
+#- name: stop all ambari services
+#  shell: >
+#        curl -H "X-Requested-By: ambari" -X PUT -u admin:admin -d '{"RequestInfo":{"context":"_PARSE_.STOP.ALL_SERVICES","operation_level":{"level":"CLUSTER","cluster_name":"Sandbox"}},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}' http://{{groups['master'][0]}}:8081/api/v1/clusters/hdp/services
+#  ignore_errors: yes
+#  when: (inventory_hostname in groups['master'])
 
-- name: wait for all ambari services to stop
-  pause:
-   seconds: 90
+#- name: wait for all ambari services to stop
+#  pause:
+#   seconds: 90
+
+- name: Reboot nodes before uninstalling Ambari
+  become: yes
+  shell: sleep 3 && /sbin/shutdown -r now "System reboot"
+  async: 1
+  poll: 0
+
+- name: Wait for nodes to be ready before continuing Ambari uninstall
+  local_action: wait_for host={{ ansible_default_ipv4.address }} port=22 state=started delay=30 timeout=360
 
 - name: stop ambari-server service
   shell: "ambari-server stop"
