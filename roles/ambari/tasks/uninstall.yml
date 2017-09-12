@@ -114,3 +114,6 @@
 - name: remove HDP specific java installation
   file: path="/usr/jdk64" state=absent
 
+- name: remove Hadoop HDFS
+  file: path="/hadoop" state=absent
+  ignore_errors: yes
