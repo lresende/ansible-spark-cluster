@@ -1,12 +1,14 @@
+- name: remove old install dir
+  file: path= "{{ install_dir }}" state=absent
+
 - name: create install dir
-  file:
-    path: "{{ install_dir }}"
-    state: directory
+  file: path="{{ install_dir }}" state=directory
+
+- name: remove old temporary install dir
+  file: path="{{ install_temp_dir }}" state=absent
 
 - name: create temporary install dir
-  file:
-    path: "{{ install_temp_dir }}"
-    state: directory
+  file: path="{{ install_temp_dir }}" state=directory
 
 - include: os-packages.yml
 
