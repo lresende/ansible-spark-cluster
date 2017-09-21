@@ -104,4 +104,4 @@
 #         (cluster_create_task.content|from_json).Requests.request_status == 'ABORTED')
 
 #- debug:
-#    msg: "Ambari server has finished deploying IOP. Access via  http://{{groups['master'][0]}}.{{ ansible_domain }}:8081"
+#    msg: "Ambari server has finished deploying Ambari. Access via  http://{{groups['master'][0]}}.{{ ansible_domain }}:8081"
