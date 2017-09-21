@@ -20,4 +20,5 @@ maven-eclipse.xml
 # Test roles and playbooks
 roles/test/**
 test.yml
+hosts-test
 
