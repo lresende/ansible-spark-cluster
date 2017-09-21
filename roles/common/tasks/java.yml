@@ -28,6 +28,19 @@
 - name: configure default java
   shell: "alternatives --set java {{ common.java_home }}/bin/java"
 
+- name: set java jce distribution fact
+  set_fact: java_jce_install_file=jce_policy-8.zip
+
+- name: download java jce zip
+  get_url:
+     headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
+     url: "{{ common.java_jce_download }}"
+     dest: "{{ install_temp_dir }}/{{ java_jce_install_file }}"
+
+- name: update java with jce contents
+  shell:
+    unzip -o -j -q {{ install_temp_dir }}/{{ java_jce_install_file }} -d {{ common.java_home }}/jre/lib/security/
+
 # Environment setup.
 - name: Set JAVA_HOME if configured.
   template:
