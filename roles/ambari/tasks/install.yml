@@ -12,9 +12,8 @@
     mode: 0644
 
 - name: install ambari-server on master node
-  yum:
-    name: ambari-server
-    state: installed
+  shell:
+     yum install -y ambari-server
   when: inventory_hostname in groups['master']
 
 - name: setup ambari server on master node
@@ -56,9 +55,8 @@
   when: inventory_hostname in groups['master']
 
 - name: install ambari-agent on all nodes
-  yum:
-    name: ambari-agent
-    state: installed
+  shell:
+     yum install -y ambari-agent
 
 - name: change master hostname in ambari agent configuration in all nodes
   lineinfile:

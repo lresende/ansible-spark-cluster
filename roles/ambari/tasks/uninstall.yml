@@ -31,9 +31,8 @@
   when: (inventory_hostname in groups['master'])
 
 - name: remove ambari server on master node
-  yum:
-    name: ambari-server
-    state: removed
+  shell:
+     yum remove -y ambari-server
   when: (inventory_hostname in groups['master'])
 
 - name: remove remaining ambari server on master node
@@ -53,9 +52,8 @@
   when: (inventory_hostname in groups['master'])
 
 - name: remove postgress on master node
-  yum:
-    name: postgresql
-    state: removed
+  shell:
+     yum remove -y postgresql
   when: (inventory_hostname in groups['master'])
 
 - name: stop ambari-agent service
@@ -67,9 +65,8 @@
 #  ignore_errors: yes
 
 - name: remove ambari agent on all nodes
-  yum:
-    name: ambari-agent
-    state: removed
+  shell:
+     yum remove -y ambari-agent
 
 - name: remove remaining config files on all nodes
   shell: >
