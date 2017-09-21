@@ -58,7 +58,7 @@
   template: src="slaves.j2" dest="{{ install_dir}}/{{ spark_installation_dir }}/conf/slaves"
 
 - name: start-cluster utility
-  template: src="start-cluster.sh.j2" dest="{{ install_dir }}/bin/start-cluster.sh" mode= 0744
+  template: src="start-cluster.sh.j2" dest="{{ install_dir }}/bin/start-cluster.sh" mode=0744
   when: inventory_hostname in groups['master']
 
 # Environment setup.
