@@ -109,7 +109,7 @@
 - user: name="zookeeper" state="absent" remove="yes"
 
 - name: remove old ambari repo definition
-  file: path="/etc/yum.repos.d/ambari.repo.j2" state=absent
+  file: path="/etc/yum.repos.d/ambari.repo" state=absent
 
 - name: remove old HDP repo definition
   file: path="/etc/yum.repos.d/HDP.repo" state=absent
