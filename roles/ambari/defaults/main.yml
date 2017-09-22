@@ -1,2 +1,2 @@
-iop:
-  version: 4.3.1
+ambari:
+  enable_kerberos: false
