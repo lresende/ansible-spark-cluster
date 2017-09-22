@@ -35,31 +35,6 @@
    shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
 
- # copy and install notebook - this must follow the elyra (JKG) install until it pulls Notebook 5.1.0
-
- - debug:
-    msg: "Downloading Notebook: {{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}"
-
- - name: download and install notebook
-   local_action: get_url url="{{ notebook.notebook_archive_pip_download_location }}{{ notebook.notebook_archive_package_name }}" dest="/tmp/"
-   when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
-   run_once: true
-
- - name: copy notebook to node
-   copy:
-     src: "/tmp/{{ notebook.notebook_archive_package_name }}"
-     dest: "{{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
-   when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
-
- - name: pip uninstall notebook
-   shell: "{{ pip }} uninstall -y {{ notebook.notebook_archive_package_name }}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
-
- - name: pip install notebook
-   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.notebook_archive_package_name }}"
-   when: (inventory_hostname in groups['master']) and (notebook.enable_notebook_5_1 == true)
-
  # Create Elyra user
 
  - name: remove elyra user

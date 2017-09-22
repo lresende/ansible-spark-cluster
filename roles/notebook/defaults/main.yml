@@ -17,9 +17,6 @@ notebook:
   elyra_kernelspec_package_name: elyra-kernel-specs.tar.gz
   elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra-kernel-specs/
 
-  notebook_archive_package_name: notebook-5.1.0.dev0-py2.py3-none-any.whl
-  notebook_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/notebook/
-
   toree_archive_package_name: toree-0.2.0.dev1.tar.gz
   toree_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/toree/
 
@@ -33,5 +30,4 @@ notebook:
   groups: [hdfs]
 
   enable_impersonation: false
-  enable_notebook_5_1: true
   deploy_kernelspecs_to_workers: false
