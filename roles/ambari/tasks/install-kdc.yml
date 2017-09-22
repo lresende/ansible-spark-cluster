@@ -1,0 +1,56 @@
+- name: install KDC server packages
+  shell:
+     yum install -y krb5-libs krb5-server
+  when: (inventory_hostname in groups['master'])
+
+- name: update /var/kerberos/krb5kdc/kdc.conf
+  template: src="kdc.conf.j2" dest="/var/kerberos/krb5kdc/kdc.conf" mode=0600
+  when: (inventory_hostname in groups['master'])
+
+- name: update /var/kerberos/krb5kdc/kadm5.acl
+  template: src="kadm5.acl.j2" dest="/var/kerberos/krb5kdc/kadm5.acl" mode=0600
+  when: (inventory_hostname in groups['master'])
+
+
+- name: install KDC client packages
+  shell:
+     yum install -y krb5-libs krb5-workstation
+
+- name: update /etc/krb5.conf
+  template: src="krb5.conf.j2" dest="/etc/krb5.conf" mode=0644
+
+
+- name: create kdc database
+  shell:
+    kdb5_util create -r IBM.COM -s -P p@ssw0rd
+  when: inventory_hostname in groups['master']
+
+- name: reload systemctl
+  shell: "systemctl daemon-reload"
+  when: inventory_hostname in groups['master']
+
+- name: start krb5kdc service
+  shell: "service krb5kdc start"
+  when: inventory_hostname in groups['master']
+
+- name: start kadmin service
+  shell: "service kadmin start"
+  when: inventory_hostname in groups['master']
+
+- name: enable krb5kdc service to autostart
+  shell: "chkconfig krb5kdc on"
+  when: inventory_hostname in groups['master']
+
+- name: enable kadmin service to autostart
+  shell: "chkconfig kadmin on"
+  when: inventory_hostname in groups['master']
+
+- name: create admin principal
+  shell:
+    kadmin.local -q "addprinc -pw admin admin/admin"
+  when: inventory_hostname in groups['master']
+
+- name: restart kadmin service
+  shell:
+    service kadmin restart
+  when: inventory_hostname in groups['master']

@@ -1,4 +1,7 @@
 - include: uninstall.yml
+- include: uninstall-kdc.yml
 - include: install.yml
+- include: install-kdc.yml
+  when: (ambari.enable_kerberos == true)
 - include: deploy.yml
 
