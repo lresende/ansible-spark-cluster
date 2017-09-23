@@ -5,28 +5,26 @@ timestamp() {
 }
 
 unset XDG_RUNTIME_DIR
-export ELYRA_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
-export ELYRA_REMOTE_USER={{ notebook.user }}
+export EG_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
+export EG_REMOTE_USER={{ notebook.user }}
 # provide password if passwordless ssh is not configured
-#export ELYRA_REMOTE_PWD=
+#export EG_REMOTE_PWD=
 
-export ELYRA_YARN_ENDPOINT=http://{{ notebook.yarn_endpoint_host }}:8088/ws/v1/cluster
+export EG_YARN_ENDPOINT=http://{{ notebook.yarn_endpoint_host }}:8088/ws/v1/cluster
 
-export ELYRA_PROXY_LAUNCH_LOG=/tmp/elyra_proxy_launch_$(timestamp).log
+export EG_PROXY_LAUNCH_LOG=/tmp/elyra_proxy_launch_$(timestamp).log
 
-export ELYRA_KERNEL_LAUNCH_TIMEOUT=40
+export EG_KERNEL_LAUNCH_TIMEOUT=40
 
-START_CMD="{{ jupyter }} elyra --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
-
-LOG_FORMAT=--KernelGatewayApp.log_format='%(asctime)s,%(msecs)03d %(levelname)s %(name)s: %(message)s'
+START_CMD="{{ jupyter }} enterprisegateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
 
 # Enable white list of kernels...
 #WHITE_LIST=--KernelSpecManager.whitelist="['spark_2.1_python_yarn_cluster','spark_2.1_r_yarn_cluster','spark_2.1_scala_yarn_cluster','spark_2.1_python_yarn_client','spark_2.1_r_yarn_client','spark_2.1_scala_yarn_client']"
 
-LOG={{ notebook.elyra_log_directory }}/elyra_$(timestamp).log
-PIDFILE={{ notebook.elyra_runtime_directory }}/elyra.pid
+LOG={{ notebook.elyra_log_directory }}/jeg_$(timestamp).log
+PIDFILE={{ notebook.elyra_runtime_directory }}/jeg.pid
 
-$START_CMD "$LOG_FORMAT" $WHITE_LIST > $LOG 2>&1 &
+$START_CMD $WHITE_LIST > $LOG 2>&1 &
 if [ "$?" -eq 0 ]; then
   echo $! > $PIDFILE
   exit 0
