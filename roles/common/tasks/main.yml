@@ -16,3 +16,5 @@
   when: "install_java == True"
 
 - include: utilities.yml
+
+- include: ssh-config.yml
