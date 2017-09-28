@@ -1,0 +1,20 @@
+[all:vars]
+ansible_connection=ssh
+#ansible_user=root
+#ansible_ssh_private_key_file=~/.ssh/ibm_rsa
+gather_facts=True
+gathering=smart
+host_key_checking=False
+install_java=True
+install_temp_dir=/tmp/ansible-install
+install_dir=/opt
+python_version=2
+
+[master]
+lresende-spark-node-1   ansible_host=9.30.54.157     ansible_host_id=1
+
+[nodes]
+lresende-spark-node-2   ansible_host=9.30.244.167    ansible_host_id=2
+lresende-spark-node-3   ansible_host=9.30.167.45     ansible_host_id=3
+lresende-spark-node-4   ansible_host=9.30.167.133    ansible_host_id=4
+
