@@ -1,2 +1,2 @@
-Host {% for host in groups['all'] %} {{ host }} {% endfor %}
+Host {% for host in groups['all'] %} {{ host }}.{{ ansible_domain }} {{ host }}{% endfor %}
     StrictHostKeyChecking no
