@@ -1,0 +1,66 @@
+#- name: Create service account for kafka
+#  user: name={{ kafka.user }}
+#        system=yes
+#        shell={{ kafka.user_shell }}
+#        state=present
+#        groups="{{ kafka.user_groups | join(',') }}"
+
+- name: set kafka installation directory fact
+  set_fact: kafka_installation_dir=kafka-{{ kafka.version }}
+
+- name: set kafka archive fact
+  set_fact: kafka_archive=kafka_2.11-{{ kafka.version }}.tgz
+
+- name: set kafka download location fact
+  set_fact: kafka_download={{ kafka.download_location }}/{{ kafka.version }}/{{ kafka_archive }}
+
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ kafka_installation_dir }}"
+    state: directory
+#    owner: "{{ kafka.user }}"
+#    group: "{{ kafka.user }}"
+#  become: true
+
+- name: create data directory
+  file:
+    path: "{{ kafka.data_dir }}"
+    state: directory
+#    owner: "{{ kafka.user }}"
+#    group: "{{ kafka.user }}"
+#  become: true
+
+- debug:
+     msg: "Downloading kafka {{ kafka_download }}"
+
+- name: download kafka
+  get_url: url="{{ kafka_download }}" dest="{{ install_temp_dir }}/{{ kafka_archive }}"
+
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ kafka_archive }} --strip 1 --directory {{ install_dir }}/{{ kafka_installation_dir }}"
+
+- name: set kafka configuration
+  template: src="server.properties.j2" dest="{{ install_dir }}/{{ kafka_installation_dir }}/config/server.properties"
+
+# Environment setup.
+- name: add kafka profile to startup
+  template:
+    src: kafka-profile.sh.j2
+    dest: /etc/profile.d/kafka-profile.sh
+    mode: 0644
+
+
+##
+# Install KafkaT
+
+- name: install KafkaT dependencies
+  shell:
+     yum install -y ruby-devel rubygems make automake gcc gcc-c++ kernel-devel
+
+- name: install KafkaT
+  shell:
+     gem install kafkat --source https://rubygems.org --no-ri --no-rdoc
+
+
+- name: set KafkaT configuration
+  template: src="kafkatcfg.j2" dest="/etc/kafkatcfg"
