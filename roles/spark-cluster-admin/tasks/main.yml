@@ -1,0 +1,4 @@
+
+- name: start-cluster utility
+  template: src="spark-cluster.sh.j2" dest="{{ install_dir }}/bin/spark-cluster.sh" mode=0744
+  when: inventory_hostname in groups['master']
