@@ -22,6 +22,14 @@
 #    group: "{{ kafka.user }}"
 #  become: true
 
+- name: create log directory
+  file:
+    path: "{{ install_dir }}/{{ kafka_installation_dir }}/logs"
+    state: directory
+#    owner: "{{ kafka.user }}"
+#    group: "{{ kafka.user }}"
+#  become: true
+
 - name: create data directory
   file:
     path: "{{ kafka.data_dir }}"
