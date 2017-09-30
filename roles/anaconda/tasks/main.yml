@@ -1,8 +1,7 @@
 
 - name: install bzip2
-  package:
-    name: bzip2
-    state: latest
+  shell:
+     yum install -y unzip bzip2
 
 - name: set anaconda distribution fact
   set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
