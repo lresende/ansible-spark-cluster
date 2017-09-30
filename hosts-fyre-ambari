@@ -11,10 +11,10 @@ install_dir=/opt
 python_version=2
 
 [master]
-lresende-elyra-node-1   ansible_host=9.30.147.7     ansible_host_id=1
+lresende-elyra-node-1   ansible_host=9.30.167.68   ansible_host_id=1
 
 [nodes]
-lresende-elyra-node-2   ansible_host=9.30.251.94    ansible_host_id=2
-lresende-elyra-node-3   ansible_host=9.30.251.96    ansible_host_id=3
-lresende-elyra-node-4   ansible_host=9.30.251.111   ansible_host_id=4
-lresende-elyra-node-5   ansible_host=9.30.251.169   ansible_host_id=5
+lresende-elyra-node-2   ansible_host=9.30.56.81    ansible_host_id=2
+lresende-elyra-node-3   ansible_host=9.30.57.98    ansible_host_id=3
+lresende-elyra-node-4   ansible_host=9.30.57.213   ansible_host_id=4
+lresende-elyra-node-5   ansible_host=9.30.96.168   ansible_host_id=5
