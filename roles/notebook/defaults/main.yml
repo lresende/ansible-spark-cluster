@@ -1,5 +1,6 @@
 internal:
 
+  elyra_version: 0.7.0.dev0
   elyra_download_server: 9.30.252.137
   elyra_download_root: dist
   elyra_install_dir: "{{ install_dir }}/elyra"
@@ -7,14 +8,14 @@ internal:
 
 notebook:
 
-  elyra_archive_package_name: jupyter_enterprise_gateway-0.5.0.dev0-py2.py3-none-any.whl
+  elyra_archive_package_name: jupyter_enterprise_gateway-{{ internal.elyra_version }}-py2.py3-none-any.whl
   elyra_archive_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra/
 
   elyra_install_directory: "{{ internal.elyra_install_dir }}"
   elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
   elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
 
-  elyra_kernelspec_package_name: enterprise_gateway_kernelspecs.tar.gz
+  elyra_kernelspec_package_name: jupyter_enterprise_gateway_kernelspecs-{{ internal.elyra_version }}.tar.gz
   elyra_kernelspec_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/elyra-kernelspecs/
 
   toree_archive_package_name: toree-0.2.0.dev1.tar.gz

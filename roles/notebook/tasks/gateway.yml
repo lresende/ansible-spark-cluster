@@ -11,6 +11,17 @@
    become_user: hdfs
    when: (inventory_hostname in groups['master'])
 
+ - name: remove temporary installation directory
+   file:
+     path: "{{ install_temp_dir }}"
+     state: absent
+
+ - name: create temporary installation directory
+   file:
+     path: "{{ install_temp_dir }}"
+     state: directory
+   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
+
  # copy and install elyra
  - debug:
     msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
@@ -160,17 +171,6 @@
  - name: download elyra kernel specs
    local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
    run_once: true
-
- - name: create temporary installation directory
-   file:
-     path: "{{ install_temp_dir }}"
-     state: absent
-
- - name: create temporary installation directory
-   file:
-     path: "{{ install_temp_dir }}"
-     state: directory
-   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
 
  - name: copy kernelspec package to remote node
    copy:
