@@ -104,6 +104,17 @@ FQDN   ansible_host=IP
 
 ```
 
+### Automatic Deployment of KernelSpecs on Cluster/Worker Nodes
+You can optionally deploy kernelspecs for Python, R, and Scala
+automatically on the cluster nodes by editing
+`spark-cluster-install/roles/notebook/default/main.yml` file such
+that `deploy_kernelspecs_to_workers` is set to `true` as shown
+below:
+
+```
+  deploy_kernelspecs_to_workers: true
+```
+
 ### Deploy
 
 ```
