@@ -10,10 +10,4 @@
     - role: spark-cluster-admin
 #    - role: elasticsearch
 
-#- name: notebook platform
-#  hosts: all
-#  remote_user: root
-#  roles:
-#   - role: anaconda
-#   - role: notebook
 

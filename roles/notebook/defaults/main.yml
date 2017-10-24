@@ -30,5 +30,6 @@ notebook:
   home_dir: /home/elyra
   groups: [hdfs]
 
+  #use_anaconda
   enable_impersonation: false
   deploy_kernelspecs_to_workers: false
