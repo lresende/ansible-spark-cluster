@@ -24,11 +24,6 @@
      url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
      dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 
-- name: clean anaconda install directory
-  file:
-    path: "{{ install_dir }}/anaconda{{ python_version }}"
-    state: absent
-
 - name: install anaconda package
   shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ python_version }}"
 
