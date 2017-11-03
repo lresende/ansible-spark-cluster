@@ -1,5 +1,5 @@
 spark:
-  version: 2.1.1
+  version: 2.2.0
   hadoop_version: 2.7
   working_dir: /tmp/spark/data
   master_port: 7077
