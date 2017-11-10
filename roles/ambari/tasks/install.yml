@@ -59,7 +59,7 @@
 
 - name: verify connection to ambari-server port 8081
   uri:
-    url: "http://{{ groups['master'][0] }}:8081/api/v1/hosts"
+    url: "http://{{ groups['master'][0] }}.{{ ansible_domain }}:8081/api/v1/hosts"    
     method: GET
     headers:
       X-Requested-By: ambari
