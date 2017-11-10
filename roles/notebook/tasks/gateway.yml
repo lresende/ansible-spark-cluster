@@ -16,7 +16,7 @@
     msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
 
  - name: download and install elyra
-   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="/tmp"
+   get_url: url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="/tmp"
    when: (inventory_hostname in groups['master'])
    run_once: true
 
@@ -71,30 +71,38 @@
     mode: 0700
 
  - name: remove old SSH keys for elyra user
-   local_action: file path="{{item}}" state=absent 
+   file: path="{{item}}" state=absent
    with_fileglob:
      - /tmp/elyra_id_rsa*
    run_once: true
+   when: inventory_hostname in groups['master']
 
  - name: generate SSH keys for elyra user
-   local_action: shell ssh-keygen -t rsa -b 4096 -f /tmp/elyra_id_rsa -q -N ""
+   shell: ssh-keygen -t rsa -b 4096 -f /tmp/elyra_id_rsa -q -N ""
    run_once: true
+   when: inventory_hostname in groups['master']
 
  - name: copy private ssh key to node
    copy:
+     remote_src: True
      src: "/tmp/elyra_id_rsa"
      dest: "/home/{{ notebook.user }}/.ssh/id_rsa"
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
      mode: 0600
+   run_once: true
+   when: inventory_hostname in groups['master']
 
  - name: copy public ssh key to node
    copy:
+     remote_src: True
      src: "/tmp/elyra_id_rsa.pub"
      dest: "/home/{{ notebook.user }}/.ssh/id_rsa.pub"
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
      mode: 0644
+   run_once: true
+   when: inventory_hostname in groups['master']
 
  - name: add SSH key to authorized users
    authorized_key:
@@ -103,10 +111,11 @@
      key: "{{ lookup('file', '/tmp/elyra_id_rsa.pub') }}"
 
  - name: remove local SSH keys for elyra user
-   local_action: file path="{{item}}" state=absent 
+   file: path="{{item}}" state=absent
    with_fileglob:
      - /tmp/elyra_id_rsa*
    run_once: true
+   when: inventory_hostname in groups['master']
 
  - name: Remove elyra root installation folder
    file:
