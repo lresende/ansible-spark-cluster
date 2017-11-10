@@ -38,7 +38,9 @@
   set_fact: rscript=Rscript
   when: not notebook.use_anaconda
 
-- include: dependencies.yml
+- include: dependencies_os.yml
+
+- include: dependencies_python.yml
 
 - include: gateway.yml
 
