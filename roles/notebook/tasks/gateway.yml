@@ -11,32 +11,7 @@
    become_user: hdfs
    when: (inventory_hostname in groups['master'])
 
- # copy and install elyra
- - debug:
-    msg: "Downloading Elyra: {{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}"
-
- - name: download and install elyra
-   local_action: get_url url="{{ notebook.elyra_archive_pip_download_location }}{{ notebook.elyra_archive_package_name }}" dest="/tmp"
-   when: (inventory_hostname in groups['master'])
-   run_once: true
-
- - name: copy elyra to node
-   copy:
-     src: "/tmp/{{ notebook.elyra_archive_package_name }}"
-     dest: "{{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
-   when: (inventory_hostname in groups['master'])
-
- - name: pip uninstall elyra
-   shell: "{{ pip }} uninstall -y {{ notebook.elyra_archive_package_name }}"
-   ignore_errors: yes
-   when: (inventory_hostname in groups['master'])
-
- - name: pip install elyra
-   shell: "{{ pip }} install {{ install_temp_dir }}/{{ notebook.elyra_archive_package_name }}"
-   when: (inventory_hostname in groups['master'])
-
- # Create Elyra user
-
+ # Create and Configure Elyra service user
  - name: remove elyra user
    user:
       name: "{{ notebook.user }}"
@@ -60,7 +35,6 @@
      name: "{{ notebook.user }}"
      append: yes
    when: inventory_hostname in groups['nodes']
-
 
  - name: create elyra user ssh folder
    file:
@@ -108,14 +82,20 @@
      - /tmp/elyra_id_rsa*
    run_once: true
 
+ # install elyra
+ - name: pip install elyra
+   shell: "{{ pip }} install --upgrade jupyter_enterprise_gateway"
+   when: (inventory_hostname in groups['master'])
+
+ # finish other elyra config (e.g. log folders, startup script utility, etc)
  - name: Remove elyra root installation folder
    file:
      path: "{{ notebook.elyra_log_directory }}"
      state: absent
 
- - name: create log directory for elyra
+ - name: create bin directory for elyra
    file:
-     path: "{{ notebook.elyra_log_directory }}"
+     path: "{{ notebook.elyra_install_directory }}/bin"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -124,9 +104,9 @@
    ignore_errors: yes
    when: (inventory_hostname in groups['master'])
 
- - name: create bin directory for elyra
+ - name: create log directory for elyra
    file:
-     path: "{{ notebook.elyra_install_directory }}/bin"
+     path: "{{ notebook.elyra_log_directory }}"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -156,13 +136,17 @@
    when: (inventory_hostname in groups['master'])
 
  # copy elyra kernel specs
+ # https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v0.6.0/jupyter_enterprise_gateway_kernelspecs-0.6.0.tar.gz
 
- - name: download elyra kernel specs
-   local_action: get_url url="{{ notebook.elyra_kernelspec_download_location }}{{ notebook.elyra_kernelspec_package_name }}" dest="/tmp/"
-   run_once: true
+ - name: set kernelspec archive name
+   set_fact: kernelspec_archive=jupyter_enterprise_gateway_kernelspecs-{{ notebook.elyra_version }}.tar.gz
 
- - name: copy kernelspec package to remote node
-   copy:
-     src: "/tmp/{{ notebook.elyra_kernelspec_package_name }}"
-     dest: "{{ install_temp_dir }}/{{ notebook.elyra_kernelspec_package_name }}"
-   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
+ - name: set kernelspec download location
+   set_fact: kernelspec_download_location=https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v{{ notebook.elyra_version }}/{{ kernelspec_archive }}
+
+ - debug:
+     msg: "Downloading kernelspecs from: {{ kernelspec_download_location }}"
+
+ - name: download elyra kernelspecs
+   shell: "curl -L {{ kernelspec_download_location }} --output {{ install_temp_dir }}/{{ kernelspec_archive }}"
+   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
