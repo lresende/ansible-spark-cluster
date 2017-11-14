@@ -49,3 +49,4 @@
   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
 
 - include: kernel_R.yml
+  when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
