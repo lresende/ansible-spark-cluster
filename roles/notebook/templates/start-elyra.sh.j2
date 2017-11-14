@@ -7,19 +7,16 @@ timestamp() {
 unset XDG_RUNTIME_DIR
 export EG_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
 export EG_REMOTE_USER={{ notebook.user }}
-# provide password if passwordless ssh is not configured
-#export EG_REMOTE_PWD=
 
 export EG_YARN_ENDPOINT=http://{{ notebook.yarn_endpoint_host }}:8088/ws/v1/cluster
 
-export EG_PROXY_LAUNCH_LOG=/tmp/elyra_proxy_launch_$(timestamp).log
-
 export EG_KERNEL_LAUNCH_TIMEOUT=40
 
-START_CMD="{{ jupyter }} enterprisegateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --MappingKernelManager.cull_connected=True --JupyterWebsocketPersonality.list_kernels=True"
+# Note: The culling parameters will cull idle kernels after 12 hours (43200 secs).  Update according to your requirements.
+START_CMD="{{ jupyter }} enterprisegateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=43200 --MappingKernelManager.cull_interval=60 --MappingKernelManager.cull_connected=True"
 
 # Enable white list of kernels...
-#WHITE_LIST=--KernelSpecManager.whitelist="['spark_2.1_python_yarn_cluster','spark_2.1_r_yarn_cluster','spark_2.1_scala_yarn_cluster','spark_2.1_python_yarn_client','spark_2.1_r_yarn_client','spark_2.1_scala_yarn_client']"
+#WHITE_LIST=--KernelSpecManager.whitelist="['spark_python_yarn_cluster','spark_r_yarn_cluster','spark_scala_yarn_cluster','spark_python_yarn_client','spark_r_yarn_client','spark_scala_yarn_client']"
 
 LOG={{ notebook.elyra_log_directory }}/enterprise_gateway_$(timestamp).log
 PIDFILE={{ notebook.elyra_runtime_directory }}/enterprise_gateway.pid
