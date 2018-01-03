@@ -1,9 +1,5 @@
 internal:
-
-  elyra_download_server: 9.30.252.137
-  elyra_download_root: dist
   elyra_install_dir: "{{ install_dir }}/elyra"
-
 
 notebook:
 
@@ -13,8 +9,8 @@ notebook:
   elyra_log_directory: "{{ internal.elyra_install_dir }}/log"
   elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
 
-  toree_archive_package_name: toree-0.2.0.dev1.tar.gz
-  toree_pip_download_location: http://{{ internal.elyra_download_server }}/{{ internal.elyra_download_root }}/toree/
+  toree_archive_package_name: toree-0.2.0.tar.gz
+  toree_pip_download_location: https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-incubating-rc2/toree-pip/
 
   yarn_endpoint_host: "{{ groups['master'][0] }}"
 

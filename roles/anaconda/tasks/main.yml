@@ -1,3 +1,13 @@
+# Create temporary install folders
+# this is required mostly when these
+# scripts are mainly used to update
+# Enterprise Gateway deployment
+- name: create install dir
+  file: path="{{ install_dir }}" state=directory
+
+- name: create temporary install dir
+  file: path="{{ install_temp_dir }}" state=directory
+#
 
 - name: install bzip2
   shell:
