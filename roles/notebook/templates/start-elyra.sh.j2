@@ -19,7 +19,7 @@ export EG_KERNEL_LAUNCH_TIMEOUT=40
 START_CMD="{{ jupyter }} enterprisegateway --ip=0.0.0.0 --port=8888 --port_retries=0 --log-level=DEBUG --MappingKernelManager.cull_idle_timeout=600 --MappingKernelManager.cull_interval=30 --JupyterWebsocketPersonality.list_kernels=True"
 
 # Enable white list of kernels...
-#WHITE_LIST=--KernelSpecManager.whitelist="['spark_2.1_python_yarn_cluster','spark_2.1_r_yarn_cluster','spark_2.1_scala_yarn_cluster','spark_2.1_python_yarn_client','spark_2.1_r_yarn_client','spark_2.1_scala_yarn_client']"
+#WHITE_LIST=--KernelSpecManager.whitelist="['spark_python_yarn_cluster','spark_r_yarn_cluster','spark_scala_yarn_cluster','spark_python_yarn_client','spark_r_yarn_client','spark_scala_yarn_client']"
 
 LOG={{ notebook.elyra_log_directory }}/enterprise_gateway_$(timestamp).log
 PIDFILE={{ notebook.elyra_runtime_directory }}/enterprise_gateway.pid

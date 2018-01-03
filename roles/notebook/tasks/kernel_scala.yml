@@ -28,7 +28,7 @@
    ignore_errors: yes
 
  - name: retrieve kernelspec location
-   shell: "/opt/anaconda2/bin/jupyter kernelspec list | grep -w spark_2.1_scala | awk '{print $2}' | xargs -i dirname {}"
+   shell: "/opt/anaconda2/bin/jupyter kernelspec list | grep -w spark_scala | awk '{print $2}' | xargs -i dirname {}"
    register: result
 
  - name: store kernelspec location
@@ -37,36 +37,36 @@
 
  - name: remove old scala kernelspecs for yarn cluster mode
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster"
+     path: "{{ jupyter_kernelspec_location }}/spark_scala_yarn_cluster"
      state: absent
 
  - name: remove old scala kernelspecs for yarn client mode
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_client"
+     path: "{{ jupyter_kernelspec_location }}/spark_scala_yarn_client"
      state: absent
 
  - name: seed scala kernelspec for yarn cluster mode
-   shell: "cp -r {{ jupyter_kernelspec_location }}/spark_2.1_scala/ {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster"
+   shell: "cp -r {{ jupyter_kernelspec_location }}/spark_scala/ {{ jupyter_kernelspec_location }}/spark_scala_yarn_cluster"
    ignore_errors: yes
 
  - name: seed scala kernelspec for yarn client mode
-   shell: "cp -r {{ jupyter_kernelspec_location }}/spark_2.1_scala/ {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_client"
+   shell: "cp -r {{ jupyter_kernelspec_location }}/spark_scala/ {{ jupyter_kernelspec_location }}/spark_scala_yarn_client"
    ignore_errors: yes
 
  - name: remove original scala kernelspecs location
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_scala"
+     path: "{{ jupyter_kernelspec_location }}/spark_scala"
      state: absent
 
  - name: update scala kernelspec for yarn cluster mode
-   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster/ spark_2.1_scala_yarn_cluster/"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_scala_yarn_cluster/ spark_scala_yarn_cluster/"
    ignore_errors: yes
 
  - name: update kernelspec for yarn client mode
-   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_client/ spark_2.1_scala_yarn_client/"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_scala_yarn_client/ spark_scala_yarn_client/"
    ignore_errors: yes
 
 # - name: disable impersonation based on configuration - Scala kernel (only applies to cluster mode)
-#   shell: " sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_2.1_scala_yarn_cluster/kernel.json"
+#   shell: " sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_scala_yarn_cluster/kernel.json"
 #   ignore_errors: yes
 #   when: (notebook.enable_impersonation == false) and ((inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true))

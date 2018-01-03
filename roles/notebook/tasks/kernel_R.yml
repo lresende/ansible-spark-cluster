@@ -41,13 +41,13 @@
 
  - name: remove old R kernelspecs for yarn cluster mode
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster"
+     path: "{{ jupyter_kernelspec_location }}/spark_R_yarn_cluster"
      state: absent
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
  - name: remove old R kernelspecs for yarn client mode
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_client"
+     path: "{{ jupyter_kernelspec_location }}/spark_R_yarn_client"
      state: absent
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
@@ -59,28 +59,28 @@
 
  - name: create placeholder location for R kernelspecs in yarn cluster
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster"
+     path: "{{ jupyter_kernelspec_location }}/spark_R_yarn_cluster"
      state: directory
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
  - name: create placeholder location for R kernelspecs in yarn client
    file:
-     path: "{{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_client"
+     path: "{{ jupyter_kernelspec_location }}/spark_R_yarn_client"
      state: directory
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
  - name: update R kernelspec for yarn cluster mode
-   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster/ spark_2.1_R_yarn_cluster/"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_R_yarn_cluster/ spark_R_yarn_cluster/"
    ignore_errors: yes
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
  - name: update R kernelspec for for yarn client
-   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_client/ spark_2.1_R_yarn_client/"
+   shell: "tar -zxvf {{ install_temp_dir }}/{{ kernelspec_archive }} --strip 1 --directory {{ jupyter_kernelspec_location }}/spark_R_yarn_client/ spark_R_yarn_client/"
    ignore_errors: yes
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
 # - name: update R kernelspec and disable impersonation (only applies to cluster mode)
-#   shell: "sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_2.1_R_yarn_cluster/kernel.json"
+#   shell: "sed -i 's/ --proxy-user ${KERNEL_USERNAME:-ERROR__NO__KERNEL_USERNAME}//g' {{ jupyter_kernelspec_location }}/spark_R_yarn_cluster/kernel.json"
 #   ignore_errors: yes
 #   when: (notebook.enable_impersonation == false) and ((inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true))
 
