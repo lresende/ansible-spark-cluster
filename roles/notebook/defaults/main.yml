@@ -3,7 +3,7 @@ internal:
 
 notebook:
 
-  elyra_version: 0.6.0
+  elyra_version: 0.7.0
 
   elyra_install_directory: "{{ internal.elyra_install_dir }}"
   elyra_log_directory: "{{ internal.elyra_install_dir }}/log"

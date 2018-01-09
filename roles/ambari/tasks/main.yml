@@ -1,4 +1,4 @@
-- include: uninstall.yml
-- include: install.yml
-- include: deploy.yml
+- import_tasks: uninstall.yml
+- import_tasks: install.yml
+- import_tasks: deploy.yml
 
