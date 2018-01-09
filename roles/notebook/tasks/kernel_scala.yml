@@ -18,11 +18,11 @@
    ignore_errors: yes
 
  - debug:
-    msg: "{{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name=\"Spark 2.1\" --interpreters=Scala"
+    msg: "{{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name=\"Spark\" --interpreters=Scala"
 
  - name: install toree kernel
    shell: >
-    {{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name="Spark 2.1" --interpreters=Scala
+    {{ jupyter }} toree install --spark_home={{ notebook.spark_home}} --kernel_name="Spark" --interpreters=Scala
    ignore_errors: yes
 
  - name: retrieve kernelspec location
