@@ -14,31 +14,34 @@
 - name: set spark download location fact
   set_fact: spark_download={{ spark.download_location }}/spark-{{ spark.version }}/{{ spark_archive }}
 
+- name: define number of spark workers
+  set_fact: number_of_workers="{{ groups['nodes'] | length | int }}"
 
-- name: check spark downloaded
-  local_action: >
-    command test -f {{ install_temp_dir }}/{{ spark_archive }}
-  register: spark_downloaded
-  failed_when: spark_downloaded.rc not in [0, 1]
-  changed_when: False
-  run_once: true
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ spark_installation_dir }}"
+    state: directory
+#    owner: "{{ spark.user }}"
+#    group: "{{ spark.user }}"
+#  become: true
+
+- name: stop spark
+  shell: "sbin/stop-all.sh"
+  args:
+      chdir: "{{ install_dir}}/{{ spark_installation_dir }}"
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
 
 - debug:
      msg: "Downloading Spark from: {{ spark_download }}"
 
 - name: download spark
   get_url: url="{{ spark_download }}" dest="{{ install_temp_dir }}/{{ spark_archive }}"
-  when: spark_downloaded.rc == 1
-  run_once: true
 
-- name: download and unarchive to the install directory
-  unarchive:
-    src: "{{ install_temp_dir }}/{{ spark_archive }}"
-    dest: "{{ install_dir }}"
-#    owner: "{{ spark.user }}"
-#    group: "{{ spark.user }}"
-    creates: "{{ install_dir }}/{{ spark_installation_dir }}"
-#  become: true
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ spark_archive }} --strip 1 --directory {{ install_dir }}/{{ spark_installation_dir }}"
+
 
 - name: create spark working directory
   file:
@@ -57,19 +60,9 @@
 - name: set slaves
   template: src="slaves.j2" dest="{{ install_dir}}/{{ spark_installation_dir }}/conf/slaves"
 
-- name: start-cluster utility
-  template: src="start-cluster.sh.j2" dest="{{ install_dir }}/bin/start-cluster.sh" mode=0744
-  when: inventory_hostname in groups['master']
-
 # Environment setup.
 - name: add spark profile to startup
   template:
     src: spark-profile.sh.j2
     dest: /etc/profile.d/spark-profile.sh
     mode: 0644
-
-- name: start spark
-  shell: "sbin/start-all.sh"
-  args:
-      chdir: "{{ install_dir}}/{{ spark_installation_dir }}"
-  when: inventory_hostname in groups['master']

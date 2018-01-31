@@ -1,9 +1,9 @@
 hadoop:
-  version: 2.7.3
-  hadoop_archive: hadoop-2.7.3.tar.gz
-  hadoop_install_dir: hadoop-2.7.3
-  data_dir: /opt/data/data
-  name_dir: /opt/data/name
+  version: 2.8.2
+  hadoop_archive: hadoop-2.8.2.tar.gz
+  hadoop_install_dir: hadoop-2.8.2
+  data_dir: /var/hadoop/data
+  name_dir: /var/hadoop/name
   temp_dir: /tmp/hadoop/hdfs/tmp
   download_location: https://archive.apache.org/dist/hadoop/common/
   user: "hdfs"               # the name of the (OS)user created for spark

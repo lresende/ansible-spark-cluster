@@ -1,0 +1,6 @@
+- name: ambari setup
+  hosts: all
+  remote_user: root
+  roles:
+    - role: common
+    - role: ambari

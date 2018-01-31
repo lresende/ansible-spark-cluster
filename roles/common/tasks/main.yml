@@ -10,9 +10,11 @@
 - name: create temporary install dir
   file: path="{{ install_temp_dir }}" state=directory
 
-- include: os-packages.yml
+- import_tasks: os-packages.yml
 
-- include: java.yml
+- import_tasks: java.yml
   when: "install_java == True"
 
-- include: utilities.yml
+- import_tasks: utilities.yml
+
+- import_tasks: ssh-config.yml

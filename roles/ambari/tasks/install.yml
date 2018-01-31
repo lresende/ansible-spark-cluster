@@ -19,16 +19,19 @@
 - name: setup ambari server on master node
   shell:
     ambari-server setup --silent
-  when:
-    - inventory_hostname in groups['master']
-    - install_java == False
+  when: inventory_hostname in groups['master'] and not install_java
 
-- name: setup ambari server on master node
+- name: setup ambari server on master node with custom java home
   shell:
     ambari-server setup --silent --java-home {{ java_home }}
-  when:
-    - inventory_hostname in groups['master']
-    - install_java == True
+  when: inventory_hostname in groups['master'] and install_java
+
+- name: increase ambari-server startup.web.timeout in order to prevent 'Server not yet listening on http port after 50 seconds. Exiting'
+  lineinfile:
+    dest: /etc/ambari-server/conf/ambari.properties
+    regexp: '^server.startup.web.timeout'
+    line: 'server.startup.web.timeout=240'
+  when: inventory_hostname in groups['master']
 
 - name: change default ambari-server port
   lineinfile:
@@ -49,10 +52,25 @@
 #    line: "java.home={{ansible_env.JAVA_HOME}}"
 #  when: inventory_hostname in groups['master']
 
-- name: start ambari server on master node
+- name: restart ambari-server on master node
   shell:
-    /usr/sbin/ambari-server start
+    /usr/sbin/ambari-server restart
   when: inventory_hostname in groups['master']
+
+- name: verify connection to ambari-server port 8081
+  uri:
+    url: "http://{{ groups['master'][0] }}.{{ ansible_domain }}:8081/api/v1/hosts"    
+    method: GET
+    headers:
+      X-Requested-By: ambari
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    status_code: 200
+  retries: 10
+  delay: 1
+  register: check_ambari_server_port
+  until: check_ambari_server_port.status == 200
 
 - name: install ambari-agent on all nodes
   shell:

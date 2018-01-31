@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOSTS=({% for host in groups['all'] %} {{ host }} {% endfor %})
+HOSTS=({% for host in groups['all'] %} {{ host }}.{{ ansible_domain }} {% endfor %})
 
 for i in ${HOSTS[@]}; do
     ssh root@${i} "$1"

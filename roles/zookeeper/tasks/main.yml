@@ -1,0 +1,54 @@
+#- name: Create service account for Zookeeper
+#  user: name={{ zookeeper.user }}
+#        system=yes
+#        shell={{ zookeeper.user_shell }}
+#        state=present
+#        groups="{{ zookeeper.user_groups | join(',') }}"
+
+- name: set zookeeper installation directory fact
+  set_fact: zookeeper_installation_dir=zookeeper-{{ zookeeper.version }}
+
+- name: set zookeeper archive fact
+  set_fact: zookeeper_archive=zookeeper-{{ zookeeper.version }}.tar.gz
+
+- name: set zookeeper download location fact
+  set_fact: zookeeper_download={{ zookeeper.download_location }}/zookeeper-{{ zookeeper.version }}/{{ zookeeper_archive }}
+
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ zookeeper_installation_dir }}"
+    state: directory
+#    owner: "{{ zookeeper.user }}"
+#    group: "{{ zookeeper.user }}"
+#  become: true
+
+- name: create data directory
+  file:
+    path: "{{ zookeeper.data_dir }}"
+    state: directory
+    mode: 0777
+#    owner: "{{ zookeeper.user }}"
+#    group: "{{ zookeeper.user }}"
+#  become: true
+
+- debug:
+     msg: "Downloading zookeeper {{ zookeeper_download }}"
+
+- name: download zookeeper
+  get_url: url="{{ zookeeper_download }}" dest="{{ install_temp_dir }}/{{ zookeeper_archive }}"
+
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ zookeeper_archive }} --strip 1 --directory {{ install_dir }}/{{ zookeeper_installation_dir }}"
+
+- name: set zookeeper configuration
+  template: src="zoo.cfg.j2" dest="{{ install_dir }}/{{ zookeeper_installation_dir }}/conf/zoo.cfg"
+
+- name: set zookeeper node id
+  template: src="myid.j2" dest="{{ zookeeper.data_dir }}/myid"
+
+# Environment setup.
+- name: add zookeeper profile to startup
+  template:
+    src: zookeeper-profile.sh.j2
+    dest: /etc/profile.d/zookeeper-profile.sh
+    mode: 0644

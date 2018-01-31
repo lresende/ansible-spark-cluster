@@ -1,8 +1,17 @@
+# Create temporary install folders
+# this is required mostly when these
+# scripts are mainly used to update
+# Enterprise Gateway deployment
+- name: create install dir
+  file: path="{{ install_dir }}" state=directory
+
+- name: create temporary install dir
+  file: path="{{ install_temp_dir }}" state=directory
+#
 
 - name: install bzip2
-  package:
-    name: bzip2
-    state: latest
+  shell:
+     yum install -y unzip bzip2
 
 - name: set anaconda distribution fact
   set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
@@ -17,6 +26,12 @@
     state: absent
     path: "{{ install_dir }}/anaconda3/"
 
+- name: create temporary install dir
+  file:
+    path: "{{ install_temp_dir }}"
+    state: directory
+    mode: 0755
+
 - debug:
      msg: "Downloading https://repo.continuum.io/archive/{{ anaconda_install_file }}"
 
@@ -24,11 +39,6 @@
   get_url:
      url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
      dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
-
-- name: clean anaconda install directory
-  file:
-    path: "{{ install_dir }}/anaconda{{ python_version }}"
-    state: absent
 
 - name: install anaconda package
   shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ python_version }}"

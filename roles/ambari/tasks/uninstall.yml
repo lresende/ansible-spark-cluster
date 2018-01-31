@@ -11,14 +11,14 @@
 #  pause:
 #   seconds: 90
 
-- name: Reboot nodes before uninstalling Ambari
-  become: yes
-  shell: sleep 3 && /sbin/shutdown -r now "System reboot"
-  async: 1
-  poll: 0
+#- name: Reboot nodes before uninstalling Ambari
+#  become: yes
+#  shell: sleep 3 && /sbin/shutdown -r now "System reboot"
+#  async: 1
+#  poll: 0
 
-- name: Wait for nodes to be ready before continuing Ambari uninstall
-  local_action: wait_for host={{ ansible_default_ipv4.address }} port=22 state=started delay=30 timeout=360
+#- name: Wait for nodes to be ready before continuing Ambari uninstall
+#  local_action: wait_for host={{ ansible_default_ipv4.address }} port=22 state=started delay=30 timeout=360
 
 - name: stop ambari-server service
   shell: "ambari-server stop"

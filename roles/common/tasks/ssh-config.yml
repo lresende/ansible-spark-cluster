@@ -1,0 +1,4 @@
+
+- name: ssh config file should be available
+  template: src="config.j2" dest="~/.ssh/config" mode="600"
+

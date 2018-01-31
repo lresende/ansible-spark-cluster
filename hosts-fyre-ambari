@@ -1,0 +1,20 @@
+[all:vars]
+ansible_connection=ssh
+#ansible_user=root
+#ansible_ssh_private_key_file=~/.ssh/ibm_rsa
+gather_facts=True
+gathering=smart
+host_key_checking=False
+install_java=True
+install_temp_dir=/tmp/ansible-install
+install_dir=/opt
+python_version=2
+
+[master]
+lresende-elyra-node-1   ansible_host=9.30.0.41    ansible_host_id=1
+
+[nodes]
+lresende-elyra-node-2   ansible_host=9.30.0.42    ansible_host_id=2
+lresende-elyra-node-3   ansible_host=9.30.0.43    ansible_host_id=3
+lresende-elyra-node-4   ansible_host=9.30.0.65    ansible_host_id=4
+lresende-elyra-node-5   ansible_host=9.30.0.93    ansible_host_id=5

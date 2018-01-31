@@ -12,7 +12,3 @@ SPARK_WORKER_WEBUI_PORT={{ spark.worker_ui_port }} #Avoid conflict with kafka po
 {% for key, value in spark.env_extras.items() | sort %}
 export {{ key }}="{{ value }}"
 {% endfor %}
-
-
-# SPARK_LOCAL_IP=127.0.0.1
-# SPARK_LOCAL_IP={{ ansible_default_ipv4['address'] }}

@@ -1,3 +1,19 @@
+# Create temporary install folders
+# this is required mostly when these
+# scripts are mainly used to update
+# Enterprise Gateway deployment
+- name: create install dir
+  file: path="{{ install_dir }}" state=directory
+
+- name: remove old temporary install dir
+  file: path="{{ install_temp_dir }}" state=absent
+
+- name: create temporary install dir
+  file: path="{{ install_temp_dir }}" state=directory
+  when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
+
+#
+
 - name: set pip location
   set_fact: pip={{ install_dir }}/anaconda{{ python_version }}/bin/pip
   when: notebook.use_anaconda
@@ -22,14 +38,16 @@
   set_fact: rscript=Rscript
   when: not notebook.use_anaconda
 
-- include: dependencies.yml
+- import_tasks: dependencies_os.yml
 
-- include: gateway.yml
+- import_tasks: dependencies_python.yml
 
-- include: kernel_scala.yml
+- import_tasks: gateway.yml
+
+- import_tasks: kernel_scala.yml
   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
 
-- include: kernel_python.yml
+- import_tasks: kernel_python.yml
   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
 
-- include: kernel_R.yml
+- import_tasks: kernel_R.yml

@@ -21,4 +21,6 @@ maven-eclipse.xml
 roles/test/**
 test.yml
 hosts-test
+hosts-elyra-fyi
+hosts-elyra-omg
 
