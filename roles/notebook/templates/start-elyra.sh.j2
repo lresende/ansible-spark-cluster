@@ -10,6 +10,8 @@ export EG_REMOTE_USER={{ notebook.user }}
 # provide password if passwordless ssh is not configured
 #export EG_REMOTE_PWD=
 
+export EG_ENABLE_TUNNELING=FALSE
+
 export EG_YARN_ENDPOINT=http://{{ notebook.yarn_endpoint_host }}:8088/ws/v1/cluster
 
 export EG_PROXY_LAUNCH_LOG=/var/log/enterprise_gateway_proxy_launch_$(timestamp).log
