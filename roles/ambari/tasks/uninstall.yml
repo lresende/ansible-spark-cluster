@@ -42,6 +42,11 @@
     rm -rf /usr/lib/ambari-server
     rm -rf /etc/ambari-server
     rm -rf /var/log/ambari-server/
+    rm -rf /tmp/hostmapping.json
+    rm -rf /tmp/blueprint_multi_node_spark.json
+    rm -rf /tmp/hsperfdata*
+    rm -rf /tmp/ambari.properties.*
+    rm -rf /etc/yum.repos.d/ambari*.repo
   ignore_errors: yes
   when: (inventory_hostname in groups['master'])
 
