@@ -11,6 +11,11 @@
     dest: /etc/yum.repos.d/ambari.repo
     mode: 0644
 
+- name: update yum after adding ambari repo
+  shell:
+     yum update -y
+     yum clean all
+
 - name: install ambari-server on master node
   shell:
      yum install -y ambari-server
