@@ -5,14 +5,40 @@
 - debug: msg="groups={{groups}}"
   run_once: true
 
-- name: add new ambari repository to all nodes
+- name: add ambari repository to all nodes
   template:
     src: ambari.repo.j2
     dest: /etc/yum.repos.d/ambari.repo
     mode: 0644
 
+- name: add mysql-community repository to all nodes
+  template:
+    src: mysql-community.repo.j2
+    dest: /etc/yum.repos.d/mysql-community.repo
+    mode: 0644
+  when: inventory_hostname in groups['master']
+
+- name: add mysql-community-source repository to all nodes
+  template:
+    src: mysql-community-source.repo.j2
+    dest: /etc/yum.repos.d/mysql-community-source .repo
+    mode: 0644
+  when: inventory_hostname in groups['master']
+
+- name: install mysql connector into all nodes
+  shell: |
+     yum install -y mysql-connector-java
+
+
+- name: copy mysql connector to required locations
+  shell: |
+     mkdir -p /usr/hdp/2.6.4.0-91/hive/lib/
+     cp /usr/share/java/mysql-connector-java.jar /usr/hdp/2.6.4.0-91/hive/lib/
+     mkdir -p /usr/hdp/2.6.4.0-91/hive2/lib/
+     cp /usr/share/java/mysql-connector-java.jar /usr/hdp/2.6.4.0-91/hive2/lib/
+
 - name: update yum after adding ambari repo
-  shell:
+  shell: |
      yum update -y
      yum clean all
 
@@ -35,7 +61,7 @@
   lineinfile:
     dest: /etc/ambari-server/conf/ambari.properties
     regexp: '^server.startup.web.timeout'
-    line: 'server.startup.web.timeout=240'
+    line: 'server.startup.web.timeout=580'
   when: inventory_hostname in groups['master']
 
 - name: change default ambari-server port

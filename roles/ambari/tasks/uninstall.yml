@@ -30,9 +30,9 @@
   ignore_errors: yes
   when: (inventory_hostname in groups['master'])
 
-- name: remove ambari server on master node
+- name: remove ambari server artifacts on master node
   shell:
-     yum remove -y ambari-server
+     yum erase -y ambari-server
   when: (inventory_hostname in groups['master'])
 
 - name: remove remaining ambari server on master node
@@ -58,7 +58,7 @@
 
 - name: remove postgress on master node
   shell:
-     yum remove -y postgresql
+     yum erase -y postgresql
   when: (inventory_hostname in groups['master'])
 
 - name: stop ambari-agent service
@@ -71,7 +71,7 @@
 
 - name: remove ambari agent on all nodes
   shell:
-     yum remove -y ambari-agent
+     yum erase -y ambari-agent
 
 - name: remove remaining config files on all nodes
   shell: >
@@ -121,6 +121,12 @@
 
 - name: remove old HDP-UTILS repo definition
   file: path="/etc/yum.repos.d/HDP-UTILS.repo" state=absent
+
+- name: remove old MySQL community repo definition
+  file: path="/etc/yum.repos.d/mysql-community.repo" state=absent
+
+- name: remove old MySQL community source repo definition
+  file: path="/etc/yum.repos.d/mysql-community-source.repo" state=absent
 
 - name: remove HDP specific java installation
   file: path="/usr/jdk64" state=absent
