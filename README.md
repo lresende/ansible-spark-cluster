@@ -25,6 +25,10 @@ sudo yum install -y  ansible
 * Install Annaconda
 * Use pip install ansible
 
+```
+pip install --upgrade ansible
+```
+
 ### Updating Ansible configuration
 
 In order to have variable overriding from host inventory, please add the following configuration into your ~/.ansible.cfg file
