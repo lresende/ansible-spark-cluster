@@ -1,9 +1,11 @@
 {
     "blueprint": "hdp",
     "default_password": "passw0rd",
+    "config_recommendation_strategy": "ALWAYS_APPLY_DONT_OVERRIDE_CUSTOM_VALUES",
     "host_groups": [
         {
             "name": "master",
+            "configurations" : [ ],
             "hosts": [
                 {
                 {% for host in groups['master'] %}
@@ -14,8 +16,8 @@
         },
         {
             "name": "slaves",
+            "configurations" : [ ],
             "hosts": [
-
                 {% for host in groups['nodes'] %}
                   {% if 'master' not in hostvars[host]['group_names'] %}
                     {"fqdn": "{{ hostvars[host]['ansible_hostname'] }}.{{ ansible_domain }}" } {% if not loop.last %}, {%endif%}
@@ -24,4 +26,16 @@
             ]
         }
     ]
+    {% if ambari.enable_kerberos == true %}
+    ,
+        "credentials": [{
+            "alias": "kdc.admin.credential",
+            "principal": "admin/admin",
+            "key": "admin",
+            "type": "TEMPORARY"
+        }],
+        "security": {
+            "type": "KERBEROS"
+        }
+    {% endif %}
 }

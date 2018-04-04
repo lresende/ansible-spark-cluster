@@ -46,6 +46,9 @@
               { "name": "YARN_CLIENT"},
               { "name": "HIVE_CLIENT"},
               { "name": "SPARK2_CLIENT"},
+              {% if ambari.enable_kerberos == true %}
+              { "name": "KERBEROS_CLIENT"},
+              {% endif %}
               { "name": "ZOOKEEPER_CLIENT"}
             ]
         }
@@ -53,7 +56,7 @@
     "configurations": [
         {
             "cluster-env": {
-                "properties_attributes": {},
+                "properties_attributes": { },
                 "security_enabled": "false",
                 "smokeuser": "ambari-qa",
                 "user_group": "hadoop",
@@ -63,10 +66,37 @@
                 }
             }
         }
+        {% if ambari.enable_kerberos == true %}
+        ,{
+            "kerberos-env": {
+    			"properties_attributes": { },
+    			"properties": {
+    				"realm": "IBM.COM",
+    				"kdc_type": "mit-kdc",
+                                "kdc_hosts": "{{ groups['master'][0] }}.{{ ansible_domain }}",
+    				"admin_server_host": "{{ groups['master'][0] }}.{{ ansible_domain }}"
+    			}
+    		}
+    	},
+    	{
+    		"krb5-conf": {
+    			"properties_attributes": { },
+    			"properties": {
+    				"domains": "IBM.COM",
+                                "manage_krb5_conf": "true"
+    			}
+    		}
+    	}
+   		{% endif %}
     ],
     "Blueprints": {
         "blueprint_name": "hdp",
         "stack_name": "HDP",
         "stack_version": "2.6"
+        {% if ambari.enable_kerberos == true %}
+        ,"security": {
+    	    "type": "KERBEROS"
+    	}
+    	{% endif %}
     }
 }
