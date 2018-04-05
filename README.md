@@ -201,3 +201,15 @@ based on Anaconda and Jupyter Notebook stack.
 
 * **use_anaconda**: Flag to identify if anaconda is available and should be used as python package manager
 * **deploy_kernelspecs_to_workers**: optionally deploy kernelspecs for Python, R, and Scala to all nodes
+
+
+# Legal Disclaimers
+
+* The **Ambari** role will install [MySQL community edition](https://www.mysql.com/products/community/)
+which is available under GPL license.
+
+* The **Notebook** role will install [R](https://www.r-project.org/) which is available under [GPL2 | GPL 3](https://www.r-project.org/Licenses/)
+
+By deploying these packages via the ansible utility scripts in this project you are accepting the
+license terms for these components.
+ 
