@@ -9,13 +9,6 @@
   file: path="{{ install_temp_dir }}" state=directory
 #
 
-- name: install bzip2
-  shell:
-     yum install -y unzip bzip2
-
-- name: set anaconda distribution fact
-  set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
-
 - name: clean previous anaconda deployments (python 2)
   file:
     state: absent
@@ -26,11 +19,12 @@
     state: absent
     path: "{{ install_dir }}/anaconda3/"
 
-- name: create temporary install dir
-  file:
-    path: "{{ install_temp_dir }}"
-    state: directory
-    mode: 0755
+- name: install bzip2
+  shell:
+     yum install -y unzip bzip2
+
+- name: set anaconda distribution fact
+  set_fact: anaconda_install_file=Anaconda{{ python_version }}-{{ anaconda.version }}-Linux-x86_64.sh
 
 - debug:
      msg: "Downloading https://repo.continuum.io/archive/{{ anaconda_install_file }}"
