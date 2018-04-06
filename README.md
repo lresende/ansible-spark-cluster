@@ -67,13 +67,13 @@ install_dir=/opt
 python_version=2
 
 [master]
-lresende-elyra-node-1   ansible_host=IP   ansible_host_id=1
+lresende-elyra-node-1   ansible_host=IP   ansible_host_private=IP  ansible_host_id=1
 
 [nodes]
-lresende-elyra-node-2   ansible_host=IP   ansible_host_id=2
-lresende-elyra-node-3   ansible_host=IP   ansible_host_id=3
-lresende-elyra-node-4   ansible_host=IP   ansible_host_id=4
-lresende-elyra-node-5   ansible_host=IP   ansible_host_id=5
+lresende-elyra-node-2   ansible_host=IP   ansible_host_private=IP  ansible_host_id=2
+lresende-elyra-node-3   ansible_host=IP   ansible_host_private=IP  ansible_host_id=3
+lresende-elyra-node-4   ansible_host=IP   ansible_host_private=IP  ansible_host_id=4
+lresende-elyra-node-5   ansible_host=IP   ansible_host_private=IP  ansible_host_id=5
 
 ```
 
