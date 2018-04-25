@@ -10,7 +10,7 @@ notebook:
   elyra_runtime_directory: "{{ internal.elyra_install_dir }}/runtime"
 
   toree_archive_package_name: toree-0.2.0.tar.gz
-  toree_pip_download_location: https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-incubating-rc4/toree-pip/
+  toree_pip_download_location: https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0-incubating-rc5/toree-pip/
 
   yarn_endpoint_host: "{{ groups['master'][0] }}"
 
