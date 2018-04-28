@@ -1,4 +1,8 @@
 
+- name: remove old java packages from OS
+  shell:
+     yum erase -y java-1.8.0-openjdk java-1.8.0-openjdk-headless
+
 - name: set java distribution fact
   set_fact: java_install_file=jdk-{{ common.java_version }}-linux-x64.rpm
 
