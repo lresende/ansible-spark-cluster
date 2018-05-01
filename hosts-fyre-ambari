@@ -5,16 +5,17 @@ ansible_connection=ssh
 gather_facts=True
 gathering=smart
 host_key_checking=False
-install_java=True
+install_java=False
 install_temp_dir=/tmp/ansible-install
 install_dir=/opt
 python_version=2
 
 [master]
-lresende-elyra-node-1   ansible_host=9.30.0.41    ansible_host_id=1
+lresende-elyra-node-1   ansible_host=9.30.166.196  ansible_host_private=172.16.159.125 ansible_host_id=1
 
 [nodes]
-lresende-elyra-node-2   ansible_host=9.30.0.42    ansible_host_id=2
-lresende-elyra-node-3   ansible_host=9.30.0.43    ansible_host_id=3
-lresende-elyra-node-4   ansible_host=9.30.0.65    ansible_host_id=4
-lresende-elyra-node-5   ansible_host=9.30.0.93    ansible_host_id=5
+lresende-elyra-node-2   ansible_host=9.30.42.35   ansible_host_private=172.16.163.194  ansible_host_id=2
+lresende-elyra-node-3   ansible_host=9.30.42.55   ansible_host_private=172.16.165.141  ansible_host_id=3
+lresende-elyra-node-4   ansible_host=9.30.251.210 ansible_host_private=172.16.191.195  ansible_host_id=4
+lresende-elyra-node-5   ansible_host=9.30.252.169 ansible_host_private=172.16.192.169  ansible_host_id=5
+
