@@ -44,8 +44,8 @@
     group: "{{ notebook.user }}"
     mode: 0700
 
-- name: ssh config file should be available
-  template:
+ - name: ssh config file should be available
+   template:
     src: "config.j2"
     dest: "/home/{{ notebook.user }}/.ssh/config"
     owner: "{{ notebook.user }}"
