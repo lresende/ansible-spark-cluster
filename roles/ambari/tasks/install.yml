@@ -113,6 +113,11 @@
     regexp: '^hostname=localhost'
     line: "hostname={{ groups['master'][0] }}.{{ ansible_domain }}"
 
+#- name: change https vertificate validation
+#  lineinfile:
+#    dest: /etc/python/cert-verification.cfg
+#    regexp: '^verify=platform_default'
+#    line: "verify=disable"
 
 - name: start ambari agent on all nodes
   shell:
