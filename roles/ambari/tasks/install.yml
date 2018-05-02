@@ -49,12 +49,12 @@
 
 - name: setup ambari server on master node
   shell:
-    ambari-server setup --silent
+    ambari-server setup --silent --enable-lzo-under-gpl-license
   when: inventory_hostname in groups['master'] and not install_java
 
 - name: setup ambari server on master node with custom java home
   shell:
-    ambari-server setup --silent --java-home {{ java_home }}
+    ambari-server setup --silent --enable-lzo-under-gpl-license --java-home {{ java_home }}
   when: inventory_hostname in groups['master'] and install_java
 
 - name: increase ambari-server startup.web.timeout in order to prevent 'Server not yet listening on http port after 50 seconds. Exiting'
