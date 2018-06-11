@@ -1,5 +1,5 @@
 zookeeper:
-  version: 3.4.0
+  version: 3.4.12
   data_dir: /var/zookeeper/data
   # https://archive.apache.org/dist/zookeeper/zookeeper-3.4.0/zookeeper-3.4.0.tar.gz
   download_location: https://archive.apache.org/dist/zookeeper
