@@ -118,7 +118,7 @@ ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
 Example:
 
 ```
-ansible-playbook --verbose setup-ambari.yml -i hosts-fyre -c paramiko
+ansible-playbook --verbose setup-ambari.yml -c paramiko -i hosts-fyre-ambari
 ```
 
 # Deploying Spark standalone
@@ -161,7 +161,7 @@ ansible-playbook --verbose <deployment playbook.yml> -i <hosts inventory>
 Example:
 
 ```
-ansible-playbook --verbose setup-spark-standalone.yml -i hosts-fyre -c paramiko
+ansible-playbook --verbose setup-spark-standalone.yml -c paramiko -i hosts-fyre-spark
 ```
 
 # Deploying Data Science Platform components
