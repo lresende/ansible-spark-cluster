@@ -1,3 +1,6 @@
+- name: set hdfs fact
+  set_fact: hdfs_installed=True
+
 #- name: Create service account for HDFS
 #  user: name={{ hadoop.user }}
 #        system=yes

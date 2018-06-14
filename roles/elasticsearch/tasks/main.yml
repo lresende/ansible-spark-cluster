@@ -1,3 +1,7 @@
+
+- name: set elastic search fact
+  set_fact: elastic_search_installed=True
+
 - name: Create service account for Elasticsearch
   user: name={{ elasticsearch.user }}
         system=yes

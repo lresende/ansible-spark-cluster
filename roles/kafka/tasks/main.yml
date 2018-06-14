@@ -1,3 +1,6 @@
+- name: set kafka fact
+  set_fact: kafka_installed=True
+
 #- name: Create service account for kafka
 #  user: name={{ kafka.user }}
 #        system=yes

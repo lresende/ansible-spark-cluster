@@ -1,3 +1,7 @@
+
+- name: set zookeeper fact
+  set_fact: zookeeper_installed=True
+
 #- name: Create service account for Zookeeper
 #  user: name={{ zookeeper.user }}
 #        system=yes

@@ -5,6 +5,9 @@
 #        state=present
 #        groups="{{ spark.user_groups | join(',') }}"
 
+- name: set spark fact
+  set_fact: spark_installed=True
+
 - name: set spark installation path fact
   set_fact: spark_installation_dir=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}
 
