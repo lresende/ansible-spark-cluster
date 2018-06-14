@@ -11,11 +11,9 @@ install_dir=/opt
 python_version=3
 
 [master]
-lresende-spark-node-1   ansible_host=9.30.192.122   ansible_host_id=1
+lresende-spark-node-1   ansible_host=9.30.182.176   ansible_host_private=172.16.208.107   ansible_host_id=1
 
 [nodes]
-lresende-spark-node-2   ansible_host=9.30.108.17    ansible_host_id=2
-lresende-spark-node-3   ansible_host=9.30.255.244   ansible_host_id=3
-lresende-spark-node-4   ansible_host=9.30.255.248   ansible_host_id=4
-lresende-spark-node-5   ansible_host=9.30.122.28    ansible_host_id=5
+lresende-spark-node-2   ansible_host=9.30.246.197   ansible_host_private=172.16.211.134   ansible_host_id=2
+lresende-spark-node-3   ansible_host=9.30.246.198   ansible_host_private=172.16.242.29    ansible_host_id=3
 
