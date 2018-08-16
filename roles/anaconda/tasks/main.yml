@@ -31,8 +31,9 @@
 
 - name: download anaconda package
   get_url:
-     url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
-     dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
+  shell: "curl -L https://repo.continuum.io/archive/{{ anaconda_install_file }} --output {{ install_temp_dir }}/{{ anaconda_install_file }}"
+#     url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
+#     dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 
 - name: install anaconda package
   shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ python_version }}"
