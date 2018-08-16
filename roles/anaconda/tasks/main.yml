@@ -30,8 +30,8 @@
      msg: "Downloading https://repo.continuum.io/archive/{{ anaconda_install_file }}"
 
 - name: download anaconda package
-  get_url:
   shell: "curl -L https://repo.continuum.io/archive/{{ anaconda_install_file }} --output {{ install_temp_dir }}/{{ anaconda_install_file }}"
+#  get_url:
 #     url: "https://repo.continuum.io/archive/{{ anaconda_install_file }}"
 #     dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 
