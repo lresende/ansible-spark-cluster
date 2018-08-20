@@ -7,10 +7,10 @@
 
  - name: install python packages
    shell: |
-    pip install --upgrade pip
-    pip install --upgrade ipykernel
+    {{ pip }} install --upgrade pip
+    {{ pip }} install --upgrade ipykernel
    when: not notebook.use_anaconda
 
  - name: update python packages
    shell: |
-    pip install --upgrade paramiko
+    {{ pip }} install --upgrade paramiko
