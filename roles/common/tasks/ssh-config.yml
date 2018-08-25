@@ -1,6 +1,6 @@
 ---
 - name: create user ssh folder
-   file:
+  file:
     path: "~/.ssh/"
     state: directory
     mode: 0700
