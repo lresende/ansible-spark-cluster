@@ -21,7 +21,7 @@
 - name: add mysql-community-source repository to all nodes
   template:
     src: mysql-community-source.repo.j2
-    dest: /etc/yum.repos.d/mysql-community-source .repo
+    dest: /etc/yum.repos.d/mysql-community-source.repo
     mode: 0644
   when: inventory_hostname in groups['master']
 
