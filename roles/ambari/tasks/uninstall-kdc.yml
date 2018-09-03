@@ -1,0 +1,40 @@
+- name: remove kdc database
+  shell:
+    kdb5_util destroy -f -r IBM.COM -P p@ssw0rd
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+- name: stop kdc services
+  shell:
+    service kadmin stop
+    service krb5kdc stop
+    chkconfig krb5kdc off
+    chkconfig kadmin off
+  ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
+
+- name: uninstall KDC server packages
+  shell:
+     yum remove -y krb5-server
+  ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
+
+- name: uninstall KDC workstation packages
+  shell:
+     yum remove -y krb5-libs krb5-workstation
+  ignore_errors: yes
+
+- name: remove /etc/krb5.conf
+  file: path="/etc/krb5.conf" state=absent
+
+- name: remove /var/kerberos/krb5kdc/kdc.conf
+  file: path="/var/kerberos/krb5kdc/kdc.conf" state=absent
+
+- name: remove /var/kerberos/krb5kdc/kadm5.acl
+  file: path="/var/kerberos/krb5kdc/kadm5.acl" state=absent
+
+- name: remove /var/kerberos/krb5kdc/principal
+  file: path="/var/kerberos/krb5kdc/principal" state=absent
+
+- name: remove /var/kerberos/
+  file: path="/var/kerberos/" state=absent

@@ -1,0 +1,2 @@
+ambari:
+  enable_kerberos: false
