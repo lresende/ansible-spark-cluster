@@ -42,8 +42,7 @@ hash_behaviour = merge
 ### Supported/Tested Platform
 
 * RHEL 7.x
-* Ansible 2.3.1.0
-  * Ansible 2.3.0.0 seems to have a bug with conditional when which is used in some roles
+* Ansible 2.6.3
 
 
 # Defining your cluster deployment metadata (host inventory)
@@ -85,6 +84,7 @@ Some specific configurations are:
 * python_version=2 : python version to use, influence which version of Anaconda to download
 
 **Note:** ansible_host_id is only used when deploying a "Spark Standalone" cluster.
+**Note:** Ambari is currently only supporting Python 2.x
 
 # Deploying Spark using Ambari and HDP distribution
 
@@ -125,7 +125,7 @@ ansible-playbook --verbose setup-ambari.yml -c paramiko -i hosts-fyre-ambari
 
 In this scenario, a Standalone Spark cluster will be deployed with a few optional components.
 
-### related ansible roles
+### Related ansible roles
 
 * **Common**  Deploys Java and common dependencies
 * **HDFS** Deploys HDFS filesystem using slave nodes as data nodes
