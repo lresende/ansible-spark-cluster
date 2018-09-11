@@ -34,8 +34,6 @@
   shell: |
      mkdir -p /usr/hdp/2.6.5.0-292/hive/lib/
      cp /usr/share/java/mysql-connector-java.jar /usr/hdp/2.6.5.0-292/hive/lib/
-     mkdir -p /usr/hdp/2.6.5.0-292/hive2/lib/
-     cp /usr/share/java/mysql-connector-java.jar /usr/hdp/2.6.5.0-292/hive2/lib/
 
 - name: update yum after adding ambari repo
   shell: |
