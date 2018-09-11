@@ -1,7 +1,7 @@
 - name: Update repository subscription on FYRE
   shell:
      cd /etc/yum.repos.d ; rm -f devit-rh7-x86_64.repo* ; wget fyreyum1.fyre.ibm.com/redhat/devit-rh7-x86_64.repo; sed -i 's/enabled = 1/enabled = 0/' /etc/yum/pluginconf.d/rhnplugin.conf
-  when: ansible_domain | search("fyre.ibm.com")
+  when: ansible_domain is search("fyre.ibm.com")
 
 - name: install commonly used os dependencies
   shell:
