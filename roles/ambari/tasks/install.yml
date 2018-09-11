@@ -28,11 +28,7 @@
 - name: install mysql connector into all nodes
   shell: |
      yum install -y mysql-connector-java
-
-
-- name: link mysql connector as ambari resources
-  shell: |
-     ln -s /usr/share/java/mysql-connector-java.jar /var/lib/ambari-server/resources/mysql-connector-java.jar
+  when: inventory_hostname in groups['master']
 
 - name: update yum after adding ambari repo
   shell: |
@@ -80,6 +76,11 @@
 #    line: "java.home={{ansible_env.JAVA_HOME}}"
 #  when: inventory_hostname in groups['master']
 
+- name: link mysql connector as ambari resources
+  shell: |
+     ln -s /usr/share/java/mysql-connector-java.jar /var/lib/ambari-server/resources/mysql-connector-java.jar
+  when: inventory_hostname in groups['master']
+
 - name: restart ambari-server on master node
   shell:
     /usr/sbin/ambari-server restart
@@ -126,6 +127,10 @@
 - name: start ambari agent on all nodes
   shell:
     /usr/sbin/ambari-agent start
+
+- name: Wait for ambari agent to be up and running
+  pause:
+     seconds: 30
 
 # Environment setup.
 - name: Add ambari related env to startup
