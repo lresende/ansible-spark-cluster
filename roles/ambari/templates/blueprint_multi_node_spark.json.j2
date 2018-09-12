@@ -62,6 +62,32 @@
                   "override_uid": "true"
                 }
             }
+        },
+        {
+          "core-site": {
+            "hadoop.proxyuser.hcat.groups" : "*",
+            "hadoop.proxyuser.hcat.hosts" : "*"
+          }
+        },
+        {
+          "hadoop-env" : {
+            "dtnode_heapsize" : "1024m",
+            "namenode_heapsize" : "2048m",
+            "namenode_opt_maxnewsize" : "384m",
+            "namenode_opt_newsize" : "384m"
+          }
+        },
+        {
+          "hdfs-site" : {
+            "dfs.datanode.data.dir" : "/hadoop/hdfs/data",
+            "dfs.datanode.failed.volumes.tolerated" : "0",
+            "dfs.replication" : "3"
+          }
+        },
+        {
+          "knox-env" : {
+            "knox_master_secret" : "passw0rd"
+          }
         }
     ],
     "Blueprints": {
