@@ -1,8 +1,8 @@
 - name: ambari setup
   hosts: all
-  vars:
-    ambari:
-      enable_kerberos: true
+#  vars:
+#    ambari:
+#      enable_kerberos: true
   remote_user: root
   roles:
     - role: common
