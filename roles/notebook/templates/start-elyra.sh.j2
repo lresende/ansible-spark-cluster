@@ -4,6 +4,11 @@ timestamp() {
   date +"%Y-%m-%d"
 }
 
+if [ "$(whoami)" != "{{ notebook.user }}" ]; then
+        echo "Script must be run as user: {{ notebook.user }}"
+        exit -1
+fi
+
 unset XDG_RUNTIME_DIR
 export EG_REMOTE_HOSTS={{ hostvars.values()|map(attribute='inventory_hostname')|join(',') }}
 export EG_REMOTE_USER={{ notebook.user }}
