@@ -4,10 +4,20 @@
   ignore_errors: yes
   when: inventory_hostname in groups['master']
 
-- name: stop kdc services
+- name: stop kadmin services
   shell:
     service kadmin stop
+  ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
+
+- name: stop krb5kdc services
+  shell:
     service krb5kdc stop
+  ignore_errors: yes
+  when: (inventory_hostname in groups['master'])
+
+- name: disable kdc services
+  shell:
     chkconfig krb5kdc off
     chkconfig kadmin off
   ignore_errors: yes

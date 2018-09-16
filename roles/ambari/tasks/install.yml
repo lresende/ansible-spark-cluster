@@ -2,9 +2,6 @@
 ## Install ambari server on all nodes
 ##########################################
 
-- debug: msg="groups={{groups}}"
-  run_once: true
-
 - name: add ambari repository to all nodes
   template:
     src: ambari.repo.j2

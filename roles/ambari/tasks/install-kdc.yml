@@ -11,14 +11,12 @@
   template: src="kadm5.acl.j2" dest="/var/kerberos/krb5kdc/kadm5.acl" mode=0600
   when: (inventory_hostname in groups['master'])
 
-
 - name: install KDC client packages
   shell:
      yum install -y krb5-libs krb5-workstation
 
 - name: update /etc/krb5.conf
   template: src="krb5.conf.j2" dest="/etc/krb5.conf" mode=0644
-
 
 - name: create kdc database
   shell:
