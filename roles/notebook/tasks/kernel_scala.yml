@@ -2,16 +2,16 @@
  - name: set toree download location
    set_fact: toree_download_location={{ notebook.toree_pip_download_location }}{{ notebook.toree_archive_package_name }}
 
+ - name: pip uninstall toree
+   shell: "{{ pip }} uninstall -y toree"
+   ignore_errors: yes
+
  - debug:
      msg: "Downloading toree from: {{ toree_download_location }}"
 
  - name: download toree
    shell: "curl -L {{ toree_download_location }} --output {{ install_temp_dir }}/{{ notebook.toree_archive_package_name }}"
    when: (inventory_hostname in groups['master'])
-
- - name: pip uninstall toree
-   shell: "{{ pip }} uninstall -y {{ notebook.toree_archive_package_name }}"
-   ignore_errors: yes
 
  - name: pip install toree
    shell: "{{ pip }} install --upgrade {{ install_temp_dir }}/{{notebook.toree_archive_package_name}}"
