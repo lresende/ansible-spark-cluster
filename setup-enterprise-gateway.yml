@@ -12,6 +12,7 @@
   vars:
     notebook:
       use_anaconda: true
+#      enable_kerberos: true
   remote_user: root
   roles:
     - role: notebook

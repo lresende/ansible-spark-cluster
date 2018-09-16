@@ -19,8 +19,9 @@ notebook:
 
   user: elyra
   home_dir: /home/elyra
-  groups: [hdfs]
+  groups: [hdfs, users]
 
   #use_anaconda
   enable_impersonation: false
+  enable_kerberos: false
   deploy_kernelspecs_to_workers: false

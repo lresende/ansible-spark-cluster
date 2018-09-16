@@ -5,5 +5,5 @@
   when: (ambari.enable_kerberos == true)
 - import_tasks: deploy.yml
 
-- import_tasks: patch.yml
-  when: (ambari.enable_kerberos == true)
+#- import_tasks: patch.yml
+#  when: (ambari.enable_kerberos == true)

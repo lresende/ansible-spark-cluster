@@ -1,0 +1,29 @@
+ - name: create elyra principal
+   shell:
+     kadmin.local -q "addprinc -pw p@ssw0rd elyra@IBM.COM"
+   when: inventory_hostname in groups['master']
+
+ - name: create jovyan principal
+   shell:
+     kadmin.local -q "addprinc -pw p@ssw0rd jovyan@IBM.COM"
+   when: inventory_hostname in groups['master']
+
+ - name: create jovyan user all nodes
+   user:
+     name: "jovyan"
+     groups: "users"
+     append: yes
+
+ - name: create jovyan home folder
+   shell: "sudo -u hdfs hadoop fs -mkdir /user/jovyan"
+   ignore_errors: yes
+   become_user: hdfs
+   when: (inventory_hostname in groups['master'])
+
+ - name: configure jovyan home folder
+   shell: "sudo -u hdfs hadoop fs -chown jovyan:hdfs /user/jovyan"
+   ignore_errors: yes
+   become_user: hdfs
+   when: (inventory_hostname in groups['master'])
+
+
