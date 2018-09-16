@@ -1,0 +1,19 @@
+#
+# Some failures might happen when kerberos is enabled
+# and might fail to start YARN RM(s) and the steps
+# below seems to make the environment better
+#
+
+#- name: Add ambari-qa to hdfs group
+#  shell: "usermod -a -G hdfs ambari-qa"
+#  ignore_errors: yes
+
+- name: Properly setup /hadoop/yarn directory with proper access rights
+  shell: "mkdir -p /hadoop/yarn && chown -R yarn:hadoop /hadoop/yarn"
+  ignore_errors: yes
+
+- name: Properly setup /tmp/ambari-qa directory with proper access rights
+  shell: "mkdir -p /tmp/ambari-qa && chown -R ambari-qa:hadoop /tmp/ambari-qa && touch /tmp/ambari-qa/hive.log"
+  ignore_errors: yes
+
+
