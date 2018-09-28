@@ -9,7 +9,7 @@ if [ "$(whoami)" != "{{ notebook.user }}" ]; then
         exit -1
 fi
 
-{% if notebook.enable_kerberos == true %}
+{% if security.enable_kerberos == true %}
 if ! klist -s
 then
     echo "INVALID Kerberos ticket; please run kinit"
@@ -31,7 +31,7 @@ export EG_PROXY_LAUNCH_LOG=/var/log/enterprise_gateway_proxy_launch_$(timestamp)
 
 export EG_KERNEL_LAUNCH_TIMEOUT=40
 
-{% if notebook.enable_kerberos == true %}
+{% if security.enable_kerberos == true %}
 export EG_IMPERSONATION_ENABLED=true
 {% endif %}
 

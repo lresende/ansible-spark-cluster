@@ -43,7 +43,7 @@
 - import_tasks: gateway.yml
 
 - import_tasks: security.yml
-  when: notebook.enable_kerberos == true
+  when: security.enable_kerberos == true
 
 - import_tasks: kernel_scala.yml
   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true) 
