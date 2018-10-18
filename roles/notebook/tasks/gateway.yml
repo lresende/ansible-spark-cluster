@@ -1,16 +1,3 @@
- # configure hadoop
- - name: create hadoop home folder
-   shell: "sudo -u hdfs hadoop fs -mkdir /user/root"
-   ignore_errors: yes
-   become_user: hdfs
-   when: (inventory_hostname in groups['master'])
-
- - name: configure hadoop home folder
-   shell: "sudo -u hdfs hadoop fs -chown root /user/root"
-   ignore_errors: yes
-   become_user: hdfs
-   when: (inventory_hostname in groups['master'])
-
  # Create and Configure Elyra service user
  - name: remove elyra user
    user:
