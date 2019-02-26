@@ -18,7 +18,7 @@
    - RCurl
    - devtools
    - uuid
-   - argparser
+   - argparse
    when: not notebook.use_anaconda
 
  - name: install IRkernel
@@ -33,9 +33,9 @@
    shell: "{{ install_dir }}/anaconda{{ python_version }}/bin/conda install --yes --quiet -c r r-essentials r-irkernel"
    when: notebook.use_anaconda
 
- - name: install argparser R package
+ - name: install argparse R package
    shell: >
-     {{ install_dir }}/anaconda{{ python_version }}/bin/Rscript -e 'install.packages("argparser", repos="https://cran.rstudio.com")' 
+     {{ install_dir }}/anaconda{{ python_version }}/bin/Rscript -e 'install.packages("argparse", repos="https://cran.rstudio.com")'
    when: notebook.use_anaconda
   ########################
 
