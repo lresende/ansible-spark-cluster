@@ -40,8 +40,8 @@ START_CMD="{{ jupyter }} enterprisegateway --ip=0.0.0.0 --port=8888 --port_retri
 # Enable white list of kernels...
 #WHITE_LIST=--KernelSpecManager.whitelist="['spark_python_yarn_cluster','spark_r_yarn_cluster','spark_scala_yarn_cluster','spark_python_yarn_client','spark_r_yarn_client','spark_scala_yarn_client']"
 
-LOG={{ notebook.elyra_log_directory }}/enterprise_gateway_$(timestamp).log
-PIDFILE={{ notebook.elyra_runtime_directory }}/enterprise_gateway.pid
+LOG={{ notebook.gateway_log_directory }}/enterprise_gateway_$(timestamp).log
+PIDFILE={{ notebook.gateway_runtime_directory }}/enterprise_gateway.pid
 
 $START_CMD $WHITE_LIST > $LOG 2>&1 &
 if [ "$?" -eq 0 ]; then

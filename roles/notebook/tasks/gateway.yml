@@ -40,18 +40,18 @@
     mode: "600"
 
  - name: remove old SSH keys for elyra user
-   local_action: file path="{{item}}" state=absent 
+   local_action: file path="{{ item }}" state=absent
    with_fileglob:
-     - /tmp/elyra_id_rsa*
+     - /tmp/{{ notebook.user }}_id_rsa*
    run_once: true
 
  - name: generate SSH keys for elyra user
-   local_action: shell ssh-keygen -t rsa -b 4096 -f /tmp/elyra_id_rsa -q -N ""
+   local_action: shell ssh-keygen -t rsa -b 4096 -f /tmp/{{ notebook.user }}_id_rsa -q -N ""
    run_once: true
 
  - name: copy private ssh key to node
    copy:
-     src: "/tmp/elyra_id_rsa"
+     src: "/tmp/{{ notebook.user }}_id_rsa"
      dest: "/home/{{ notebook.user }}/.ssh/id_rsa"
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -59,7 +59,7 @@
 
  - name: copy public ssh key to node
    copy:
-     src: "/tmp/elyra_id_rsa.pub"
+     src: "/tmp/{{ notebook.user }}_id_rsa.pub"
      dest: "/home/{{ notebook.user }}/.ssh/id_rsa.pub"
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -69,12 +69,12 @@
    authorized_key:
      user: "{{ notebook.user }}"
      state: present
-     key: "{{ lookup('file', '/tmp/elyra_id_rsa.pub') }}"
+     key: "{{ lookup('file', '/tmp/{{ notebook.user }}_id_rsa.pub') }}"
 
  - name: remove local SSH keys for elyra user
-   local_action: file path="{{item}}" state=absent 
+   local_action: file path="{{ item }}" state=absent
    with_fileglob:
-     - /tmp/elyra_id_rsa*
+     - /tmp/{{ notebook.user }}_id_rsa*
    run_once: true
 
  # install elyra
@@ -85,12 +85,12 @@
  # finish other elyra config (e.g. log folders, startup script utility, etc)
  - name: Remove elyra root installation folder
    file:
-     path: "{{ notebook.elyra_log_directory }}"
+     path: "{{ notebook.gateway_log_directory }}"
      state: absent
 
  - name: create bin directory for elyra
    file:
-     path: "{{ notebook.elyra_install_directory }}/bin"
+     path: "{{ notebook.gateway_install_directory }}/bin"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -101,7 +101,7 @@
 
  - name: create log directory for elyra
    file:
-     path: "{{ notebook.elyra_log_directory }}"
+     path: "{{ notebook.gateway_log_directory }}"
      state: directory
      owner: "{{ notebook.user }}"
      group: "{{ notebook.user }}"
@@ -112,7 +112,7 @@
 
  - name: create runtime directory for elyra
    file:
-    path: "{{ notebook.elyra_runtime_directory }}"
+    path: "{{ notebook.gateway_runtime_directory }}"
     state: directory
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
@@ -123,8 +123,8 @@
 
  - name: generate elyra startup script
    template:
-    src: start-elyra.sh.j2
-    dest: "{{ notebook.elyra_install_directory }}/bin/start-elyra.sh"
+    src: start-gateway.sh.j2
+    dest: "{{ notebook.gateway_install_directory }}/bin/start-gateway.sh"
     mode: 0744
     owner: "{{ notebook.user }}"
     group: "{{ notebook.user }}"
@@ -134,10 +134,10 @@
  # https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v0.6.0/jupyter_enterprise_gateway_kernelspecs-0.6.0.tar.gz
 
  - name: set kernelspec archive name
-   set_fact: kernelspec_archive=jupyter_enterprise_gateway_kernelspecs-{{ notebook.elyra_version }}.tar.gz
+   set_fact: kernelspec_archive=jupyter_enterprise_gateway_kernelspecs-{{ notebook.gateway_version }}.tar.gz
 
  - name: set kernelspec download location
-   set_fact: kernelspec_download_location=https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v{{ notebook.elyra_version }}/{{ kernelspec_archive }}
+   set_fact: kernelspec_download_location=https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v{{ notebook.gateway_version }}/{{ kernelspec_archive }}
 
  - debug:
      msg: "Downloading kernelspecs from: {{ kernelspec_download_location }}"

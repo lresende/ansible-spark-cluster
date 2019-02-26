@@ -1,6 +1,6 @@
  - name: create elyra principal
    shell:
-     kadmin.local -q "addprinc -pw p@ssw0rd elyra@IBM.COM"
+     kadmin.local -q "addprinc -pw p@ssw0rd gateway@IBM.COM"
    when: inventory_hostname in groups['master']
 
  - name: create jovyan principal
