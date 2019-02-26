@@ -79,7 +79,7 @@
 
  # install elyra
  - name: pip install elyra
-   shell: "{{ pip }} install --upgrade jupyter_enterprise_gateway"
+   shell: "{{ pip }} install --upgrade jupyter_enterprise_gateway=={{ notebook.gateway_version }}"
    when: (inventory_hostname in groups['master'])
 
  # finish other elyra config (e.g. log folders, startup script utility, etc)
@@ -131,17 +131,14 @@
    when: (inventory_hostname in groups['master'])
 
  # copy elyra kernel specs
- # https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v0.6.0/jupyter_enterprise_gateway_kernelspecs-0.6.0.tar.gz
+ # https://github.com/jupyter/enterprise_gateway/releases/download/v2.0.0-beta.1/jupyter_enterprise_gateway_kernelspecs-2.0.0.b1.tar.gz
 
  - name: set kernelspec archive name
    set_fact: kernelspec_archive=jupyter_enterprise_gateway_kernelspecs-{{ notebook.gateway_version }}.tar.gz
 
- - name: set kernelspec download location
-   set_fact: kernelspec_download_location=https://github.com/jupyter-incubator/enterprise_gateway/releases/download/v{{ notebook.gateway_version }}/{{ kernelspec_archive }}
-
  - debug:
-     msg: "Downloading kernelspecs from: {{ kernelspec_download_location }}"
+     msg: "Downloading kernelspecs from: {{ notebook.gateway_kernelspec_download_location }}"
 
  - name: download elyra kernelspecs
-   shell: "curl -L {{ kernelspec_download_location }} --output {{ install_temp_dir }}/{{ kernelspec_archive }}"
+   shell: "curl -L {{ notebook.gateway_kernelspec_download_location }} --output {{ install_temp_dir }}/{{ kernelspec_archive }}"
    when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)

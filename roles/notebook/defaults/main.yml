@@ -1,6 +1,7 @@
 notebook:
 
   gateway_version: 2.0.0b1
+  gateway_kernelspec_download_location: https://github.com/jupyter/enterprise_gateway/releases/download/v2.0.0-beta.1/jupyter_enterprise_gateway_kernelspecs-2.0.0.b1.tar.gz
 
   gateway_install_directory: "{{ install_dir }}/gateway"
   gateway_log_directory: "{{ install_dir }}/gateway/log"
