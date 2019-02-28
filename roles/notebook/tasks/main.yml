@@ -13,7 +13,7 @@
   when: (inventory_hostname in groups['master']) or (notebook.deploy_kernelspecs_to_workers == true)
 
 - name: set pip location
-  set_fact: pip={{ install_dir }}/anaconda{{ python_version }}/bin/pip
+  set_fact: pip={{ install_dir }}/anaconda/bin/pip
   when: notebook.use_anaconda
 
 - name: set pip location
@@ -21,7 +21,7 @@
   when: not notebook.use_anaconda
 
 - name: set jupyter location
-  set_fact: jupyter={{ install_dir }}/anaconda{{ python_version }}/bin/jupyter
+  set_fact: jupyter={{ install_dir }}/anaconda/bin/jupyter
   when: notebook.use_anaconda
 
 - name: set jupyter location
@@ -29,7 +29,7 @@
   when: not notebook.use_anaconda
 
 - name: set RScript location
-  set_fact: rscript={{ install_dir }}/anaconda{{ python_version }}/bin/RScript
+  set_fact: rscript={{ install_dir }}/anaconda/bin/RScript
   when: notebook.use_anaconda
 
 - name: set RScript location

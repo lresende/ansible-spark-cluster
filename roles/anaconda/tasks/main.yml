@@ -9,6 +9,11 @@
   file: path="{{ install_temp_dir }}" state=directory
 #
 
+- name: clean previous anaconda deployments
+  file:
+    state: absent
+    path: "{{ install_dir }}/anaconda/"
+
 - name: clean previous anaconda deployments (python 2)
   file:
     state: absent
@@ -36,7 +41,7 @@
 #     dest: "{{ install_temp_dir }}/{{ anaconda_install_file }}"
 
 - name: install anaconda package
-  shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda{{ python_version }}"
+  shell: "bash {{ install_temp_dir }}/{{ anaconda_install_file }} -b -p {{ install_dir }}/anaconda"
 
 # Environment setup.
 - name: Add anaconda_env to startup

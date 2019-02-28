@@ -30,12 +30,12 @@
 
   #### ANACONDA deployment mode
  - name: install Anaconda R binaries
-   shell: "{{ install_dir }}/anaconda{{ python_version }}/bin/conda install --yes --quiet -c r r-essentials r-irkernel"
+   shell: "{{ install_dir }}/anaconda/bin/conda install --yes --quiet -c r r-essentials r-irkernel"
    when: notebook.use_anaconda
 
  - name: install argparse R package
    shell: >
-     {{ install_dir }}/anaconda{{ python_version }}/bin/Rscript -e 'install.packages("argparse", repos="https://cran.rstudio.com")'
+     {{ install_dir }}/anaconda/bin/Rscript -e 'install.packages("argparse", repos="https://cran.rstudio.com")'
    when: notebook.use_anaconda
   ########################
 
