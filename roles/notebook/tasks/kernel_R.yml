@@ -33,6 +33,11 @@
    shell: "{{ install_dir }}/anaconda/bin/conda install --yes --quiet -c r r-essentials r-irkernel"
    when: notebook.use_anaconda
 
+- name: install argparser R package (required by EG 1.x)
+   shell: >
+     {{ install_dir }}/anaconda/bin/Rscript -e 'install.packages("argparser", repos="https://cran.rstudio.com")'
+   when: notebook.use_anaconda
+
  - name: install argparse R package
    shell: >
      {{ install_dir }}/anaconda/bin/Rscript -e 'install.packages("argparse", repos="https://cran.rstudio.com")'
