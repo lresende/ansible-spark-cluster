@@ -1,0 +1,54 @@
+- name: set zeppelin download location
+  set_fact: zeppelin_download={{ zeppelin.download_location }}
+
+- name: set zeppelin fact
+  set_fact: zeppelin_installed=True
+
+- name: set zeppelin archive fact
+  set_fact: zeppelin_archive=zeppelin.tgz
+
+- name: set zeppelin installation path fact
+  set_fact: zeppelin_installation_dir=zeppelin
+
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ zeppelin_installation_dir }}"
+    state: directory
+    owner: root
+    group: root
+  when: inventory_hostname in groups['master']
+
+- name: stop zeppelin
+  shell: "bin/zeppelin-daemon.sh stop"
+  args:
+      chdir: "{{ install_dir }}/{{ zeppelin_installation_dir }}"
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+
+- debug:
+     msg: "Downloading Zeppelin from: {{ zeppelin_download }}"
+
+- name: download zeppelin
+  get_url: url="{{ zeppelin_download }}" dest="{{ install_temp_dir }}/{{ zeppelin_archive }}"
+  when: inventory_hostname in groups['master']
+
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ zeppelin_archive }} --directory {{ install_dir }}/{{ zeppelin_installation_dir }}"
+  when: inventory_hostname in groups['master']
+
+- name: set zeppelin-env.sh
+  template: src="zeppelin-env.sh.j2" dest="{{ install_dir }}/{{ zeppelin_installation_dir }}/zeppelin-0.10.1-bin-all/conf/zeppelin-env.sh"
+  when: inventory_hostname in groups['master']
+
+- name: change owner
+  shell: "chown -R root:root {{ install_dir }}/{{ zeppelin_installation_dir }}"
+  when: inventory_hostname in groups['master']
+
+- name: start zeppelin
+  shell: "bin/zeppelin-daemon.sh start"
+  args:
+      chdir: "{{ install_dir }}/{{ zeppelin_installation_dir }}/zeppelin-0.10.1-bin-all"
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+

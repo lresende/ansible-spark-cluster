@@ -1,0 +1,14 @@
+[master]
+sr-spark-master   ansible_host=10.0.0.9   ansible_host_private=10.0.0.9   ansible_host_id=1
+
+[nodes]
+sr-spark-worker-node1   ansible_host=10.0.0.18   ansible_host_private=10.0.0.18   ansible_host_id=2
+sr-spark-worker-node2   ansible_host=10.0.0.13   ansible_host_private=10.0.0.13   ansible_host_id=3
+sr-spark-worker-node3   ansible_host=10.0.0.14   ansible_host_private=10.0.0.14   ansible_host_id=4
+sr-spark-worker-node4   ansible_host=10.0.0.16   ansible_host_private=10.0.0.16   ansible_host_id=5
+sr-spark-worker-node5   ansible_host=10.0.0.17   ansible_host_private=10.0.0.17   ansible_host_id=6
+sr-spark-worker-node6   ansible_host=10.0.0.19   ansible_host_private=10.0.0.19   ansible_host_id=7
+sr-spark-worker-node7   ansible_host=10.0.0.20   ansible_host_private=10.0.0.20   ansible_host_id=8
+sr-spark-worker-node8   ansible_host=10.0.0.22   ansible_host_private=10.0.0.22   ansible_host_id=9
+sr-spark-worker-node9   ansible_host=10.0.0.23   ansible_host_private=10.0.0.23   ansible_host_id=10
+sr-spark-worker-node10   ansible_host=10.0.0.24   ansible_host_private=10.0.0.24   ansible_host_id=11

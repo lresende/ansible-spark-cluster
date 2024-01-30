@@ -1,0 +1,7 @@
+Host {% for host in groups['all'] %} {{ host }}.{{ ansible_domain }} {{ host }} {{hostvars[host].ansible_host_private}} {% endfor %} 0.0.0.0
+
+    StrictHostKeyChecking no
+
+Host *
+
+    IdentityFile /root/.ssh/key.pem

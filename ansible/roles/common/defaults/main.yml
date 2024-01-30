@@ -1,0 +1,6 @@
+common:
+  java_version: 8u201
+  java_home: "/usr/java/jdk1.8.0_201-amd64"
+  java_download: "https://dependencies2431.blob.core.windows.net/demoimage/jdk-8u202-linux-x64.rpm"
+  java_jce_download: "https://dependencies2431.blob.core.windows.net/demoimage/jce_policy-8.zip"
+

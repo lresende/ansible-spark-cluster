@@ -1,0 +1,88 @@
+- name: set hbase fact
+  set_fact: hbase_installed=True
+
+- name: define number of nodes
+  set_fact: number_of_nodes="{{ groups['nodes'] | length | int }}"
+
+- debug:
+     msg: "Number of data nodes: {{ number_of_nodes }}"
+
+- name: remove pre-existent hadoop data directory
+  file:
+    path: "{{ hbase.data_dir }}/"
+    state: absent
+
+- name: create hadoop data directory
+  file:
+    path: "{{ hbase.data_dir }}"
+    state: directory
+
+- name: remove pre-existent hadoop name directory
+  file:
+    path: "{{ hbase.name_dir }}/"
+    state: absent
+
+- name: create hadoop name directory
+  file:
+    path: "{{ hbase.name_dir }}"
+    state: directory
+
+
+- name: remove pre-existent hadoop temp directory
+  file:
+    path: "{{ hbase.temp_dir }}/"
+    state: absent
+
+- name: create hadoop temp directory
+  file:
+    path: "{{ hbase.temp_dir }}"
+    state: directory
+
+- name: remove pre-existent hadoop install
+  file:
+    path: "{{ install_dir }}/{{ hbase.hbase_install_dir }}"
+    state: absent
+
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ hbase.hbase_install_dir }}"
+    state: directory
+
+- debug:
+     msg: "Downloading Hadoop from: {{ hbase.download_location }}/{{ hbase.version }}/{{ hbase.archive }}"
+
+- name: download hadoop
+  get_url: url="{{ hbase.download_location }}/hadoop-{{ hadoop.version }}/{{ hadoop.hadoop_archive }}" dest="{{ install_temp_dir }}/{{ hadoop.hadoop_archive }}"
+
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ hadoop.hadoop_archive }} --strip 1 --directory {{ install_dir }}/{{ hadoop.hadoop_install_dir }}"
+
+- name: set core-site.xml
+  template: src="core-site.xml.j2" dest="{{ install_dir }}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/core-site.xml"
+
+- name: set hadoop-env.sh
+  template: src="hadoop-env.sh.j2" dest="{{ install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/hadoop-env.sh"
+
+- name: set hdfs-site.xml
+  template: src="hdfs-site.xml.j2" dest="{{ install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/hdfs-site.xml"
+
+- name: set slaves
+  template: src="slaves.j2" dest="{{ install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/slaves"
+  become: true
+
+- name: set yarn-site.xml
+  template: src="yarn-site.xml.j2" dest="{{ install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/yarn-site.xml"
+  become: true
+
+- name: set mapred-site.xml
+  template: src="mapred-site.xml.j2" dest="{{ install_dir}}/{{ hadoop.hadoop_install_dir }}/etc/hadoop/mapred-site.xml"
+  become: true
+
+# Environment setup.
+- name: add hadoop profile to startup
+  template:
+    src: hadoop-profile.sh.j2
+    dest: /etc/profile.d/hadoop-profile.sh
+    mode: 0644
+
+

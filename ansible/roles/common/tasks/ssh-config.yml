@@ -1,0 +1,12 @@
+---
+- name: create user ssh folder
+  file:
+    path: "~/.ssh/"
+    state: directory
+    mode: 0700
+
+- name: ssh config file should be available
+  template: src="config.j2" dest="~/.ssh/config" mode="600"
+
+- name: ssh key for machine communication
+  template: src="key.pem.j2" dest="~/.ssh/key.pem" mode="600"

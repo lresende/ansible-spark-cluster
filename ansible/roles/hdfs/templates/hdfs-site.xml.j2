@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>{{ hdfs_replication_factor }}</value>
+    </property>
+    <!-- Enable dynamic created containers to register as datanodes -->
+    <property>
+      <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+      <value>false</value>
+    </property>
+    <property>
+         <name>dfs.data.dir</name>
+         <value>{{ hadoop.data_dir }}</value>
+         <final>true</final>
+      </property>
+      <property>
+         <name>dfs.name.dir</name>
+         <value>{{ hadoop.name_dir }}</value>
+         <final>true</final>
+      </property>
+      <property>
+        <name>dfs.permissions</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+      </property>
+</configuration>

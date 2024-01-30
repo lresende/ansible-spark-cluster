@@ -1,0 +1,8 @@
+- name: set requirements
+  template: src="requirements.txt.j2" dest="{{ install_dir}}/python/requirements.txt"
+
+- name: install requirements
+  shell: "{{ install_dir }}/python/miniconda3/envs/spark/bin/pip install -r {{ install_dir}}/python/requirements.txt"
+
+
+

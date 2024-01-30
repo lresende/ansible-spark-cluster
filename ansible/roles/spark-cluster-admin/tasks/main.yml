@@ -1,0 +1,10 @@
+
+# - name: start-cluster utility
+#   template: src="spark-cluster.sh.j2" dest="{{ install_dir }}/bin/spark-cluster.sh" mode=0744
+#   when: inventory_hostname in groups['master']
+
+- name: clean up worker directories
+  shell: "rm * -rf"
+  args:
+      chdir: "/opt/install/spark-3.3.2-bin-hadoop2.8.2/work"
+  ignore_errors: yes

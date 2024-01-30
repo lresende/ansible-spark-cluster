@@ -1,0 +1,12 @@
+hadoop:
+  version: 3.2.4
+  hadoop_archive: hadoop-3.2.4.tar.gz
+  hadoop_install_dir: hadoop-3.2.4
+  data_dir: /hadoop-data/data
+  name_dir: /var/hadoop/name
+  temp_dir: /tmp/hadoop/hdfs/tmp
+  java_home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.382.b05-1.el7_9.x86_64/jre
+  download_location: https://archive.apache.org/dist/hadoop/common/
+  user: "hdfs"               # the name of the (OS)user created for spark
+  user_groups: []             # Optional list of (OS)groups the new spark user should belong to
+  user_shell: "/bin/false"    # the hdfs user's default shell

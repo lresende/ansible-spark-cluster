@@ -1,0 +1,12 @@
+hbase:
+  version: 3.2.4
+  archive: hbase-2.5.5-bin.tar.gz
+  hbase_install_dir: hbase-2.5.5
+  data_dir: /hadoop-data/data
+  name_dir: /var/hbase/name
+  temp_dir: /tmp/hbase/tmp
+  java_home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.382.b05-1.el7_9.x86_64/jre
+  download_location: https://dlcdn.apache.org/hbase/stable/
+  user: "hbase"               # the name of the (OS)user created for spark
+  user_groups: []             # Optional list of (OS)groups the new spark user should belong to
+  user_shell: "/bin/false"    # the hdfs user's default shell

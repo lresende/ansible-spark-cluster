@@ -1,0 +1,20 @@
+- name: remove old install dir
+  file: path="{{ install_dir }}" state=absent
+
+- name: create install dir
+  file: path="{{ install_dir }}" state=directory
+
+- name: remove old temporary install dir
+  file: path="{{ install_temp_dir }}" state=absent
+
+- name: create temporary install dir
+  file: path="{{ install_temp_dir }}" state=directory
+
+- import_tasks: os-packages.yml
+
+- import_tasks: java.yml
+  when: "install_java == True"
+
+- import_tasks: utilities.yml
+
+- import_tasks: ssh-config.yml

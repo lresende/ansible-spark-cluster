@@ -1,0 +1,2 @@
+livy:
+  download_location: https://dlcdn.apache.org/incubator/livy/0.8.0-incubating/apache-livy-0.8.0-incubating_2.12-bin.zip

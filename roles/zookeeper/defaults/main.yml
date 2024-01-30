@@ -1,8 +1,0 @@
-zookeeper:
-  version: 3.4.12
-  data_dir: /var/zookeeper/data
-  # https://archive.apache.org/dist/zookeeper/zookeeper-3.4.0/zookeeper-3.4.0.tar.gz
-  download_location: https://archive.apache.org/dist/zookeeper
-  user: "zookeeper"       # the name of the (OS)user created for spark
-  user_groups: []             # Optional list of (OS)groups the new spark user should belong to
-  user_shell: "/bin/false"    # the elasticsearch user's default shell

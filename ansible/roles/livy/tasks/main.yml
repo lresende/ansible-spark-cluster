@@ -1,0 +1,54 @@
+- name: set livy download location
+  set_fact: livy_download={{ livy.download_location }}
+
+- name: set livy fact
+  set_fact: livy_installed=True
+
+- name: set livy archive fact
+  set_fact: livy_archive=livy.zip
+
+- name: set livy installation path fact
+  set_fact: livy_installation_dir=livy
+
+- name: create install directory
+  file:
+    path: "{{ install_dir }}/{{ livy_installation_dir }}"
+    state: directory
+    owner: root
+    group: root
+  when: inventory_hostname in groups['master']
+
+- name: stop livy
+  shell: "bin/livy-server stop"
+  args:
+      chdir: "{{ install_dir }}/{{ livy_installation_dir }}"
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
+
+- debug:
+     msg: "Downloading livy from: {{ livy_download }}"
+
+- name: download livy
+  get_url: url="{{ livy_download }}" dest="{{ install_temp_dir }}/{{ livy_archive }}"
+  when: inventory_hostname in groups['master']
+
+- name: unarchive to the install directory
+  shell: "unzip {{ install_temp_dir }}/{{ livy_archive }} -d {{ install_dir }}/{{ livy_installation_dir }}"
+  when: inventory_hostname in groups['master']
+
+- name: set livy-env.sh
+  template: src="livy-env.sh.j2" dest="{{ install_dir }}/{{ livy_installation_dir }}/apache-livy-0.8.0-incubating_2.12-bin/conf/livy-env.sh"
+  when: inventory_hostname in groups['master']
+
+- name: change owner
+  shell: "chown -R root:root {{ install_dir }}/{{ livy_installation_dir }}"
+  when: inventory_hostname in groups['master']
+
+- name: start livy
+  shell: "./bin/livy-server start"
+  args:
+      chdir: "{{ install_dir }}/{{ livy_installation_dir }}/apache-livy-0.8.0-incubating_2.12-bin/"
+  ignore_errors: yes
+  when: inventory_hostname in groups['master']
+
